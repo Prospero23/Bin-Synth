@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
 import dbConnect from "../../../lib/dbConnect";
+import Post from "../../../models/Post"
 
 //get all posts
 export async function GET() {
-  const result = await fetch(
-    "https://official-joke-api.appspot.com/jokes/programming/random"
-  );
-  const data = await result.json();
-  return NextResponse.json(data);
+  await dbConnect();
+  const posts = await Post.find({});
+  return NextResponse.json(posts);
 }
 //add a new post
 export async function POST() {
