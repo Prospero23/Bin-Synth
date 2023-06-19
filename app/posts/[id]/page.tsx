@@ -5,7 +5,8 @@ import Link from "next/link";
 async function getPost(id:string){
     await dbConnect()
     const result = await Post.findById(id);
-  return result
+    const post = JSON.parse(JSON.stringify(result))
+  return post
 
 }
 
@@ -26,10 +27,17 @@ async function ShowPage({params}: {params: {id: string}}){
             </a>
     </audio>
 <Link href="/posts">All Posts</Link>
-<Link href="/posts">Edit</Link>
+<Link href={{
+    pathname: '/posts/edit',
+    query: {'post': post._id}
+}}>Edit</Link>
 <Link href="/posts">Delete</Link>
         </main>
     )
 }
 
 export default ShowPage
+
+
+
+//need to add super much error handling 

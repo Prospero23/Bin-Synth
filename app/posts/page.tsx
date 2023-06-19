@@ -10,12 +10,14 @@ const getData = async () => {
 };
 
 export default async function Posts() {
-  const posts = await getData();
+  const data = await getData();
+  //fix stupid error popup
+  const posts = JSON.parse(JSON.stringify(data))
 
   return (
     <main className="grid justify-center">
-    <h1 className="text-4xl text-center">All Posts</h1>
-    {posts.map((post) =>{
+    <h1 className="text-4xl text-center my-4">All Posts</h1>
+    {posts.map((post: object) =>{
         return <Card post={post}/>
     })};
     </main>
@@ -28,3 +30,5 @@ export default async function Posts() {
 //creation date, creator
 //button needs to be rendered client side and have a click event
 
+
+//add types to the shit soo that that stupid parse thing doesnt have to happen
