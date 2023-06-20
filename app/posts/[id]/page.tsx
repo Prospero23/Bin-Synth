@@ -1,14 +1,5 @@
-import dbConnect from "@/lib/dbConnect";
-import Post from "@/models/Post";
+import {getPost} from '@/lib//RESTFUL/Post'
 import Link from "next/link";
-
-async function getPost(id:string){
-    await dbConnect()
-    const result = await Post.findById(id);
-    const post = JSON.parse(JSON.stringify(result))
-  return post
-
-}
 
 async function ShowPage({params}: {params: {id: string}}){
     const {id} = params;
@@ -31,7 +22,9 @@ async function ShowPage({params}: {params: {id: string}}){
     pathname: '/posts/edit',
     query: {'post': post._id}
 }}>Edit</Link>
-<Link href="/posts">Delete</Link>
+<Link href={{
+    pathname: `api/posts/`
+}}>Delete</Link>
         </main>
     )
 }
@@ -41,3 +34,6 @@ export default ShowPage
 
 
 //need to add super much error handling 
+
+
+//API call to delete

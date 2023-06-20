@@ -1,11 +1,30 @@
 "use client";
 
 
-//use react hook form for validation
-//add warning on refresh to lose changes?
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { stringify } from "querystring";
+
+
+// updatePost = async (post) => {
+//     await dbConnect()
+//     const postId = post._id;
+//     const foundPost = await Post.findByIdAndUpdate(postId, {
+//       ...req.body.campground,
+//     });
+    
+//     await campground.save();
+//   };
+
+//pass in the props -> so i can send the request from the page element itself? 
+
+
+
+
+//use react hook form for validation
+//add warning on refresh to lose changes?
+
 
 function EditForm({ post }) {
     const router = useRouter()
@@ -16,7 +35,7 @@ function EditForm({ post }) {
  
   function handleChange(evt) {
     const fieldName = evt.target.name;
-    const value = evt.target.valie;
+    const value = evt.target.value;
 
     setFormData(currData => {
         currData[fieldName] = value;
@@ -24,14 +43,29 @@ function EditForm({ post }) {
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('SUBMITTED')
+
+    //pull out the two elements needed
+    const {title, description} = formData;
+
+    //send data to API route
+    const res = await fetch(`http://localhost:3000/api/posts/${post._id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({title, description})
+    })
+
+    const result = await res.json();
+    console.log(result)
+
     //sends back to the show page of a post
     router.replace(`${post._id}`)
   }
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div>
         <label htmlFor="title">Update title</label>
         <textarea
@@ -54,7 +88,7 @@ function EditForm({ post }) {
           onChange={handleChange}
         ></textarea>
       </div>
-      <button onClick={handleSubmit}>Submit</button>
+      <button>Submit</button>
     </form>
   );
 }
