@@ -1,11 +1,12 @@
 import EditForm from '@/components/EditForm'
 import {getPost} from '@/lib/RESTFUL/Post'
-
+import { useState } from 'react';
 
 async function EditPage({searchParams}: {searchParams:{post:string}}){
     const postId = searchParams.post;
-    //get the post with specificied ID
+    //get the post with specified ID
     const post = await getPost(postId);
+
     return(
         <div className='h-screen flex flex-col items-center justify-center'>
         <h1>EDIT</h1>
@@ -15,9 +16,8 @@ async function EditPage({searchParams}: {searchParams:{post:string}}){
 }
 
 
+export const dynamic = 'force-dynamic'
 
-
-// export const dynamic = 'force-dynamic'
 export default EditPage;
 
 
@@ -28,3 +28,4 @@ export default EditPage;
 
 
 //feed the data from the top level somehow? 
+//is it better to use state and save this? only update when i need to and update the state as need be 

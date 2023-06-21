@@ -1,5 +1,6 @@
 import Card from "@/components/Card"
 import {getAllPosts} from '@/lib/RESTFUL/Post'
+import Link from "next/link"
 
 export default async function Index() {
   const data = await getAllPosts()
@@ -8,7 +9,8 @@ export default async function Index() {
 
   return (
     <main className="grid justify-center">
-    <h1 className="text-4xl text-center my-8">All Posts</h1>
+    <h1 className="text-4xl text-center mt-24 mb-6">All Posts</h1>
+    <Link href='/posts/new'>New Post</Link>
     {data.map((post: object) =>{
         return <Card post={post}/>
     })}
@@ -27,6 +29,8 @@ export default async function Index() {
 
 //fix key thing
 
+//maybe add sorting? or some other form of looking at posts
+//infitite scroll?
 
 
 //ERROR HANDLING

@@ -4,8 +4,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { stringify } from "querystring";
-
+import Link from "next/link";
 
 // updatePost = async (post) => {
 //     await dbConnect()
@@ -48,6 +47,7 @@ function EditForm({ post }) {
 
     //pull out the two elements needed
     const {title, description} = formData;
+    const id = post._id;
 
     //send data to API route
     const res = await fetch(`http://localhost:3000/api/posts/${post._id}`, {
@@ -55,16 +55,18 @@ function EditForm({ post }) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({title, description})
+      body: JSON.stringify({title, description, id})
     })
 
     const result = await res.json();
     console.log(result)
 
-    //sends back to the show page of a post
-    router.replace(`${post._id}`)
+    //sends back to the show page of a post with hard reload
+    window.location.href = `${id}`
+    
   }
   return (
+  <div>
     <form onSubmit={handleSubmit}>
       <div>
         <label htmlFor="title">Update title</label>
@@ -90,6 +92,8 @@ function EditForm({ post }) {
       </div>
       <button>Submit</button>
     </form>
+    <Link href={`/posts/${post._id}`}>Back</Link>
+    </div>
   );
 }
 
@@ -102,3 +106,5 @@ export default EditForm;
 //https://github.com/vercel/next.js/issues/47447
 
 //change description and title
+
+//use effect to reload a page?

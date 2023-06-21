@@ -5,7 +5,7 @@ return(
     <Link
     key={post._id}
   href={`/posts/${post._id}`}
-  className=" relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8 max-w-md items-center my-2"
+  className=" relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8 max-w-md items-center my-2 transform hover:scale-105 transition duration-300"
 >
   <span
     className="absolute inset-x-0 bottom-0 h-2 bg-white"
