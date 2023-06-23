@@ -1,24 +1,11 @@
 "use client";
 
-
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-// updatePost = async (post) => {
-//     await dbConnect()
-//     const postId = post._id;
-//     const foundPost = await Post.findByIdAndUpdate(postId, {
-//       ...req.body.campground,
-//     });
-    
-//     await campground.save();
-//   };
 
 //pass in the props -> so i can send the request from the page element itself? 
-
-
 
 
 //use react hook form for validation

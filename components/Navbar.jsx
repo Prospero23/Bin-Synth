@@ -45,7 +45,7 @@ function Navbar() {
   }, [prevScrollPos]);
 
   return (
-    <div className={`navbar bg-base-100 fixed z-50 transition-opacity duration-400 ${navbarVisible ? 'opacity-100' : 'opacity-0'}`}>
+    <nav className={`navbar bg-base-100 fixed z-50 transition-opacity duration-400 ${navbarVisible ? 'opacity-100' : 'opacity-0'}`}>
       <div className="flex-1">
         <a className="btn btn-ghost normal-case text-xl" href="/posts">Music App</a>
       </div>
@@ -63,7 +63,7 @@ function Navbar() {
           </li>
         </ul>
       </div>
-    </div>
+    </nav>
   );
 }
 

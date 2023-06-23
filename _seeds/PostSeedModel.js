@@ -25,6 +25,12 @@ const PostSchema = new mongoose.Schema({
     /* how would you describe your music? */
     type: String,
   },
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment"
+    }
+  ]
 });
 
 module.exports = mongoose.model("Post", PostSchema);

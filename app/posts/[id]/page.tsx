@@ -1,39 +1,35 @@
-import { getPost } from "@/lib//RESTFUL/Post";
-import Link from "next/link";
-import DeleteButton from "@/components/DeleteButton";
+import { getPost } from '@/lib//RESTFUL/Post';
+import ShowCard from '@/components/ShowCard';
+import Comment from '@/components/Comment';
+import NewComment from '@/components/NewComment'
+
 
 async function ShowPage({ params }: { params: { id: string } }) {
   const { id } = params;
   const post = await getPost(id);
 
-  return (
-    <main className="h-screen flex flex-col items-center justify-center">
-      <div className="flex-col justify-center">
-        <h1 className="text-center">{post.title}</h1>
+  const comments = [
+    { author: "HATER", body: "This is bad. I promise you." },
+    { author: "HATER", body: "This is bad. I promise you." },
+    { author: "HATER", body: "This is bad. I promise you." },
+    { author: "HATER", body: "This is bad. I promise you." },
+    { author: "HATER", body: "This is bad. I promise you." },
+  ];
 
-        {/* link to author should go to profile */}
-        <h2 className="text-center">By: {post.author}</h2>
-        <audio className="my-2" controls src="/media/cc0-audio/t-rex-roar.mp3">
-          <a href="/media/cc0-audio/t-rex-roar.mp3">Download audio</a>
-        </audio>
-        <div className="mt-2">
-          <Link
-            href={{
-              pathname: "/posts/edit",
-              query: { post: post._id },
-            }}
-            className=''
-          >
-            Edit
-          </Link>
-          <DeleteButton id={id} />
-        </div>
-        <div className="text-center my-2">
-          <Link href="/posts" className="bg-gray-100 text-black btn hover:bg-sky-500">
-            All Posts
-          </Link>
+
+  return (
+    <main className="flex flex-col items-center justify-center">
+      <div className="relative h-screen flex flex-col items-center justify-center">
+        <ShowCard post={post} />
+        <div className="absolute bottom-0">
+          <p className="mb-0">Scroll down for comments &#x2193;</p>
         </div>
       </div>
+      {comments.map((c) => (
+        <Comment comment={c} />
+      ))}
+      <NewComment id={id}/>
+
     </main>
   );
 }
@@ -41,3 +37,6 @@ async function ShowPage({ params }: { params: { id: string } }) {
 export default ShowPage;
 
 //need to add super much error handling
+
+//should make some component for a comment and then map over array of comments with it + add something to make a comment
+//fix styling later on

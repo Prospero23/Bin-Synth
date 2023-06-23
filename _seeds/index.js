@@ -19,7 +19,8 @@ const seedDb = async () => {
         title: 'My first track',
         author: 'Me',
         dateMade: '2023-10-19',
-        description: 'Just me messing around really'
+        description: 'Just me messing around really',
+        comments: []
 
     });
     await post.save();
