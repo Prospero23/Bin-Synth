@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Comment from '@/models/Comment'
 
 const PostSchema = new mongoose.Schema({
   title: {
@@ -32,6 +33,16 @@ const PostSchema = new mongoose.Schema({
     },
   ],
 });
+
+PostSchema.post("findOneAndDelete", async function (doc) {
+  if (doc) {
+    await Comment.deleteMany({
+      _id: {
+        $in: doc.comments,
+      },
+    });
+  }
+})
 
 export default mongoose.models.Post || mongoose.model("Post", PostSchema);
 

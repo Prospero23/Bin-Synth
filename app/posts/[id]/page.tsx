@@ -25,8 +25,9 @@ async function ShowPage({ params }: { params: { id: string } }) {
           <p className="mb-0">Scroll down for comments &#x2193;</p>
         </div>
       </div>
-      {comments.map((c) => (
-        <Comment comment={c} />
+      {post.comments.map((c:Comment) => (
+        //@ts-ignore
+        <Comment comment={c} key={c._id!}/>
       ))}
       <NewComment id={id}/>
 
@@ -40,3 +41,6 @@ export default ShowPage;
 
 //should make some component for a comment and then map over array of comments with it + add something to make a comment
 //fix styling later on
+
+
+//fix the typescript stuff
