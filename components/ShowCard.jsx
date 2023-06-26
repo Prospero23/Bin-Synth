@@ -1,7 +1,12 @@
 import DeleteButton from "@/components/DeleteButton";
+import { getAuthSession } from "@/lib/auth";
 import Link from "next/link";
 
-export default function ShowCard({ post }) {
+export default async function ShowCard({ post }) {
+
+  const session = await getAuthSession()
+  
+
   return (
     <div className="flex-col justify-center">
       <h1 className="text-center">{post.title}</h1>

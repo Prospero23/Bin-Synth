@@ -1,35 +1,11 @@
-// function Navbar(){
-//     return(
-//         <div className="navbar bg-base-100 fixed z-50" >
-//   <div className="flex-1">
-//     <a className="btn btn-ghost normal-case text-xl" href="/posts">Music App</a>
-//   </div>
-//   <div className="flex-none">
-//     <ul className="menu menu-horizontal px-1">
-//       <li><a>Link</a></li>
-//       <li>
-//         <details>
-//           <summary>
-//             User
-//           </summary>
-//           <ul className="p-2 bg-base-100">
-//             <li><a>Profile</a></li>
-//             <li><a>Logout</a></li>
-//           </ul>
-//         </details>
-//       </li>
-//     </ul>
-//   </div>
-// </div>
-//     )
-// }
-// export default Navbar;
+"use client";
+import { useEffect, useState } from "react";
+import { useSession, SessionProvider, signOut } from "next-auth/react";
+import Link from "next/link";
 
-// //maybe add some js stuff
-'use client'
-import{ useEffect, useState } from 'react';
+export default function Navbar() {
+  const { data: session, status } = useSession();
 
-function Navbar() {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [navbarVisible, setNavbarVisible] = useState(true);
 
@@ -40,31 +16,59 @@ function Navbar() {
       setPrevScrollPos(currentScrollPos);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [prevScrollPos]);
 
   return (
-    <nav className={`navbar bg-base-100 fixed z-50 transition-opacity duration-400 ${navbarVisible ? 'opacity-100' : 'opacity-0'}`}>
+    <nav
+      className={`navbar bg-base-100 fixed z-50 transition-opacity duration-400 ${
+        navbarVisible ? "opacity-100" : "opacity-0"
+      }`}
+    >
       <div className="flex-1">
-        <a className="btn btn-ghost normal-case text-xl" href="/posts">Music App</a>
+        <a className="btn btn-ghost normal-case text-xl" href="/posts">
+          Bin Synth
+        </a>
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">
-          <li><a>Link</a></li>
           <li>
-            <details>
-              <summary>User</summary>
-              <ul className="p-2 bg-base-100">
-                <li><a>Profile</a></li>
-                <li><a>Logout</a></li>
-              </ul>
-            </details>
+            <a>PLAY SYNTH</a>
           </li>
+
+          {session?.user? (
+            <li>
+              <details>
+                <summary>{session.user.name}</summary>
+                <ul className="p-2 bg-base-100">
+                  <li>
+                    <a href="">
+                      <img
+                        className="w-8 h-8 rounded-full"
+                        src={session.user.image}
+                        alt="Profile Photo"
+                      />
+                      Profile
+                    </a>
+                  </li>
+                  <li>
+                    <Link onClick={() => signOut()} href='' className=''>Logout</Link>
+                  </li>
+                </ul>
+              </details>
+            </li>
+          ) : (
+            <Link href="users/login" className="p-2 bg-base-100 hover:bg-pink-200 hover:rounded-s-md hover:text-slate-300 hover:bg-opacity-50">Login</Link>
+          )}
         </ul>
       </div>
     </nav>
   );
 }
 
-export default Navbar;
+//use to manage async
+
+
+
+//change a to LINK?

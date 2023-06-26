@@ -12,6 +12,20 @@ module.exports = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      animation: {
+        fadeOut: 'fadeOut 2500ms forwards',
+      },
+      keyframes: {
+        fadeOut: {
+          from: {
+            opacity: '1',
+          },
+          to: {
+            opacity: '0',
+            display: 'none !important'
+          },
+        },
+      },
     },
   },
   plugins: [require("daisyui")],

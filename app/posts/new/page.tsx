@@ -14,7 +14,7 @@ export default function NewPost() {
     <div className='h-screen flex flex-col items-center justify-center'>
     <h1>NEW</h1>
     <NewForm post={newPost}/>
-    <Link href='/posts'>Back to All Posts</Link>
+    <Link href='/posts' className='bg-gray-100 text-black btn hover:bg-sky-500'>Back to all Posts</Link>
     </div>
   );
 }

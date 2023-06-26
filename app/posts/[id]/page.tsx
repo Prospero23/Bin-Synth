@@ -1,21 +1,11 @@
-import { getPost } from '@/lib//RESTFUL/Post';
-import ShowCard from '@/components/ShowCard';
-import Comment from '@/components/Comment';
-import NewComment from '@/components/NewComment'
-
+import { getPost } from "@/lib//RESTFUL/Post";
+import ShowCard from "@/components/ShowCard";
+import Comment from "@/components/Comment";
+import NewComment from "@/components/NewComment";
 
 async function ShowPage({ params }: { params: { id: string } }) {
   const { id } = params;
   const post = await getPost(id);
-
-  const comments = [
-    { author: "HATER", body: "This is bad. I promise you." },
-    { author: "HATER", body: "This is bad. I promise you." },
-    { author: "HATER", body: "This is bad. I promise you." },
-    { author: "HATER", body: "This is bad. I promise you." },
-    { author: "HATER", body: "This is bad. I promise you." },
-  ];
-
 
   return (
     <main className="flex flex-col items-center justify-center">
@@ -25,12 +15,11 @@ async function ShowPage({ params }: { params: { id: string } }) {
           <p className="mb-0">Scroll down for comments &#x2193;</p>
         </div>
       </div>
-      {post.comments.map((c:Comment) => (
+      {post.comments.map((c: Comment) => (
         //@ts-ignore
-        <Comment comment={c} key={c._id!}/>
+        <Comment comment={c} postId={params.id} key={c._id!} />
       ))}
-      <NewComment id={id}/>
-
+        <NewComment id={id} />
     </main>
   );
 }
@@ -41,6 +30,5 @@ export default ShowPage;
 
 //should make some component for a comment and then map over array of comments with it + add something to make a comment
 //fix styling later on
-
 
 //fix the typescript stuff

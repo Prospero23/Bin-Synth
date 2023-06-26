@@ -47,8 +47,8 @@ export default function NewComment({ id }) {
       const result = await res.json();
       // Handle the response data
       console.log(result);
-      commentData.author = '';
-      commentData.body = '';
+      commentData.author = "";
+      commentData.body = "";
       router.refresh();
     } catch (error) {
       // Handle any other errors that occurred during the request
@@ -56,24 +56,46 @@ export default function NewComment({ id }) {
     }
   }
   return (
-    <form action="" onSubmit={handleSubmit}>
-      <label htmlFor="author">Name</label>
-      <input
-        type="text"
-        name="author"
-        id="author"
-        value={commentData.author}
-        onChange={handleChange}
-      />
-      <label htmlFor="body">Comment</label>
-      <input
-        type="text"
-        name="body"
-        id="body"
-        value={commentData.body}
-        onChange={handleChange}
-      />
-      <button>Submit</button>
+    <form
+      action=""
+      onSubmit={handleSubmit}
+      className="grid grid-cols-3 border mt-2"
+    >
+        <div className="col-span-1 mb-1 text-center">
+          <label htmlFor="author">Name</label>
+          </div>
+          <div className="col-span-2 mb-1">
+          <input
+            type="text"
+            name="author"
+            id="author"
+            value={commentData.author}
+            onChange={handleChange}
+            className="w-full"
+          />
+        </div>
+        <div className="col-span-1 text-center">
+          <label htmlFor="body">Comment</label>
+          </div>
+          <div className="col-span-2">
+          <textarea name="body" id="body" cols="30" rows="3" value={commentData.body} onChange={handleChange}></textarea>
+        </div>
+      <div className="col-span-3 text-center">
+        <button className="btn">Submit</button>
+      </div>
     </form>
+
+
+
   );
 }
+
+
+
+{/* <input
+            type="text"
+            name="body"
+            id="body"
+            value={commentData.body}
+            onChange={handleChange}
+          /> */}

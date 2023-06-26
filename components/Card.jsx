@@ -1,9 +1,9 @@
 import Link from 'next/link'
 
 function Card({post}){
-return(
+
+  return(
     <Link
-    key={post._id}
   href={`/posts/${post._id}`}
   className=" relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8 max-w-md items-center my-2 transform hover:scale-105 transition duration-300"
 >
