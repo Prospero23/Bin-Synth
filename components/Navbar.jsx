@@ -35,7 +35,7 @@ export default function Navbar() {
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <Link href='/posts'>SEE CREATIONS</Link>
+            <Link href='/posts'>COMMUNITY CREATIONS</Link>
           </li>
 
           {session?.user? (

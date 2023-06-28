@@ -12,7 +12,12 @@ export default function Login() {
     </div>
   );
 }
+
+
 //move home to closer to top right and then make google button bigger and have some type of is loading state 
+
+
+
 
 //      <div className="flex items-center mt-3">
 {/* <p className="inline mr-2">Don't have an account?</p>

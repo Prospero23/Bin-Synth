@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { FaGoogle } from "react-icons/fa";
+import {toast} from "react-toastify"
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,6 +15,7 @@ export default function Login() {
       await signIn("google");
     } catch (error) {
       //send TOAST notification to user
+      toast.error('Error signing in')
     } finally {
       setIsLoading(false);
     }
@@ -23,11 +25,12 @@ export default function Login() {
     <div className="bg-gray-100 text-black btn hover:bg-sky-500 w-96 my-2 mt-4">
       <button onClick={loginWithGoogle} className="w-full">
         <div className="flex items-center">
-          <FaGoogle className='mr-24' />
+        {isLoading ? <span className="loading loading-spinner loading-sm mr-24"></span>: <FaGoogle className='mr-24' />}
           <span className="">Continue with Google</span>
         </div>
       </button>
     </div>
+
   );
 }
 
