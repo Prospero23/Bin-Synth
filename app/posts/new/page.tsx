@@ -11,10 +11,12 @@ export default function NewPost() {
   }
 
   return (
-    <div className='h-screen flex flex-col items-center justify-center'>
-    <h1>NEW</h1>
+    <div className='flex flex-col items-center justify-center h-screen'>
+    <h1>NEW POST</h1>
     <NewForm post={newPost}/>
-    <Link href='/posts' className='bg-gray-100 text-black btn hover:bg-sky-500'>Back to all Posts</Link>
     </div>
   );
 }
+
+
+{/* <Link href='/posts' className='bg-gray-100 text-black btn hover:bg-sky-500'>Back to all Posts</Link> */}

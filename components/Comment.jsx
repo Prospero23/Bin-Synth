@@ -1,18 +1,18 @@
-"use client";
+'use client'
 
 import { useState } from "react";
 
 export default function Comment({ comment, postId }) {
-  const [hovered, setHovered] = useState(false);
+  const [clicked, setClicked] = useState(false);
   const [deleted, setDeleted] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
 
-  const handleMouseEnter = () => {
-    setHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setHovered(false);
+  const handleClick = () => {
+    if (deleted) {
+      setIsHidden(true); // Hide the component if it's already deleted
+    } else {
+      setClicked(!clicked);
+    }
   };
 
   const handleDelete = async () => {
@@ -36,11 +36,10 @@ export default function Comment({ comment, postId }) {
 
   return (
     <div
-      className={`border p-2 relative ${
-        deleted ? "animate-fadeOut" : hovered ? "pr-10" : ""
+      className={`max-w-lg border p-2 relative hover:cursor-pointer ${
+        deleted ? "animate-fadeOut" : clicked ? "pr-10" : ""
       }`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onClick={handleClick}
       onAnimationEnd={handleAnimationEnd}
       style={{ display: isHidden ? "none" : "block" }}
     >
@@ -48,11 +47,12 @@ export default function Comment({ comment, postId }) {
         <p className="text-red-500">Comment deleted.</p>
       ) : (
         <>
-          <h1>Commentor: {comment.author}</h1>
           <p>{comment.body}</p>
-          {hovered && (
+          <h1>- {comment.author.name}</h1>
+
+          {clicked && (
             <button
-              className="absolute bottom-2 right-2 p-2 bg-red-500 text-white rounded-full transition-opacity duration-300 opacity-0 hover:opacity-100"
+              className="absolute bottom-2 right-2 p-2 text-white rounded-full transition-opacity duration-300 opacity-30 hover:opacity-100"
               onClick={handleDelete}
             >
               X
@@ -63,3 +63,6 @@ export default function Comment({ comment, postId }) {
     </div>
   );
 }
+
+
+// 

@@ -1,7 +1,8 @@
 "use client";
-import {redirect} from 'next/navigation'
 
-export default function DeleteButton({id}) {
+
+
+export default function DeleteButton({id, authorId}) {
 
   async function handleClick(){
     console.log('DELETE')
@@ -10,7 +11,7 @@ export default function DeleteButton({id}) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({id})
+        body: JSON.stringify({id, authorId})
       })
       const result = await res.json()
       console.log(result);
@@ -21,7 +22,7 @@ export default function DeleteButton({id}) {
 
   return (
     <>
-      <button onClick={handleClick} className='float-right'>Delete</button>
+      <button onClick={handleClick} className='float-right hover:text-red-500 hover:underline'>Delete</button>
     </>
   );
 }

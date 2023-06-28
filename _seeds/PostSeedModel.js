@@ -9,11 +9,8 @@ const PostSchema = new mongoose.Schema({
     maxlength: [60, "Name cannot be more than 60 characters"],
   },
   author: {
-    /* the author who made the post. SHOULD BECOME ACTUAL AUTHOR STUFF */
-
-    type: String,
-    required: [true, "Please provide name of user"],
-    maxlength: [60, "User's Name cannot be more than 60 characters"],
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   },
   dateMade: {
     /* date of post */
@@ -28,10 +25,20 @@ const PostSchema = new mongoose.Schema({
   comments: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Comment"
-    }
-  ]
+      ref: "Comment",
+    },
+  ],
 });
+
+PostSchema.post("findOneAndDelete", async function (doc) {
+  if (doc) {
+    await Comment.deleteMany({
+      _id: {
+        $in: doc.comments,
+      },
+    });
+  }
+})
 
 module.exports = mongoose.model("Post", PostSchema);
 //at some point, need to really think about why im modeling as i am modeling. one to many vs whatever

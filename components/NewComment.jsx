@@ -7,7 +7,6 @@ export default function NewComment({ id }) {
   const router = useRouter();
 
   const [commentData, setCommentData] = useState({
-    author: "",
     body: "",
   });
 
@@ -26,7 +25,7 @@ export default function NewComment({ id }) {
   async function handleSubmit(e) {
     e.preventDefault();
     // Pull out the two fields
-    const { author, body } = commentData;
+    const { body } = commentData;
     // Send data to API route
     try {
       const res = await fetch(
@@ -36,7 +35,7 @@ export default function NewComment({ id }) {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ author, body }),
+          body: JSON.stringify({ body }),
         }
       );
 
@@ -47,7 +46,6 @@ export default function NewComment({ id }) {
       const result = await res.json();
       // Handle the response data
       console.log(result);
-      commentData.author = "";
       commentData.body = "";
       router.refresh();
     } catch (error) {
@@ -59,29 +57,14 @@ export default function NewComment({ id }) {
     <form
       action=""
       onSubmit={handleSubmit}
-      className="grid grid-cols-3 border mt-2"
+      className="border mt-2"
     >
-        <div className="col-span-1 mb-1 text-center">
-          <label htmlFor="author">Name</label>
-          </div>
-          <div className="col-span-2 mb-1">
-          <input
-            type="text"
-            name="author"
-            id="author"
-            value={commentData.author}
-            onChange={handleChange}
-            className="w-full"
-          />
+        <div className="mb-1">
+          <label htmlFor="body" className="block text-gray-300 font-semibold mb-2">New Comment</label>
+          <textarea name="body" id="body" cols="30" rows="3" value={commentData.body} onChange={handleChange} className="w-full px-4 py-2 border rounded focus:outline-none focus:border-sky-500"></textarea>
         </div>
-        <div className="col-span-1 text-center">
-          <label htmlFor="body">Comment</label>
-          </div>
-          <div className="col-span-2">
-          <textarea name="body" id="body" cols="30" rows="3" value={commentData.body} onChange={handleChange}></textarea>
-        </div>
-      <div className="col-span-3 text-center">
-        <button className="btn">Submit</button>
+        <div className="w-full flex flex-col mb-1">
+      <button className="m-auto hover:bg-sky-500 rounded-md p-1 hover:text-black">Submit</button>
       </div>
     </form>
 
@@ -90,12 +73,3 @@ export default function NewComment({ id }) {
   );
 }
 
-
-
-{/* <input
-            type="text"
-            name="body"
-            id="body"
-            value={commentData.body}
-            onChange={handleChange}
-          /> */}

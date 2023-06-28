@@ -16,6 +16,10 @@ const CommentSchema = new mongoose.Schema({
       required: [true, "comment must have text"],
       maxlength:[10000]
     },
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    }
   });
   
   export default mongoose.models.Comment || mongoose.model("Comment", CommentSchema);

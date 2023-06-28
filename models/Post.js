@@ -10,11 +10,8 @@ const PostSchema = new mongoose.Schema({
     maxlength: [60, "Name cannot be more than 60 characters"],
   },
   author: {
-    /* the author who made the post. SHOULD BECOME ACTUAL AUTHOR STUFF */
-
-    type: String,
-    required: [true, "Please provide name of user"],
-    maxlength: [60, "User's Name cannot be more than 60 characters"],
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   },
   dateMade: {
     /* date of post */

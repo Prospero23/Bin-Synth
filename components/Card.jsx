@@ -5,7 +5,7 @@ function Card({post}){
   return(
     <Link
   href={`/posts/${post._id}`}
-  className=" relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8 max-w-md items-center my-2 transform hover:scale-105 transition duration-300"
+  className=" relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8 max-w-md items-center my-2 transform hover:scale-105 transition duration-300 hover:border-sky-500"
 >
   <span
     className="absolute inset-x-0 bottom-0 h-2 bg-white"
@@ -17,7 +17,7 @@ function Card({post}){
         {post.title}
       </h3>
 
-      <p className="mt-1 text-xs font-medium text-gray-600">By {post.author}</p>
+      <p className="mt-1 text-xs font-medium text-gray-600">By {post.author.name}</p>
     </div>
 
     <div className="hidden sm:block sm:shrink-0">

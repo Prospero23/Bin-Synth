@@ -1,45 +1,76 @@
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import Post from "@/models/Post";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
-//update a post
-export async function PATCH(request){
-    try{
-    const data = await request.json()
+//update a post AUTH
+export async function PATCH(request) {
+  //@ts-ignore
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return NextResponse.json(
+      { error: "You must be logged in" },
+      { status: 401 }
+    );
+  }
+
+  try {
+    const data = await request.json();
     //console.log('data: ', data);
 
-    const {title, description, id} = data; 
+    const { title, description, id } = data;
 
-    dbConnect()
-    const post = await Post.findByIdAndUpdate(id, {
-        title, description, id
-    });
-    
-    await post.save()
-
-    return NextResponse.json({ title, description, id});
-} catch (e){
-
-}
-}
-
-
-//delete specified post. DELETE MESSED UP SO USING A POST REQUEST
-export async function POST(request){
-    try{
-    const {id} = await request.json();
-
-    if (!id) return NextResponse.json({"message": "Post id required "})
-
-    dbConnect()
-    await Post.findByIdAndDelete(id);
-    return NextResponse.json({"message": `Post ${id} deleted`});
-    } catch(e){
-
+    //check authorship
+    if (session.user.id !== id) {
+      return NextResponse.json({ error: "Not your post" }, { status: 403 });
     }
+
+    dbConnect();
+    const post = await Post.findByIdAndUpdate(id, {
+      title,
+      description,
+      id,
+    });
+
+    await post.save();
+
+    return NextResponse.json({ title, description, id });
+  } catch (e) {}
 }
 
+//delete specified post. DELETE MESSED UP SO USING A POST REQUEST AUTH
+export async function POST(request) {
+  //@ts-ignore
+  const session = await getServerSession(authOptions);
 
-//check header for authentification in these 
+  if (!session) {
+    return NextResponse.json(
+      { error: "You must be logged in" },
+      { status: 401 }
+    );
+  }
 
-//pass in the props -> so i can send the request from the page element itself? 
+  try {
+    const { id, authorId } = await request.json();
+
+    if (!id) return NextResponse.json({ message: "Post id required " });
+
+    console.log("SESSION", session.user.id);
+    console.log("AUTHOR", authorId)
+
+    //check authorship
+    if (session.user.id !== authorId) {
+      return NextResponse.json({ error: "Not your post" }, { status: 403 });
+    }
+
+    dbConnect();
+    await Post.findByIdAndDelete(id);
+    return NextResponse.json({ message: `Post ${id} deleted` });
+  } catch (e) {}
+}
+
+//check header for authentification in these
+
+//pass in the props -> so i can send the request from the page element itself?

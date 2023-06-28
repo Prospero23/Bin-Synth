@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useSession, SessionProvider, signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 
 export default function Navbar() {
@@ -16,6 +16,7 @@ export default function Navbar() {
       setPrevScrollPos(currentScrollPos);
     };
 
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [prevScrollPos]);
@@ -27,14 +28,14 @@ export default function Navbar() {
       }`}
     >
       <div className="flex-1">
-        <a className="btn btn-ghost normal-case text-xl" href="/posts">
+        <a className="btn btn-ghost normal-case text-xl" href="/synth">
           Bin Synth
         </a>
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <a>PLAY SYNTH</a>
+            <Link href='/posts'>SEE CREATIONS</Link>
           </li>
 
           {session?.user? (
@@ -53,13 +54,13 @@ export default function Navbar() {
                     </a>
                   </li>
                   <li>
-                    <Link onClick={() => signOut()} href='' className=''>Logout</Link>
+                    <Link onClick={() => signOut()} href='' className='p-2 flex flex-col align-center'>Logout</Link>
                   </li>
                 </ul>
               </details>
             </li>
           ) : (
-            <Link href="users/login" className="p-2 bg-base-100 hover:bg-pink-200 hover:rounded-s-md hover:text-slate-300 hover:bg-opacity-50">Login</Link>
+            <Link href="/users/login" className="p-2 bg-base-100 hover:bg-pink-200 hover:rounded-s-md hover:text-slate-300 hover:bg-opacity-50">Login</Link>
           )}
         </ul>
       </div>
