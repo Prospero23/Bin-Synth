@@ -7,6 +7,15 @@ const ImageSchema = new mongoose.Schema({
   filename: String,
 });
 
+const MouseActionSchema = new mongoose.Schema({
+  event: String,
+  x: Number,
+  y: Number,
+  prevX: Number,
+  prevY: Number,
+  time: Number,
+});
+
 
 const PostSchema = new mongoose.Schema({
   title: {
@@ -21,6 +30,7 @@ const PostSchema = new mongoose.Schema({
     ref: "User",
   },
   image: ImageSchema,
+  mouseActions: MouseActionSchema,
   dateMade: {
     /* date of post */
 

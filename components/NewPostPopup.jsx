@@ -8,6 +8,7 @@ export default function NewPostPopup({ post, isModalOpen }) {
     description: post.description,
     dateMade: post.dateMade,
     image: post.image,
+    formData: post.mouseActions
   });
 
   // Update form data whenever the post prop changes
@@ -17,6 +18,7 @@ export default function NewPostPopup({ post, isModalOpen }) {
       description: post.description,
       dateMade: post.dateMade,
       image: post.image,
+      mouseActions: post.mouseActions
     });
   }, [post]);
 
@@ -36,14 +38,16 @@ export default function NewPostPopup({ post, isModalOpen }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+
     //submit as multi-type form
     const multiData = new FormData();
     multiData.append("title", formData.title);
     multiData.append("description", formData.description);
     multiData.append("dateMade", formData.dateMade);
     multiData.append("image", formData.image);
+    multiData.append("mouseActions", JSON.stringify(formData.mouseActions ));
 
-    const userActions = null; //FIIXIXIXIXIXIX
+
 
     //send data to API route
     const res = await fetch(`http://localhost:3000/api/posts/`, {
@@ -55,7 +59,7 @@ export default function NewPostPopup({ post, isModalOpen }) {
     console.log(result);
 
     // //sends back to the show page of a post with hard reload FIX
-    //window.location.href = `/posts`;
+    window.location.href = `/posts`;
   };
   return (
     <dialog

@@ -40,6 +40,11 @@ export async function POST(request: Request) {
     const description = formData.get("description");
     const imageFile = formData.get("image");
     const dateMade = formData.get("dateMade");
+    const mouseActionsString = formData.get("mouseActions") as string; // Assuming it's the first value in the array
+    const mouseActions = JSON.parse(mouseActionsString);
+
+
+
 
     if (!imageFile) {
       throw new Error("No image file. Please try again");
@@ -58,12 +63,12 @@ export async function POST(request: Request) {
       throw new Error("Failed to upload image to Cloudinary");
     }
 
-    //public_id, secure_url
+    // public_id, secure_url
     const imageUrl = uploadResult.secure_url;
     const imageId = uploadResult.public_id;
 
     dbConnect();
-    const post = new Post({ title, description, dateMade });
+    const post = new Post({ title, description, dateMade, mouseActions });
 
     post.image = {
       url: imageUrl,
@@ -77,11 +82,11 @@ export async function POST(request: Request) {
     //console.log('post', post);
 
     //save post to DB
-      await post.save();
-      return NextResponse.json({ message: 'New Post Created' });
+    await post.save();
 
+    return NextResponse.json({ message: "New Post Created" });
   } catch (e) {
-    console.error('Error saving post:', e)
+    console.error("Error saving post:", e);
     // Handle error
   }
 }

@@ -6,6 +6,15 @@ const ImageSchema = new mongoose.Schema({
   filename: String,
 });
 
+const MouseActionSchema = new mongoose.Schema({
+  event: String,
+  x: Number,
+  y: Number,
+  prevX: Number,
+  prevY: Number,
+  time: Number,
+});
+
 ImageSchema.virtual("thumbnail").get(function () {
   return this.url.replace("/upload", "/upload/w_200");
 });
@@ -23,6 +32,7 @@ const PostSchema = new mongoose.Schema({
     ref: "User",
   },
   image: ImageSchema,
+  mouseActions:[MouseActionSchema],
   dateMade: {
     /* date of post */
 
