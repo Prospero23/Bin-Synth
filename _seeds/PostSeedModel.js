@@ -1,4 +1,12 @@
 const mongoose = require('mongoose')
+const Comment  = require("./CommentSeedModel");
+
+
+const ImageSchema = new mongoose.Schema({
+  url: String,
+  filename: String,
+});
+
 
 const PostSchema = new mongoose.Schema({
   title: {
@@ -12,6 +20,7 @@ const PostSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  image: ImageSchema,
   dateMade: {
     /* date of post */
 
@@ -29,6 +38,7 @@ const PostSchema = new mongoose.Schema({
     },
   ],
 });
+
 
 PostSchema.post("findOneAndDelete", async function (doc) {
   if (doc) {

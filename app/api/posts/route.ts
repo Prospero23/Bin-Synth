@@ -76,7 +76,7 @@ export async function POST(request: Request) {
     //console.log('IMAGE', post.image)
     //console.log('post', post);
 
-    //save post to DB ISSUE
+    //save post to DB
       await post.save();
       return NextResponse.json({ message: 'New Post Created' });
 

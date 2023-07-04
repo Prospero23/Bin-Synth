@@ -1,15 +1,14 @@
 import mongoose from "mongoose";
 import Comment from "@/models/Comment";
 
-// ImageSchema.virtual('thumbnail').get(function() {
-//   return this.url.replace("/upload", "/upload/w_200")
-// })
-
 const ImageSchema = new mongoose.Schema({
   url: String,
   filename: String,
 });
 
+ImageSchema.virtual("thumbnail").get(function () {
+  return this.url.replace("/upload", "/upload/w_200");
+});
 
 const PostSchema = new mongoose.Schema({
   title: {
