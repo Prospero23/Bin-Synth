@@ -8,14 +8,21 @@ export default async function Index() {
   const posts = JSON.parse(JSON.stringify(data));
 
   return (
-    <main className="grid justify-center">
-      <h1 className="text-4xl text-center mt-24 mb-6">All Posts</h1>
-      <Link href="/posts/new" className=" hover:bg-sky-500 hover:rounded-md p-1 hover:text-black w-fit">New Post</Link>
-      {data.map((post: object) => {
-        //@ts-ignore
-        return <Card post={post} key={post._id} />;
-      })}
-    </main>
+<main className="grid justify-center w-full h-full">
+  <div className="max-w-7xl h-full w-full">
+    <h1 className="text-4xl text-center mt-24 mb-6">All Posts</h1>
+    <Link
+      href="/posts/new"
+      className="hover:bg-sky-500 hover:rounded-md p-1 hover:text-black w-fit"
+    >
+      New Post
+    </Link>
+    {data.map((post: object) => {
+      //@ts-ignore
+      return <Card post={post} key={post._id} />;
+    })}
+  </div>
+</main>
   );
 }
 
