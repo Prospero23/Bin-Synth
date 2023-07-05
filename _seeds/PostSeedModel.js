@@ -30,7 +30,7 @@ const PostSchema = new mongoose.Schema({
     ref: "User",
   },
   image: ImageSchema,
-  mouseActions: MouseActionSchema,
+  mouseActions: [MouseActionSchema],
   dateMade: {
     /* date of post */
 

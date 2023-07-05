@@ -2,16 +2,21 @@
 
 import { NextReactP5Wrapper } from "@p5-wrapper/next";
 import { Suspense } from "react";
-
-//take in an array of actions and then pew pew pew with them at press of button
+import { useRef } from "react";
 
 const ShowSynth = ({ actionsArray }) => {
+  const isPlaying = useRef(false); // Use useRef for mutable state
+  let p5Instance; // Variable to store the p5 instance
+  let recordingStartTime;
+  const recordingDuration = 10000;
+  let playbackIndex = 0; 
+
+
   const sketch = (p5) => {
     let canvasMain;
-    let mouseActions = []; // Array to store recorded mouse actions
-    let isPlaying = false; // Flag to indicate playback state
-    let playbackIndex = 0; // Index to keep track of playback position
-    let recordingStartTime; // Variable to store the recording start time
+    let mouseActions = actionsArray;
+
+    p5Instance = p5; // Store the p5 instance
 
     p5.setup = function () {
       canvasMain = p5.createCanvas(600, 600);
@@ -20,55 +25,69 @@ const ShowSynth = ({ actionsArray }) => {
 
     p5.draw = function () {
       if (isPlaying) {
-        // Playback recorded mouse actions based on adjusted elapsed time
-        let elapsedTime = millis() - recordingStartTime;
+        let elapsedTime = p5Instance.millis() - recordingStartTime;
+
         while (playbackIndex < mouseActions.length) {
           let action = mouseActions[playbackIndex];
           if (action.time <= elapsedTime) {
             if (action.event === "dragged") {
-              line(
+              p5Instance.line(
                 action.prevX * p5.width,
                 action.prevY * p5.height,
                 action.x * p5.width,
                 action.y * p5.height
               );
-              //synthStuff(action.x, action.y);
             }
-    
+
             if (action.event === "click") {
-              rect(action.x * width, action.y * height, 30, 30);
-              //synth.triggerAttack(currentFreq);
+              p5Instance.rect(
+                action.x * p5.width,
+                action.y * p5.height,
+                30,
+                30
+              );
             }
-    
+
             if (action.event === "release") {
-              circle(action.x * width, action.y * height, 15);
-              //synth.triggerRelease();
+              p5Instance.circle(
+                action.x * p5.width,
+                action.y * p5.height,
+                15
+              );
             }
             playbackIndex++;
+
           } else {
             break;
           }
         }
-    
-        // Stop playback when all actions have been played
-        if (playbackIndex >= mouseActions.length) {
-          isPlaying = false;
+
+        if (elapsedTime >= recordingDuration){
+          isPlaying.current = false;
         }
       }
-    
-    };
 
-    p5.windowResized = function () {
-      p5.resizeCanvas(p5.windowWidth, p5.windowHeight);
+      p5.windowResized = function () {
+        p5.resizeCanvas(p5.windowWidth, p5.windowHeight);
+      };
     };
+  };
+
+  const startPlayback = () => {
+    recordingStartTime = p5Instance.millis()
+    isPlaying.current = true; // Update the value of isPlaying without triggering re-render
+    p5Instance.background(255);
+    playbackIndex = 0;
+    console.log('bang')
   };
 
   return (
     <>
       <Suspense
-        fallback={<p className="h-full text-center text-5xl">Loading Synth</p>}
+        fallback={<p className="h-full text-center text-5xl">Loading Synth........</p>}
       >
         <NextReactP5Wrapper sketch={sketch} />
+        <button onClick={startPlayback}>START</button>
       </Suspense>
     </>
   );
@@ -76,4 +95,7 @@ const ShowSynth = ({ actionsArray }) => {
 
 export default ShowSynth;
 
-//maybe allow newpost to close early?
+
+
+//add some error logic with Array.isArray(arrayasdfa)
+//NOT STORING PROPER IMAGE END

@@ -100,6 +100,7 @@ const Synth = ({ post }) => {
         p5.noLoop();
         console.log("STOP");
         openModal();
+        p5.saveJSON(mouseActions, 'mouseActions.json');
 
         // Call the function to save the canvas to Cloudinary
         saveCanvas(canvasMain.canvas, mouseActions);

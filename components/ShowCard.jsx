@@ -25,7 +25,7 @@ export default async function ShowCard({ post, session }) {
           <DeleteButton id={post._id} authorId={post.author._id} />
         </div>
       )}
-      <ShowSynth actionsArray={4} />
+      <ShowSynth actionsArray={post.mouseActions} />
       <div className="text-center my-2">
         <Link
           href="/posts"
