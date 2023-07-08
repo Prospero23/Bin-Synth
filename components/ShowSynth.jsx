@@ -9,8 +9,8 @@ const ShowSynth = ({ actionsArray }) => {
   let p5Instance; // Variable to store the p5 instance
   let recordingStartTime;
   const recordingDuration = 10000;
-  let playbackIndex = 0; 
-
+  let playbackIndex = 0;
+  let progress = 0; // Variable to store the progress of the recording
 
   const sketch = (p5) => {
     let canvasMain;
@@ -27,20 +27,22 @@ const ShowSynth = ({ actionsArray }) => {
       if (isPlaying) {
         let elapsedTime = p5Instance.millis() - recordingStartTime;
 
+        progress = (elapsedTime / recordingDuration) * p5.width; //calc progress
+
         while (playbackIndex < mouseActions.length) {
           let action = mouseActions[playbackIndex];
           if (action.time <= elapsedTime) {
             if (action.event === "dragged") {
-              p5Instance.line(
-                action.prevX * p5.width,
-                action.prevY * p5.height,
+              p5Instance.ellipse(
                 action.x * p5.width,
-                action.y * p5.height
+                action.y * p5.height,
+                30,
+                30
               );
             }
 
             if (action.event === "click") {
-              p5Instance.rect(
+              p5Instance.ellipse(
                 action.x * p5.width,
                 action.y * p5.height,
                 30,
@@ -49,45 +51,45 @@ const ShowSynth = ({ actionsArray }) => {
             }
 
             if (action.event === "release") {
-              p5Instance.circle(
-                action.x * p5.width,
-                action.y * p5.height,
-                15
-              );
+              p5Instance.ellipse(action.x * p5.width, action.y * p5.height, 30, 30);
             }
             playbackIndex++;
-
           } else {
             break;
           }
         }
 
-        if (elapsedTime >= recordingDuration){
+        if (elapsedTime >= recordingDuration) {
           isPlaying.current = false;
         }
       }
+      // Draw the progress bar at the bottom of the canvas
+      p5.fill(0);
+      p5.rect(0, p5.height - 10, progress, 10);
 
       p5.windowResized = function () {
-        p5.resizeCanvas(p5.windowWidth, p5.windowHeight);
+        //p5.resizeCanvas(p5.windowWidth, p5.windowHeight);
       };
     };
   };
 
   const startPlayback = () => {
-    recordingStartTime = p5Instance.millis()
+    recordingStartTime = p5Instance.millis();
     isPlaying.current = true; // Update the value of isPlaying without triggering re-render
     p5Instance.background(255);
     playbackIndex = 0;
-    console.log('bang')
+    console.log("bang");
   };
 
   return (
     <>
       <Suspense
-        fallback={<p className="h-full text-center text-5xl">Loading Synth........</p>}
+        fallback={
+          <p className="h-full text-center text-5xl">Loading Synth........</p>
+        }
       >
         <NextReactP5Wrapper sketch={sketch} />
-        <button onClick={startPlayback}>START</button>
+        <button onClick={startPlayback} className=" hover:text-green-500 hover:underline">START</button>
       </Suspense>
     </>
   );
@@ -95,7 +97,8 @@ const ShowSynth = ({ actionsArray }) => {
 
 export default ShowSynth;
 
-
-
 //add some error logic with Array.isArray(arrayasdfa)
 //NOT STORING PROPER IMAGE END
+
+
+//add a pause button and such

@@ -7,7 +7,7 @@ function Card({post}){
   return(
     <Link
   href={`/posts/${post._id}`}
-  className=" relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8 max-w-2xl items-center my-2 transform hover:scale-105 transition duration-300 hover:border-sky-500"
+  className=" relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8 max-w-2xl items-center my-2 transform hover:scale-105 transition duration-300 hover:border-sky-500 mx-auto"
 >
   <span
     className="absolute inset-x-0 bottom-0 h-2 bg-white"
@@ -26,7 +26,7 @@ function Card({post}){
       <img
         alt="Paul Clapton"
         src={post.image.url}
-        className="h-16 w-16 rounded-lg object-cover shadow-sm"
+        className="h-16 w-16 rounded-lg object-cover shadow-sm lg:h-32 lg:w-32"
       />
     </div>
   </div>
