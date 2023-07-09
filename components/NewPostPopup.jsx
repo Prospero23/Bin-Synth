@@ -62,7 +62,7 @@ export default function NewPostPopup({ post, isModalOpen }) {
     });
 
     const result = await res.json();
-    console.log(result);
+    localStorage.setItem('result', JSON.stringify(result)); //result to local storage
 
     // //sends back to the show page of a post with hard reload FIX
     window.location.href = `/posts`;

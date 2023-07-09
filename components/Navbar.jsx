@@ -2,12 +2,30 @@
 import { useEffect, useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
+import {toast} from 'react-toastify'
 
 export default function Navbar() {
   const { data: session, status } = useSession();
 
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [navbarVisible, setNavbarVisible] = useState(true);
+
+  const handleSignOut = () => {
+    signOut({
+      redirect: false
+    })
+    toast.success('successfully logged out', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      });
+
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,7 +72,7 @@ export default function Navbar() {
                     </a>
                   </li>
                   <li>
-                    <Link onClick={() => signOut()} href='' className='p-2 flex flex-col align-center'>Logout</Link>
+                    <Link onClick={handleSignOut} href='' className='p-2 flex flex-col align-center'>Logout</Link>
                   </li>
                 </ul>
               </details>

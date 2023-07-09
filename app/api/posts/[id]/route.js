@@ -36,7 +36,7 @@ export async function PATCH(request) {
 
     await post.save();
 
-    return NextResponse.json({ title, description, id });
+    return NextResponse.json({ message: "Post Updated Successfully" });
   } catch (e) {}
 }
 
@@ -55,19 +55,22 @@ export async function POST(request) {
   try {
     const { id, authorId } = await request.json();
 
-    if (!id) return NextResponse.json({ message: "Post id required " });
+    if (!id) return NextResponse.json({ message: "Post Id Required " });
 
-    console.log("SESSION", session.user.id);
-    console.log("AUTHOR", authorId)
+    // console.log("SESSION", session.user.id);
+    // console.log("AUTHOR", authorId)
 
     //check authorship
     if (session.user.id !== authorId) {
-      return NextResponse.json({ error: "Not your post" }, { status: 403 });
+      return NextResponse.json(
+        { error: "Not Your Post to Delete" },
+        { status: 403 }
+      );
     }
 
     dbConnect();
     await Post.findByIdAndDelete(id);
-    return NextResponse.json({ message: `Post ${id} deleted` });
+    return NextResponse.json({ message: `Post Deleted Successfully!` });
   } catch (e) {}
 }
 

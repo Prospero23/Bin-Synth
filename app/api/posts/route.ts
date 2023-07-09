@@ -86,7 +86,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ message: "New Post Created" });
   } catch (e) {
-    console.error("Error saving post:", e);
+    console.error("Error Saving Post:", e);
     // Handle error
   }
 }

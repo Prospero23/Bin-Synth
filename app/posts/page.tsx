@@ -1,6 +1,7 @@
 import Card from "@/components/Card";
 import { getAllPosts } from "@/lib/RESTFUL/Post";
 import Link from "next/link";
+import Toast from "@/components/Toast"
 
 export default async function Index() {
   const data = await getAllPosts();
@@ -9,7 +10,7 @@ export default async function Index() {
 
   return (
 <main className="grid justify-center lg:grid-cols-7">
-
+<Toast/>
   <div className="h-full w-full lg:col-start-3 lg:col-span-3">
   <h1 className="text-4xl text-center mt-24 mb-6">Community Creations</h1>
     <div className="w-full col-start-3">
