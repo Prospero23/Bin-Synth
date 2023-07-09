@@ -25,13 +25,15 @@ function NewForm({ post }) {
     });
   }
 
-  //FIX
+  //FIX HAVE
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     //pull out the two elements needed
     const { title, description } = formData;
     const dateMade = '2023-10-19';
+    const photo = null;
+    const userActions = null; //FIIXIXIXIXIXIX
 
     //send data to API route
     const res = await fetch(`http://localhost:3000/api/posts/`, {
@@ -39,7 +41,7 @@ function NewForm({ post }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ title, description, dateMade }),
+      body: JSON.stringify({ title, description, dateMade, photo, userActions }),
     });
 
     const result = await res.json();

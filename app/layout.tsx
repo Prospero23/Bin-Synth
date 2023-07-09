@@ -4,7 +4,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { NextAuthProvider } from "./providers";
 import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -24,8 +23,8 @@ export default function RootLayout({
       <body className={inter.className}>
         <NextAuthProvider>
           <Navbar />
+          <ToastContainer theme="dark"/>
           {children}
-          <ToastContainer />
           <Footer />
         </NextAuthProvider>
       </body>

@@ -1,5 +1,23 @@
 import mongoose from "mongoose";
-import Comment from '@/models/Comment'
+import Comment from "@/models/Comment";
+
+const ImageSchema = new mongoose.Schema({
+  url: String,
+  filename: String,
+});
+
+const MouseActionSchema = new mongoose.Schema({
+  event: String,
+  x: Number,
+  y: Number,
+  prevX: Number,
+  prevY: Number,
+  time: Number,
+});
+
+ImageSchema.virtual("thumbnail").get(function () {
+  return this.url.replace("/upload", "/upload/w_200");
+});
 
 const PostSchema = new mongoose.Schema({
   title: {
@@ -13,6 +31,8 @@ const PostSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  image: ImageSchema,
+  mouseActions:[MouseActionSchema],
   dateMade: {
     /* date of post */
 
@@ -39,11 +59,10 @@ PostSchema.post("findOneAndDelete", async function (doc) {
       },
     });
   }
-})
+});
 
 export default mongoose.models.Post || mongoose.model("Post", PostSchema);
 
 //at some point, need to really think about why im modeling as i am modeling. one to many vs whatever
-
 
 //title, author, dateMade, description
