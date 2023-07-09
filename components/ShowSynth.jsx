@@ -1,6 +1,6 @@
-"use client";
+"use client"; //client to let synth error about hydration go away
 
-import * as Tone from 'tone'
+import * as Tone from "tone";
 import { NextReactP5Wrapper } from "@p5-wrapper/next";
 import { Suspense } from "react";
 import { useRef } from "react";
@@ -14,6 +14,7 @@ import {
 import { drawFunction } from "@/lib/synth/visualHelper";
 
 const ShowSynth = ({ actionsArray }) => {
+
   //SOUND///
   const fmSynth = new Tone.FMSynth();
   fmSynth.oscillator.type = "sawtooth";
@@ -73,11 +74,19 @@ const ShowSynth = ({ actionsArray }) => {
     p5Instance = p5; // Store the p5 instance
 
     p5.setup = function () {
-      canvasMain = p5.createCanvas(600, 600);
-      p5.background(255);
+      let scale = 0.725;
+      let height = p5.windowHeight * scale;
+      canvasMain = p5.createCanvas(height, height);
+      p5.background(0);
     };
 
     p5.draw = function () {
+      // Draw a border around the canvas
+      p5.stroke(255); // Set the border color to white
+      p5.strokeWeight(2); // Set the border thickness
+      p5.noFill(); // Disable fill for the border
+      p5.rect(0, 0, p5.width, p5.height); // Draw the border rectangle
+
       if (isPlaying) {
         let elapsedTime = p5.millis() - recordingStartTime;
         const scaleX = p5.width; //scale to deal with normalized value
@@ -96,7 +105,15 @@ const ShowSynth = ({ actionsArray }) => {
                 action.prevX * scaleX,
                 action.prevY * scaleY
               );
-              synthMove(p5, fmSynth, randomPulseSynth, granularSynth, sineSynth, action.x * scaleX, action.y * scaleY,)
+              synthMove(
+                p5,
+                fmSynth,
+                randomPulseSynth,
+                granularSynth,
+                sineSynth,
+                action.x * scaleX,
+                action.y * scaleY
+              );
             }
 
             if (action.event === "click") {
@@ -107,7 +124,15 @@ const ShowSynth = ({ actionsArray }) => {
                 action.prevX * scaleX,
                 action.prevY * scaleY
               );
-              synthStart(p5, fmSynth, randomPulseSynth, granularSynth, sineSynth, action.x * scaleX, action.y * scaleY)
+              synthStart(
+                p5,
+                fmSynth,
+                randomPulseSynth,
+                granularSynth,
+                sineSynth,
+                action.x * scaleX,
+                action.y * scaleY
+              );
             }
 
             if (action.event === "release") {
@@ -118,7 +143,7 @@ const ShowSynth = ({ actionsArray }) => {
                 action.prevX * scaleX,
                 action.prevY * scaleY
               );
-              synthEnd(p5, fmSynth, randomPulseSynth, granularSynth, sineSynth)
+              synthEnd(p5, fmSynth, randomPulseSynth, granularSynth, sineSynth);
             }
             playbackIndex++;
           } else {
@@ -131,7 +156,7 @@ const ShowSynth = ({ actionsArray }) => {
         }
       }
       // Draw the progress bar at the bottom of the canvas
-      p5.fill(0);
+      p5.fill(255);
       p5.rect(0, p5.height - 10, progress, 10);
 
       p5.windowResized = function () {
@@ -143,12 +168,10 @@ const ShowSynth = ({ actionsArray }) => {
   const startPlayback = () => {
     recordingStartTime = p5Instance.millis();
     isPlaying.current = true; // Update the value of isPlaying without triggering re-render
-    p5Instance.background(255);
+    p5Instance.background(0);
     playbackIndex = 0;
-    console.log("bang");
 
     //reset synth
-    
   };
 
   return (

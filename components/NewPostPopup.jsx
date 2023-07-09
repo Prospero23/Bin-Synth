@@ -3,6 +3,10 @@
 import { useState, useEffect } from "react";
 
 export default function NewPostPopup({ post, isModalOpen }) {
+
+  const [isLoading, setIsLoading] = useState(false);
+
+
   const [formData, setFormData] = useState({
     title: post.title,
     description: post.description,
@@ -36,7 +40,9 @@ export default function NewPostPopup({ post, isModalOpen }) {
 
   //FIX HAVE
   const handleSubmit = async (e) => {
+    setIsLoading(true)
     e.preventDefault();
+    
 
 
     //submit as multi-type form
@@ -109,11 +115,14 @@ export default function NewPostPopup({ post, isModalOpen }) {
         </div>
         <div className="mb-4">{/* date made here maybe? */}</div>
         <div className="w-full flex flex-col">
-          <button className="m-auto hover:bg-sky-500 rounded-md p-1 hover:text-black">
-            Submit
+          <button className="m-auto hover:bg-sky-500 rounded-md p-1 hover:text-black disabled:bg-gray-500 disabled:cursor-not-allowed" disabled = {isLoading}>
+          {isLoading ? <span className="loading loading-spinner loading-sm items-center"></span> : "Submit"}
           </button>
         </div>
       </form>
     </dialog>
   );
 }
+
+
+//make button inactive after click

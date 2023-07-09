@@ -23,7 +23,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`navbar bg-base-100 fixed z-50 transition-opacity duration-400 ${
+      className={`navbar bg-base-100 fixed z-50 transition-opacity duration-400 bg-opacity-70 ${
         navbarVisible ? "opacity-100" : "opacity-0"
       }`}
     >

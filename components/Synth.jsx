@@ -19,26 +19,27 @@ import {drawFunction, recordAction} from "@/lib/synth/visualHelper"
 
 const Synth = ({ post }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);   //controls for popup
-  const [updatedPost, setUpdatedPost] = useState(post);   //update post stuff
+  const [updatedPost, setUpdatedPost] = useState(post); 
+    //update post stuff
 
   const openModal = () => {
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+
   /////////////SKETCH STUFF////////////////////
   const sketch = (p5) => {
     Tone.start();
     let countdown = 10000;
+    let offset = 70; //canvas vert offset
     let startTime;
     let photoTaken = false;
     let canvasMain;
     let isClick = false;
     let isRelease = true;
-    let previousMouseIsPressed = false;
     let mouseActions = []; //MOUSE ACTIONS ARRAY
+
+    let inCanvas = false; 
 
     //SOUND///
     const fmSynth = new Tone.FMSynth();
@@ -86,6 +87,7 @@ const Synth = ({ post }) => {
 
     p5.setup = function () {
       canvasMain = p5.createCanvas(p5.windowWidth, p5.windowHeight);
+      canvasMain.position(0,offset);
       p5.background(0);
       startTime = p5.millis();
     };
@@ -109,7 +111,7 @@ const Synth = ({ post }) => {
       }
 
       /// RECORDING STUFF ///
-      if (p5.mouseIsPressed && isClick) {
+      if (p5.mouseIsPressed && isClick && isInCanvas()) {
         recordAction(p5, elapsedTime, mouseActions, "click")
         synthStart(p5, fmSynth, randomPulseSynth, granularSynth, sineSynth, p5.mouseX, p5.mouseY);
 
@@ -121,7 +123,7 @@ const Synth = ({ post }) => {
         synthEnd(p5, fmSynth, randomPulseSynth, granularSynth, sineSynth);
         isRelease = false; // Reset after the release action
         return;
-      } else if (p5.mouseIsPressed) {
+      } else if (p5.mouseIsPressed && isInCanvas()) {
         //drag event capture
         recordAction(p5, elapsedTime, mouseActions, "dragged")
 
@@ -133,12 +135,11 @@ const Synth = ({ post }) => {
       //end the loop
        if (remainingTime <= 0 && !photoTaken) {
          photoTaken = true;
-        p5.noLoop();
-        console.log("STOP");
-        openModal();
+        //p5.noLoop();
+        //openModal();
 
         // Call the function to save the canvas to Cloudinary
-        saveCanvas(canvasMain.canvas, mouseActions);
+        //saveCanvas(canvasMain.canvas, mouseActions);
       }
       if (isModalOpen){
         p5.noLoop();
@@ -148,6 +149,7 @@ const Synth = ({ post }) => {
     //when mouse is pressed
     p5.mousePressed = function () {
       isClick = true;
+
     };
 
     //when mouse is released
@@ -159,14 +161,23 @@ const Synth = ({ post }) => {
     p5.windowResized = function () {
       //p5.resizeCanvas(p5.canvas.width, p5.canvas.height, false); //FIX THIS
     };
+
+    function isInCanvas(){
+
+      const x = p5.mouseX
+      const y = p5.mouseY
+
+      if (x >= 0 && x <= p5.width && y >=offset  &&y <= p5.height){
+        return true
+      }
+      return false
+    }
+
   };
 
   function saveCanvas(canvas, mouseActions) {
     const canvasURL = canvas.toDataURL("image/png");
     // Update the post object
-
-    console.log(mouseActions);
-
     setUpdatedPost((prevPost) => ({
       ...prevPost,
       image: canvasURL,
@@ -185,10 +196,12 @@ const Synth = ({ post }) => {
     }
   }, [isModalOpen]);
 
+
+
   return (
     <>
       <Suspense
-        fallback={<p className="h-full text-center text-5xl">Loading Synth</p>}
+        fallback={<p className="h-full text-center text-9xl">SYNTH LOADING</p>}
       >
         <Timer initialTime={10} />
         <NextReactP5Wrapper sketch={sketch} />
