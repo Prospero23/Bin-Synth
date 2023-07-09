@@ -13,19 +13,18 @@ import {
   synthMove,
   synthEnd,
 } from "@/lib/synth/soundHelper";
-import {drawFunction, recordAction} from "@/lib/synth/visualHelper"
+import { drawFunction, recordAction } from "@/lib/synth/visualHelper";
 
 //need the post info at the top level here to pass into the sub component
 
 const Synth = ({ post }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);   //controls for popup
-  const [updatedPost, setUpdatedPost] = useState(post); 
-    //update post stuff
+  const [isModalOpen, setIsModalOpen] = useState(false); //controls for popup
+  const [updatedPost, setUpdatedPost] = useState(post);
+  //update post stuff
 
   const openModal = () => {
     setIsModalOpen(true);
   };
-
 
   /////////////SKETCH STUFF////////////////////
   const sketch = (p5) => {
@@ -39,7 +38,7 @@ const Synth = ({ post }) => {
     let isRelease = true;
     let mouseActions = []; //MOUSE ACTIONS ARRAY
 
-    let inCanvas = false; 
+    let inCanvas = false;
 
     //SOUND///
     const fmSynth = new Tone.FMSynth();
@@ -78,7 +77,8 @@ const Synth = ({ post }) => {
     granularSynth.chain(Tone.Destination);
     sineSynth.chain(Tone.Destination);
 
-    function logisticMap(x, r) { //randomizer for the pitch of pulseSynth
+    function logisticMap(x, r) {
+      //randomizer for the pitch of pulseSynth
       return r * x * (1 - x);
     }
     //values for randomizing pulse
@@ -87,7 +87,7 @@ const Synth = ({ post }) => {
 
     p5.setup = function () {
       canvasMain = p5.createCanvas(p5.windowWidth, p5.windowHeight);
-      canvasMain.position(0,offset);
+      canvasMain.position(0, offset);
       p5.background(0);
       startTime = p5.millis();
     };
@@ -99,7 +99,8 @@ const Synth = ({ post }) => {
       const randTime = 50;
       const timeTime = p5.millis(); //calculate when random pitch changes
 
-      if (timeTime % 100 >= randTime - 10) { //check if it has been over 100ish ms
+      if (timeTime % 100 >= randTime - 10) {
+        //check if it has been over 100ish ms
         value2 = logisticMap(value2, parameter2);
         const frequency = Tone.Frequency(value2).toFrequency();
 
@@ -107,49 +108,64 @@ const Synth = ({ post }) => {
       }
       //drawing FUNCTIONALITY
       if (p5.mouseIsPressed) {
-        drawFunction(p5, p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY)
+        drawFunction(p5, p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY);
       }
 
       /// RECORDING STUFF ///
       if (p5.mouseIsPressed && isClick && isInCanvas()) {
-        recordAction(p5, elapsedTime, mouseActions, "click")
-        synthStart(p5, fmSynth, randomPulseSynth, granularSynth, sineSynth, p5.mouseX, p5.mouseY);
+        recordAction(p5, elapsedTime, mouseActions, "click");
+        synthStart(
+          p5,
+          fmSynth,
+          randomPulseSynth,
+          granularSynth,
+          sineSynth,
+          p5.mouseX,
+          p5.mouseY
+        );
 
         isClick = false; // Reset after the first click action
         return;
       } else if (isRelease && !p5.mouseIsPressed) {
         //release of mouse
-        recordAction(p5, elapsedTime, mouseActions, "release")
+        recordAction(p5, elapsedTime, mouseActions, "release");
         synthEnd(p5, fmSynth, randomPulseSynth, granularSynth, sineSynth);
         isRelease = false; // Reset after the release action
         return;
       } else if (p5.mouseIsPressed && isInCanvas()) {
         //drag event capture
-        recordAction(p5, elapsedTime, mouseActions, "dragged")
+        recordAction(p5, elapsedTime, mouseActions, "dragged");
 
-        synthMove(p5, fmSynth, randomPulseSynth, granularSynth, sineSynth, p5.mouseX, p5.mouseY);
+        synthMove(
+          p5,
+          fmSynth,
+          randomPulseSynth,
+          granularSynth,
+          sineSynth,
+          p5.mouseX,
+          p5.mouseY
+        );
 
         return;
       }
 
       //end the loop
-       if (remainingTime <= 0 && !photoTaken) {
-         photoTaken = true;
-        //p5.noLoop();
-        //openModal();
+      if (remainingTime <= 0 && !photoTaken) {
+        photoTaken = true;
+        p5.noLoop();
+        openModal();
 
         // Call the function to save the canvas to Cloudinary
-        //saveCanvas(canvasMain.canvas, mouseActions);
+        saveCanvas(canvasMain.canvas, mouseActions);
       }
-      if (isModalOpen){
+      if (isModalOpen) {
         p5.noLoop();
-       }
+      }
     };
 
     //when mouse is pressed
     p5.mousePressed = function () {
       isClick = true;
-
     };
 
     //when mouse is released
@@ -162,17 +178,15 @@ const Synth = ({ post }) => {
       //p5.resizeCanvas(p5.canvas.width, p5.canvas.height, false); //FIX THIS
     };
 
-    function isInCanvas(){
+    function isInCanvas() {
+      const x = p5.mouseX;
+      const y = p5.mouseY;
 
-      const x = p5.mouseX
-      const y = p5.mouseY
-
-      if (x >= 0 && x <= p5.width && y >=offset  &&y <= p5.height){
-        return true
+      if (x >= 0 && x <= p5.width && y >= offset && y <= p5.height) {
+        return true;
       }
-      return false
+      return false;
     }
-
   };
 
   function saveCanvas(canvas, mouseActions) {
@@ -195,8 +209,6 @@ const Synth = ({ post }) => {
       console.log("Modal opened!");
     }
   }, [isModalOpen]);
-
-
 
   return (
     <>

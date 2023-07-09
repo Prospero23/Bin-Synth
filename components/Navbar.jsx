@@ -11,7 +11,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollPos = window.pageYOffset;
+      const currentScrollPos = window.scrollY;
       setNavbarVisible(prevScrollPos > currentScrollPos);
       setPrevScrollPos(currentScrollPos);
     };
@@ -35,13 +35,13 @@ export default function Navbar() {
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <Link href='/posts'>COMMUNITY CREATIONS</Link>
+            <Link href='/posts' className="hover:text-gray-200">COMMUNITY CREATIONS</Link>
           </li>
 
           {session?.user? (
             <li>
               <details>
-                <summary>{session.user.name}</summary>
+                <summary className="hover:text-gray-200">{session.user.name}</summary>
                 <ul className="p-2 bg-base-100">
                   <li>
                     <a href="">

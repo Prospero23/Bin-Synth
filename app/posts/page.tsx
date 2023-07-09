@@ -17,7 +17,7 @@ export default async function Index() {
       href="/synth"
       className="hover:bg-sky-500 hover:rounded-md p-1 hover:text-black w-fit "
     >
-      Click ME to try 
+      Click ME to try SYNTH
     </Link>
     </div>
     {data.map((post: object) => {

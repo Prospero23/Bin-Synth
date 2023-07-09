@@ -4,9 +4,11 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { FaGoogle } from "react-icons/fa";
 import {toast} from "react-toastify"
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter()
 
   const loginWithGoogle = async () => {
     setIsLoading(true);
@@ -18,6 +20,7 @@ export default function Login() {
       toast.error('Error signing in')
     } finally {
       setIsLoading(false);
+      router.push('/users/login/loggedIn')
     }
   };
 
