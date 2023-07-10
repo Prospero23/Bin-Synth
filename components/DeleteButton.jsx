@@ -24,7 +24,6 @@ export default function DeleteButton({id, authorId}) {
         body: JSON.stringify({id, authorId})
       })
       const result = await res.json()
-      console.log(result);
 
       localStorage.setItem('result', JSON.stringify(result));
 

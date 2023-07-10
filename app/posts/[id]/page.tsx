@@ -4,6 +4,7 @@ import Comment from "@/components/Comment";
 import NewComment from "@/components/NewComment";
 import { getAuthSession } from "@/lib/auth";
 import Link from "next/link";
+import Toast from "@/components/Toast"
 
 
 async function ShowPage({ params }: { params: { id: string } }) {
@@ -14,6 +15,7 @@ async function ShowPage({ params }: { params: { id: string } }) {
   return (
     <main className="flex flex-col items-center justify-center">
       <div className="relative h-screen flex flex-col items-center justify-center">
+        <Toast/>
         {/* @ts-ignore */}
         <ShowCard post={post} session={session} />
         <div className="absolute bottom-0">

@@ -1,6 +1,6 @@
 import EditForm from '@/components/EditForm'
 import {getPost} from '@/lib/RESTFUL/Post'
-import { useState } from 'react';
+import Toast from '@/components/Toast';
 
 async function EditPage({searchParams}: {searchParams:{post:string}}){
     const postId = searchParams.post;
@@ -11,6 +11,7 @@ async function EditPage({searchParams}: {searchParams:{post:string}}){
         <div className='h-screen flex flex-col items-center justify-center'>
         <h1>EDIT</h1>
         <EditForm post={post}/>
+        <Toast/>
         </div>
     )
 }

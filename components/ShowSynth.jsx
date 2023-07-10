@@ -2,8 +2,7 @@
 
 import * as Tone from "tone";
 import { NextReactP5Wrapper } from "@p5-wrapper/next";
-import { Suspense } from "react";
-import { useRef } from "react";
+import { Suspense, useRef, useEffect } from "react";
 import {
   granularOptions,
   synthStart,
@@ -14,88 +13,88 @@ import {
 import { drawFunction } from "@/lib/synth/visualHelper";
 
 const ShowSynth = ({ actionsArray }) => {
+  const fmSynth = useRef(null);
+  const randomPulseSynth = useRef(null);
+  const granularSynth = useRef(null);
+  const sineSynth = useRef(null);
+  const isPlaying = useRef(false);
+  const p5Instance = useRef(null);
+  const recordingStartTime = useRef(0);
+  const playbackIndex = useRef(0);
+  const progress = useRef(0);
 
-  //SOUND///
-  const fmSynth = new Tone.FMSynth();
-  fmSynth.oscillator.type = "sawtooth";
+  useEffect(() => {
+    // Create the Tone.js synths and effects
+    fmSynth.current = new Tone.FMSynth();
+    fmSynth.current.oscillator.type = "sawtooth";
 
-  const randomPulseSynth = new Tone.Synth();
-  randomPulseSynth.oscillator.type = "sine";
+    randomPulseSynth.current = new Tone.Synth();
+    randomPulseSynth.current.oscillator.type = "sine";
 
-  const granularSynth = new Tone.GrainPlayer(granularOptions);
-  const sineSynth = new Tone.Synth();
+    granularSynth.current = new Tone.GrainPlayer(granularOptions);
+    sineSynth.current = new Tone.Synth();
 
-  const bitCrusher = new Tone.BitCrusher({
-    bits: 8,
-  });
-  const reverb = new Tone.Reverb({
-    decay: 5,
-  });
-  const limiter = new Tone.Limiter();
-  limiter.threshold.value = -50; // Adjust the threshold level as needed
-  const compressor = new Tone.Compressor(-20, 3);
+    const bitCrusher = new Tone.BitCrusher({
+      bits: 8,
+    });
+    const reverb = new Tone.Reverb({
+      decay: 5,
+    });
+    const limiter = new Tone.Limiter();
+    limiter.threshold.value = -50; // Adjust the threshold level as needed
+    const compressor = new Tone.Compressor(-20, 3);
 
-  const reverb1 = new Tone.Reverb({
-    decay: 0.5,
-  });
+    const reverb1 = new Tone.Reverb({
+      decay: 0.5,
+    });
 
-  const distortion1 = new Tone.Distortion(0.3);
+    const distortion1 = new Tone.Distortion(0.3);
 
-  fmSynth.chain(reverb1, distortion1, Tone.Destination);
-  randomPulseSynth.chain(
-    reverb,
-    bitCrusher,
-    compressor,
-    limiter,
-    Tone.Destination
-  );
-  granularSynth.chain(Tone.Destination);
-  sineSynth.chain(Tone.Destination);
+    fmSynth.current.chain(reverb1, distortion1, Tone.Destination);
+    randomPulseSynth.current.chain(
+      reverb,
+      bitCrusher,
+      compressor,
+      limiter,
+      Tone.Destination
+    );
+    granularSynth.current.chain(Tone.Destination);
+    sineSynth.current.chain(Tone.Destination);
 
-  function logisticMap(x, r) {
-    //randomizer for the pitch of pulseSynth
-    return r * x * (1 - x);
-  }
-  //values for randomizing pulse
-  let value2 = 0.5; // Set the initial value (between 0 and 1)
-  const parameter2 = 3.2; // Set the parameter (can be changed)
-
-  const isPlaying = useRef(false); // Use useRef for mutable state
-  let p5Instance; // Variable to store the p5 instance
-  let recordingStartTime;
-  const recordingDuration = 10000;
-  let playbackIndex = 0;
-  let progress = 0; // Variable to store the progress of the recording
+    return () => {
+      // Clean up the Tone.js resources when the component unmounts
+      fmSynth.current.dispose();
+      randomPulseSynth.current.dispose();
+      granularSynth.current.dispose();
+      sineSynth.current.dispose();
+    };
+  }, []);
 
   const sketch = (p5) => {
-    let canvasMain;
-    let mouseActions = actionsArray;
-
-    p5Instance = p5; // Store the p5 instance
+    p5Instance.current = p5;
 
     p5.setup = function () {
       let scale = 0.725;
       let height = p5.windowHeight * scale;
-      canvasMain = p5.createCanvas(height, height);
+      p5.createCanvas(height, height);
       p5.background(0);
     };
 
     p5.draw = function () {
-      // Draw a border around the canvas
-      p5.stroke(255); // Set the border color to white
-      p5.strokeWeight(2); // Set the border thickness
-      p5.noFill(); // Disable fill for the border
-      p5.rect(0, 0, p5.width, p5.height); // Draw the border rectangle
+      p5.stroke(255);
+      p5.strokeWeight(2);
+      p5.noFill();
+      p5.rect(0, 0, p5.width, p5.height);
 
-      if (isPlaying) {
-        let elapsedTime = p5.millis() - recordingStartTime;
-        const scaleX = p5.width; //scale to deal with normalized value
+      if (isPlaying.current) {
+        let elapsedTime = p5.millis() - recordingStartTime.current;
+        const scaleX = p5.width;
         const scaleY = p5.height;
 
-        progress = (elapsedTime / recordingDuration) * p5.width; //calc progress
+        progress.current = (elapsedTime / 10000) * p5.width;
 
-        while (playbackIndex < mouseActions.length) {
-          let action = mouseActions[playbackIndex];
+        while (playbackIndex.current < actionsArray.length) {
+          let action = actionsArray[playbackIndex.current];
           if (action.time <= elapsedTime) {
             if (action.event === "dragged") {
               drawFunction(
@@ -107,10 +106,10 @@ const ShowSynth = ({ actionsArray }) => {
               );
               synthMove(
                 p5,
-                fmSynth,
-                randomPulseSynth,
-                granularSynth,
-                sineSynth,
+                fmSynth.current,
+                randomPulseSynth.current,
+                granularSynth.current,
+                sineSynth.current,
                 action.x * scaleX,
                 action.y * scaleY
               );
@@ -126,10 +125,10 @@ const ShowSynth = ({ actionsArray }) => {
               );
               synthStart(
                 p5,
-                fmSynth,
-                randomPulseSynth,
-                granularSynth,
-                sineSynth,
+                fmSynth.current,
+                randomPulseSynth.current,
+                granularSynth.current,
+                sineSynth.current,
                 action.x * scaleX,
                 action.y * scaleY
               );
@@ -143,21 +142,27 @@ const ShowSynth = ({ actionsArray }) => {
                 action.prevX * scaleX,
                 action.prevY * scaleY
               );
-              synthEnd(p5, fmSynth, randomPulseSynth, granularSynth, sineSynth);
+              synthEnd(
+                p5,
+                fmSynth.current,
+                randomPulseSynth.current,
+                granularSynth.current,
+                sineSynth.current
+              );
             }
-            playbackIndex++;
+            playbackIndex.current++;
           } else {
             break;
           }
         }
 
-        if (elapsedTime >= recordingDuration) {
+        if (elapsedTime >= 10000) {
           isPlaying.current = false;
         }
       }
-      // Draw the progress bar at the bottom of the canvas
+
       p5.fill(255);
-      p5.rect(0, p5.height - 10, progress, 10);
+      p5.rect(0, p5.height - 10, progress.current, 10);
 
       p5.windowResized = function () {
         //p5.resizeCanvas(p5.windowWidth, p5.windowHeight);
@@ -166,12 +171,10 @@ const ShowSynth = ({ actionsArray }) => {
   };
 
   const startPlayback = () => {
-    recordingStartTime = p5Instance.millis();
-    isPlaying.current = true; // Update the value of isPlaying without triggering re-render
-    p5Instance.background(0);
-    playbackIndex = 0;
-
-    //reset synth
+    recordingStartTime.current = p5Instance.current.millis();
+    isPlaying.current = true;
+    p5Instance.current.background(0);
+    playbackIndex.current = 0;
   };
 
   return (
@@ -184,7 +187,7 @@ const ShowSynth = ({ actionsArray }) => {
         <NextReactP5Wrapper sketch={sketch} />
         <button
           onClick={startPlayback}
-          className=" hover:text-green-500 hover:underline"
+          className="hover:text-green-500 hover:underline"
         >
           START
         </button>

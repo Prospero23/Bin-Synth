@@ -32,6 +32,9 @@ function EditForm({ post }) {
     //pull out the two elements needed
     const { title, description } = formData;
     const id = post._id;
+    const authorId = post.author._id;
+
+    console.log(post)
 
     //send data to API route
     const res = await fetch(`http://localhost:3000/api/posts/${post._id}`, {
@@ -39,11 +42,12 @@ function EditForm({ post }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ title, description, id }),
+      body: JSON.stringify({ title, description, id, authorId}),
     });
 
     const result = await res.json();
-    console.log(result);
+
+    localStorage.setItem('result', JSON.stringify(result));
 
     //sends back to the show page of a post with hard reload
     window.location.href = `${id}`;

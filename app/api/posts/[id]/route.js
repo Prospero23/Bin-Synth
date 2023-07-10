@@ -18,20 +18,19 @@ export async function PATCH(request) {
 
   try {
     const data = await request.json();
-    //console.log('data: ', data);
+    console.log('data: ', data);
 
-    const { title, description, id } = data;
+    const { title, description, id, authorId } = data;
 
     //check authorship
-    if (session.user.id !== id) {
-      return NextResponse.json({ error: "Not your post" }, { status: 403 });
-    }
+     if (session.user.id !== authorId) {
+       return NextResponse.json({ error: "Not your post" }, { status: 403 });
+     }
 
     dbConnect();
     const post = await Post.findByIdAndUpdate(id, {
       title,
-      description,
-      id,
+      description
     });
 
     await post.save();
@@ -57,8 +56,8 @@ export async function POST(request) {
 
     if (!id) return NextResponse.json({ message: "Post Id Required " });
 
-    // console.log("SESSION", session.user.id);
-    // console.log("AUTHOR", authorId)
+     console.log("SESSION", session.user.id);
+     console.log("AUTHOR", authorId)
 
     //check authorship
     if (session.user.id !== authorId) {
