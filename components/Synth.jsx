@@ -1,5 +1,7 @@
 "use client";
 
+import StartSynthPopup from "@/components/StartSynthPopup"
+
 import { useEffect } from "react";
 import { NextReactP5Wrapper } from "@p5-wrapper/next";
 import { Suspense } from "react";
@@ -15,12 +17,14 @@ import {
 } from "@/lib/synth/soundHelper";
 import { drawFunction, recordAction } from "@/lib/synth/visualHelper";
 
-//need the post info at the top level here to pass into the sub component
-
 const Synth = ({ post }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false); //controls for popup
+
+  const [isModalOpen, setIsModalOpen] = useState(false); //controls for popup to submit
+  const [isStarted, setIsStarted] = useState(false);
   const [updatedPost, setUpdatedPost] = useState(post);
-  //update post stuff
+
+  let p5Context;
+  let startTime; //Time playing is started
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -28,10 +32,11 @@ const Synth = ({ post }) => {
 
   /////////////SKETCH STUFF////////////////////
   const sketch = (p5) => {
+    p5Context=p5; //get access to p5 outside of sketch
+
     Tone.start();
     let countdown = 10000;
     let offset = 70; //canvas vert offset
-    let startTime;
     let photoTaken = false;
     let canvasMain;
     let isClick = false;
@@ -89,10 +94,10 @@ const Synth = ({ post }) => {
       canvasMain = p5.createCanvas(p5.windowWidth, p5.windowHeight);
       canvasMain.position(0, offset);
       p5.background(0);
-      startTime = p5.millis();
     };
     ///////DRAW///////
     p5.draw = function () {
+      if (isStarted){
       let elapsedTime = p5.millis() - startTime; //how long recording has been going
       let remainingTime = countdown - elapsedTime; // calc remaining time
 
@@ -187,7 +192,7 @@ const Synth = ({ post }) => {
       }
       return false;
     }
-  };
+  }};
 
   function saveCanvas(canvas, mouseActions) {
     const canvasURL = canvas.toDataURL("image/png");
@@ -202,22 +207,22 @@ const Synth = ({ post }) => {
 
   // Call the saveArrayToFile() function to trigger the file download
 
-  //in here  => send the data into the modal
   useEffect(() => {
-    if (isModalOpen) {
+    if (isStarted) {
       // Trigger any necessary actions when the modal opens
-      console.log("Modal opened!");
+      startTime = p5Context.millis();
     }
-  }, [isModalOpen]);
+  }, [isStarted]);
 
   return (
     <>
       <Suspense
         fallback={<p className="h-full text-center text-9xl">SYNTH LOADING</p>}
       >
-        <Timer initialTime={10} />
+        <Timer initialTime={10} isStarted={isStarted}/>
         <NextReactP5Wrapper sketch={sketch} />
       </Suspense>
+      <StartSynthPopup setIsStarted={setIsStarted}/>
       <NewPostPopup isModalOpen={isModalOpen} post={updatedPost} />
     </>
   );
@@ -228,3 +233,8 @@ export default Synth;
 //maybe allow newpost to close early?
 
 //MOVE MOST LOGIC OUT OF THIS FILE
+
+
+
+//run code after ok button is pressed
+

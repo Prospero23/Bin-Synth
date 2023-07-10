@@ -158,6 +158,13 @@ const ShowSynth = ({ actionsArray }) => {
 
         if (elapsedTime >= 10000) {
           isPlaying.current = false;
+          synthEnd(
+            p5,
+            fmSynth.current,
+            randomPulseSynth.current,
+            granularSynth.current,
+            sineSynth.current
+          )
         }
       }
 
@@ -202,3 +209,8 @@ export default ShowSynth;
 //NOT STORING PROPER IMAGE END
 
 //add a pause button and such
+
+
+
+
+
