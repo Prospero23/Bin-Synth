@@ -63,6 +63,6 @@ PostSchema.post("findOneAndDelete", async function (doc) {
 
 export default mongoose.models.Post || mongoose.model("Post", PostSchema);
 
-//at some point, need to really think about why im modeling as i am modeling. one to many vs whatever
-
 //title, author, dateMade, description
+
+//add likes and the LIKE

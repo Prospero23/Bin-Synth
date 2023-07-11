@@ -3,22 +3,19 @@ import mongoose from 'mongoose';
 
 
 const CommentSchema = new mongoose.Schema({
-    author: {
-      /* The author of comment */
-  
-      type: String,
-      required: [true, "Please provide a title for your song."],
-      maxlength: [60, "Name cannot be more than 60 characters"],
-    },
+
     body: {
       /* body of comment */
       type: String,
       required: [true, "comment must have text"],
-      maxlength:[10000]
+      maxlength:[10000],
+      required: [true, "Must keave a COMMENT."],
+
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: [true, "MUST HAVE AUTHOR"]
     }
   });
   

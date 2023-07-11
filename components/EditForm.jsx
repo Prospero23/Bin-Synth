@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -10,6 +11,8 @@ import Link from "next/link";
 //add warning on refresh to lose changes?
 
 function EditForm({ post }) {
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
   const router = useRouter();
   const [formData, setFormData] = useState({
     title: post.title,
@@ -26,7 +29,7 @@ function EditForm({ post }) {
     });
   }
 
-  const handleSubmit = async (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     //pull out the two elements needed
@@ -54,7 +57,7 @@ function EditForm({ post }) {
   };
   return (
     <div>
-      <form onSubmit={handleSubmit} className="max-w-md mx-auto p-2">
+      <form onSubmit={onSubmit} className="max-w-md mx-auto p-2">
         <div className="mb-4">
           <label
             htmlFor="title"

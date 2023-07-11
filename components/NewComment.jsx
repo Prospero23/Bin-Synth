@@ -1,32 +1,27 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import {toast} from "react-toastify"
 
 export default function NewComment({ id }) {
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const router = useRouter();
 
-  const [commentData, setCommentData] = useState({
-    body: "",
-  });
-
-  function handleChange(evt) {
-    const fieldName = evt.target.name;
-    const value = evt.target.value;
-
-    setCommentData((currData) => {
-      return {
-        ...currData,
-        [fieldName]: value,
-      };
-    });
+  const toastConfig = {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    // Pull out the two fields
-    const { body } = commentData;
+  async function onSubmit(data) {
     // Send data to API route
+
     try {
       const res = await fetch(
         `http://localhost:3000/api/posts/${id}/comments`,
@@ -35,18 +30,17 @@ export default function NewComment({ id }) {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ body }),
+          body: JSON.stringify(data),
         }
       );
 
       if (!res.ok) {
-        throw new Error("Failed to submit comment.");
+        toast.error('Failed to Submit Comment', toastConfig);
       }
 
       const result = await res.json();
       // Handle the response data
-      console.log(result);
-      commentData.body = "";
+      toast.success(result.message, toastConfig)
       router.refresh();
     } catch (error) {
       // Handle any other errors that occurred during the request
@@ -54,22 +48,30 @@ export default function NewComment({ id }) {
     }
   }
   return (
-    <form
-      action=""
-      onSubmit={handleSubmit}
-      className="border mt-2"
-    >
-        <div className="mb-1">
-          <label htmlFor="body" className="block text-gray-300 font-semibold mb-2">New Comment</label>
-          <textarea name="body" id="body" cols="30" rows="3" value={commentData.body} onChange={handleChange} className="w-full px-4 py-2 border rounded focus:outline-none focus:border-sky-500"></textarea>
-        </div>
-        <div className="w-full flex flex-col mb-1">
-      <button className="m-auto hover:bg-sky-500 rounded-md p-1 hover:text-black">Submit</button>
+    <form onSubmit={handleSubmit(onSubmit)} className="border mt-2">
+      <div className="mb-1">
+        <label
+          htmlFor="body"
+          className="block text-gray-300 font-semibold mb-2"
+        >
+          New Comment
+        </label>
+        <textarea
+{...register("body", { 
+  required: { value: true, message: "Actually say something!" },
+  validate: value => !!value.trim() || 'not just spaces :(' 
+})}          id="body"
+          cols="30"
+          rows="3"
+          className="w-full px-4 py-2 border rounded focus:outline-none focus:border-sky-500"
+        ></textarea>
+        <p>{errors.body?.message}</p>
+      </div>
+      <div className="w-full flex flex-col mb-1">
+        <button className="m-auto hover:bg-sky-500 rounded-md p-1 hover:text-black">
+          Submit
+        </button>
       </div>
     </form>
-
-
-
   );
 }
-

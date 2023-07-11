@@ -21,6 +21,7 @@ export async function POST(request, { params }) {
     //grab id from search params and data from body
     const data = await request.json();
     const { body } = data;
+    console.log(body)
     const postId = params.id;
 
     //connect and grab post from db
@@ -39,8 +40,7 @@ export async function POST(request, { params }) {
     await post.save();
     await comment.save();
 
-    return NextResponse.json({ message: `comment ${comment._id} added` });
-    //return NextResponse.json({'message' : 'working'})
+    return NextResponse.json({ message: `comment added` });
   } catch (e) {
     NextResponse.json({ error: "rats" });
   }
