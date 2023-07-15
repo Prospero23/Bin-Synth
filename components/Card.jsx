@@ -8,9 +8,9 @@ function Card({ post }) {
   return (
 <Link
 href={`/posts/${post._id}`}
-className=" relative block overflow-hidden rounded-lg border border-gray-100 items-center my-2 transform hover:scale-105 transition duration-300 hover:border-sky-500"
+className=" relative block overflow-hidden rounded-lg border border-gray-100 items-center my-2 transform hover:scale-105 transition duration-300 hover:border-sky-500 group"
 >
-<span className="absolute inset-x-0 bottom-0 h-2 bg-white z-10"></span>
+<span className="absolute inset-x-0 bottom-0 h-2 bg-white z-10 group-hover:bg-sky-500 transition duration-300"></span>
 <div className="flex flex-row">
   <div className="p-4 sm:p-6 lg:p-8 flex-nowrap">
     <div className="sm:flex sm:justify-between sm:gap-4">
@@ -39,11 +39,13 @@ className=" relative block overflow-hidden rounded-lg border border-gray-100 ite
       </div>
     </dl>
   </div>
-  <div className="relative h-10">
+  <div className="relative h-64 w-full p-6">
+    <div className="absolute">
+  </div>
       <img
         alt="post image"
         src={post.image.url}
-        className=""
+        className="object-none object-center h-full w-full"
       />
   </div>
 </div>

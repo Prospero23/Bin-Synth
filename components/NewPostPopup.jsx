@@ -1,59 +1,53 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 
 export default function NewPostPopup({ post, isModalOpen }) {
-
-  const [isLoading, setIsLoading] = useState(false);
-
-
-  const [formData, setFormData] = useState({
-    title: post.title,
-    description: post.description,
-    dateMade: post.dateMade,
-    image: post.image,
-    formData: post.mouseActions
-  });
-
-  // Update form data whenever the post prop changes
-  useEffect(() => {
-    setFormData({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
       title: post.title,
       description: post.description,
       dateMade: post.dateMade,
       image: post.image,
-      mouseActions: post.mouseActions
+      formData: post.mouseActions,
+    },
+  });
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [givenData, setGivenData] = useState({
+    title: post.title,
+    description: post.description,
+    dateMade: post.dateMade,
+    image: post.image,
+    formData: post.mouseActions,
+  });
+
+  // Update form data whenever the post prop changes
+  useEffect(() => {
+    setGivenData({
+      dateMade: post.dateMade,
+      image: post.image,
+      mouseActions: post.mouseActions,
     });
   }, [post]);
 
-  function handleChange(evt) {
-    const fieldName = evt.target.name;
-    const value = evt.target.value;
-
-    setFormData((currData) => {
-      return {
-        ...currData,
-        [fieldName]: value,
-      };
-    });
-  }
-
   //FIX HAVE
-  const handleSubmit = async (e) => {
-    setIsLoading(true)
-    e.preventDefault();
-    
-
+  const onSubmit = async (formData) => {
+    setIsLoading(true); //change graphic to show load
 
     //submit as multi-type form
     const multiData = new FormData();
-    multiData.append("title", formData.title);
+    multiData.append("title", formData.title); //title + desc from form, else from state
     multiData.append("description", formData.description);
-    multiData.append("dateMade", formData.dateMade);
-    multiData.append("image", formData.image);
-    multiData.append("mouseActions", JSON.stringify(formData.mouseActions ));
-
-
+    multiData.append("dateMade", givenData.dateMade);
+    multiData.append("image", givenData.image);
+    multiData.append("mouseActions", JSON.stringify(givenData.mouseActions));
 
     //send data to API route
     const res = await fetch(`http://localhost:3000/api/posts/`, {
@@ -62,7 +56,7 @@ export default function NewPostPopup({ post, isModalOpen }) {
     });
 
     const result = await res.json();
-    localStorage.setItem('result', JSON.stringify(result)); //result to local storage
+    localStorage.setItem("result", JSON.stringify(result)); //result to local storage
 
     // //sends back to the show page of a post with hard reload FIX
     window.location.href = `/posts`;
@@ -76,7 +70,7 @@ export default function NewPostPopup({ post, isModalOpen }) {
     >
       <form
         method="dialog"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         className="max-w-md mx-auto p-2 modal-box"
       >
         <h1 className="w-full text-center">FINISH POST</h1>
@@ -90,11 +84,13 @@ export default function NewPostPopup({ post, isModalOpen }) {
           <input
             type="text"
             id="title"
-            value={formData.title}
-            onChange={handleChange}
-            name="title"
+            {...register("title", {
+              required: { value: true, message: "Actually say something!" },
+              validate: (value) => !!value.trim() || "not just spaces :(",
+            })}
             className="w-full px-4 py-2 border rounded focus:outline-none focus:border-sky-500"
           />
+          <p>{errors.title?.message}</p>
         </div>
         <div className="mb-4">
           <label
@@ -104,25 +100,33 @@ export default function NewPostPopup({ post, isModalOpen }) {
             Description
           </label>
           <textarea
-            name="description"
+            {...register("description", {
+              required: { value: true, message: "Actually say something!" },
+              validate: (value) => !!value.trim() || "not just spaces :(",
+            })}
             id="description"
             cols="30"
             rows="5"
-            value={formData.description}
-            onChange={handleChange}
             className="w-full px-4 py-2 border rounded focus:outline-none focus:border-sky-500"
           ></textarea>
+          <p>{errors.description?.message}</p>
         </div>
         <div className="mb-4">{/* date made here maybe? */}</div>
         <div className="w-full flex flex-col">
-          <button className="m-auto hover:bg-sky-500 rounded-md p-1 hover:text-black disabled:bg-gray-500 disabled:cursor-not-allowed" disabled = {isLoading}>
-          {isLoading ? <span className="loading loading-spinner loading-sm items-center"></span> : "Submit"}
+          <button
+            className="m-auto hover:bg-sky-500 rounded-md p-1 hover:text-black disabled:bg-gray-500 disabled:cursor-not-allowed"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <span className="loading loading-spinner loading-sm items-center"></span>
+            ) : (
+              "Submit"
+            )}
           </button>
         </div>
       </form>
     </dialog>
   );
 }
-
 
 //make button inactive after click

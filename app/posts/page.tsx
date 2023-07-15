@@ -9,9 +9,9 @@ export default async function Index() {
   const posts = JSON.parse(JSON.stringify(data));
 
   return (
-<main className="grid justify-center lg:grid-cols-7">
+<main className="flex justify-center">
 <Toast/>
-  <div className="h-full w-full lg:col-start-3 lg:col-span-3">
+  <div className="">
   <h1 className="text-4xl text-center mt-24 mb-6">Community Creations</h1>
     <div className="w-full col-start-3">
     <Link

@@ -3,6 +3,8 @@
 import DeleteButton from "@/components/DeleteButton";
 import Link from "next/link";
 import ShowSynth from "@/components/ShowSynth";
+import LikeButton from '@/components/LikeButton'
+
 
 export default async function ShowCard({ post, session }) {
   //check to see if session user is the owner of post
@@ -36,7 +38,11 @@ export default async function ShowCard({ post, session }) {
         >
           All Posts
         </Link>
+        <div className="text-end">
+        <LikeButton/>
+        </div>
       </div>
+
     </div>
   );
 }
