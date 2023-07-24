@@ -12,9 +12,12 @@ export default async function ShowCard({ post, session }) {
   const isAuthor = post.author._id === session?.user.id;
 
   return (
-    <div className="flex-col justify-center">
-      <h1 className="text-center text-5xl mb-4 mt">{post.title}</h1>
-      <h2 className="text-center mb-2 text-sm">By: {post.author.name}</h2>
+    <div className="flex-col justify-center mt-24">
+         <div className="flex items-center justify-center">
+      <h1 className="text-center text-4xl mb-4">{post.title}</h1>
+      <LikeButton />
+    </div>
+      <h2 className="text-center text-sm">By: {post.author.name}</h2>
       {isAuthor && (
         <div className="mt-2">
           <Link
@@ -31,7 +34,7 @@ export default async function ShowCard({ post, session }) {
       )}
       
       <ShowSynth actionsArray={post.mouseActions} />
-      <div className="text-center my-2">
+      <div className="text-right">
         <Link
           href="/posts"
           className="bg-gray-100 text-black btn hover:bg-sky-500"
@@ -39,7 +42,6 @@ export default async function ShowCard({ post, session }) {
           All Posts
         </Link>
         <div className="text-end">
-        <LikeButton/>
         </div>
       </div>
 

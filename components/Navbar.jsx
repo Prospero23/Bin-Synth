@@ -47,7 +47,7 @@ export default function Navbar() {
     >
       <div className="flex-1">
         <a className="btn btn-ghost normal-case text-xl" href="/synth">
-          Bin Synth
+          binSynth
         </a>
       </div>
       <div className="flex-none">

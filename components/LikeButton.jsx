@@ -10,7 +10,7 @@ const LikeButton = () => {
   };
 
   return (
-    <div className="inline-block">
+    <div className="-mt-4">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill={isLiked ? "red" : "none"}

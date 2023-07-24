@@ -72,9 +72,9 @@ const ShowSynth = ({ actionsArray }) => {
 
   const sketch = (p5) => {
     p5Instance.current = p5;
+    let scale = 0.725; //how much space canvas takes
 
     p5.setup = function () {
-      let scale = 0.725;
       let height = p5.windowHeight * scale;
       p5.createCanvas(height, height);
       p5.background(0);
@@ -164,16 +164,18 @@ const ShowSynth = ({ actionsArray }) => {
             randomPulseSynth.current,
             granularSynth.current,
             sineSynth.current
-          )
+          );
         }
       }
 
       p5.fill(255);
       p5.rect(0, p5.height - 10, progress.current, 10);
 
-      p5.windowResized = function () {
-        //p5.resizeCanvas(p5.windowWidth, p5.windowHeight);
-      };
+    };
+    p5.windowResized = function () { //MAKE BETTER LATER
+      const size = Math.min(p5.windowWidth * scale, p5.windowHeight * scale)
+      p5.resizeCanvas(size, size);
+      console.log(p5.windowHeight * scale)
     };
   };
 
@@ -209,8 +211,3 @@ export default ShowSynth;
 //NOT STORING PROPER IMAGE END
 
 //add a pause button and such
-
-
-
-
-
