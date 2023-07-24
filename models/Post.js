@@ -25,7 +25,7 @@ const PostSchema = new mongoose.Schema({
 
     type: String,
     required: [true, "Please provide a title for your song."],
-    maxlength: [60, "Name cannot be more than 60 characters"],
+    maxlength: [20, "Name cannot be more than 60 characters"],
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,
@@ -49,6 +49,15 @@ const PostSchema = new mongoose.Schema({
       ref: "Comment",
     },
   ],
+  likeCount: {
+    type: Number,
+  },
+  likes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }
+  ]
 });
 
 PostSchema.post("findOneAndDelete", async function (doc) {

@@ -5,14 +5,25 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { v2 as cloudinary } from "cloudinary";
 
-//get all posts
-export async function GET() {
+//get all posts NOTUSED
+export async function GET(req: Request) {
   try {
     await dbConnect();
-    const posts = await Post.find({});
+
+    //const { page = 1 } = req.query;
+
+    const page = 1
+    const pageSize = 5;
+    const skip = (page - 1) * pageSize;
+
+    const posts = await Post.find().limit(pageSize).skip(skip);
     return NextResponse.json(posts);
   } catch (e) {}
 }
+
+
+
+
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
