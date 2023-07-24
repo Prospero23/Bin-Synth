@@ -4,7 +4,7 @@ import { useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { useCallback } from "react";
 
-const NavButton = ({ type }) => {
+const NavButton = ({ type, className }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
@@ -31,7 +31,7 @@ const NavButton = ({ type }) => {
       href={
         // <pathname>?sort=desc
         pathname + "?" + createQueryString("page", `${nextPage}`)
-      }
+      } className=" mx-40 hover:bg-sky-500"
     >
       {type === "next"
         ? "NEXT"
@@ -41,3 +41,6 @@ const NavButton = ({ type }) => {
 };
 
 export default NavButton;
+
+
+////if first page then no prev if last no next
