@@ -31,7 +31,7 @@ export default async function Index({
           return <Card post={post} key={post._id} />;
         })}
         {/* @ts-ignore */}
-        <NavButton type='prev' />
+        <NavButton type='prev'/>
         {/* @ts-ignore */}
         <NavButton type='next' />
       </div>
