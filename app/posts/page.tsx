@@ -2,9 +2,14 @@ import Card from "@/components/Card";
 import { getAllPosts } from "@/lib/RESTFUL/Post";
 import Link from "next/link";
 import Toast from "@/components/Toast";
+import NavButton from "@/components/IndexNav/NavButton";
 
-export default async function Index({searchParams}: {searchParams:{page:number}}) {
-  const data = await getAllPosts();
+export default async function Index({
+  searchParams,
+}: {
+  searchParams: { page: number };
+}) {
+  const data = await getAllPosts(searchParams.page);
   //fix stupid error popup
   const posts = JSON.parse(JSON.stringify(data));
 
@@ -25,8 +30,10 @@ export default async function Index({searchParams}: {searchParams:{page:number}}
           //@ts-ignore
           return <Card post={post} key={post._id} />;
         })}
-        <button className=" mr-5">PREVIOUS</button>
-        <button>NEXT</button>
+        {/* @ts-ignore */}
+        <NavButton type='prev' />
+        {/* @ts-ignore */}
+        <NavButton type='next' />
       </div>
     </main>
   );
