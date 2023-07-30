@@ -1,4 +1,4 @@
-import ShowSynth from "@/components/ShowSynth";
+import ShowSynth from "@/components/ShowPage/ShowSynth";
 
 export default function profilePage({ params }: { params: { id: string } }){
     const { id } = params;

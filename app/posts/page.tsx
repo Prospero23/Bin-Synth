@@ -1,4 +1,4 @@
-import Card from "@/components/Card";
+import Card from "@/components/Card/Card";
 import { getAllPosts } from "@/lib/RESTFUL/Post";
 import Link from "next/link";
 import Toast from "@/components/Toast";

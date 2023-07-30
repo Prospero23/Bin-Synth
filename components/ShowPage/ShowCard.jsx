@@ -1,9 +1,9 @@
 'use client'
 
-import DeleteButton from "@/components/DeleteButton";
+import DeleteButton from "@/components/ShowPage/DeleteButton";
 import Link from "next/link";
-import ShowSynth from "@/components/ShowSynth";
-import LikeButton from '@/components/LikeButton'
+import ShowSynth from "@/components/ShowPage/ShowSynth";
+import LikeButton from '@/components/ShowPage/LikeButton'
 
 
 export default async function ShowCard({ post, session }) {

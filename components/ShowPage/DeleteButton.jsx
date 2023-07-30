@@ -2,7 +2,7 @@
 
 import {toast} from 'react-toastify'
 import { useState } from "react";
-import DeletePostPop from '@/components/DeletePostPop'
+import DeletePostPop from '@/components/ShowPage/DeletePostPop'
 
 
 export default function DeleteButton({id, authorId}) {

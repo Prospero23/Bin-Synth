@@ -1,7 +1,7 @@
 import { getPost } from "@/lib//RESTFUL/Post";
-import ShowCard from "@/components/ShowCard";
-import Comment from "@/components/Comment";
-import NewComment from "@/components/NewComment";
+import ShowCard from "@/components/ShowPage/ShowCard";
+import Comment from "@/components/ShowPage/Comment";
+import NewComment from "@/components/ShowPage/NewComment";
 import { getAuthSession } from "@/lib/auth";
 import Link from "next/link";
 import Toast from "@/components/Toast"

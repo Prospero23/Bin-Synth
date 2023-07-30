@@ -1,4 +1,6 @@
 import Link from "next/link";
+import DateMade from "@/components/Card/TimeMade"
+import TimeMade from "@/components/Card/TimeMade";
 
 function Card({ post }) {
 
@@ -32,7 +34,7 @@ className=" relative block overflow-hidden rounded-lg border border-gray-100 ite
     <dl className="mt-6 flex gap-4 sm:gap-6">
       <div className="flex flex-col-reverse">
         <dd className="text-xs text-gray-300">
-          {post.dateMade.toString()}
+          <TimeMade dateMade={post.dateMade}/>
         </dd>
         <dt className="text-sm font-medium text-gray-400">Published:</dt>
 
