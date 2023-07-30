@@ -14,7 +14,7 @@ export default async function Index({
   const posts = JSON.parse(JSON.stringify(data));
 
   return (
-    <main className="flex justify-center">
+    <main className="flex justify-center w-full">
       <Toast />
       <div className="">
         <h1 className="text-4xl text-center mt-24 mb-6">Community Creations</h1>
@@ -31,9 +31,9 @@ export default async function Index({
           return <Card post={post} key={post._id} />;
         })}
         {/* @ts-ignore */}
-        <NavButton type='prev'/>
+        {/* <NavButton type='prev'/> */}
         {/* @ts-ignore */}
-        <NavButton type='next' />
+        {/* <NavButton type='next' /> */}
       </div>
     </main>
   );

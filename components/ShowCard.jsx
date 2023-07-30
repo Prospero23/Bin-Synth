@@ -17,7 +17,7 @@ export default async function ShowCard({ post, session }) {
       <h1 className="text-center text-4xl mb-4">{post.title}</h1>
       <LikeButton />
     </div>
-      <h2 className="text-center text-sm">By: {post.author.name}</h2>
+      <h2 className="text-center text-sm">By: <Link href={`users/${post.author._id}`}>{post.author.name}</Link></h2>
       {isAuthor && (
         <div className="mt-2">
           <Link
