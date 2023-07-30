@@ -18,7 +18,6 @@ export async function PATCH(request) {
 
   try {
     const data = await request.json();
-    console.log('data: ', data);
 
     const { title, description, id, authorId } = data;
 
@@ -33,10 +32,14 @@ export async function PATCH(request) {
       description
     });
 
+    console.log(post)
+
     await post.save();
 
     return NextResponse.json({ message: "Post Updated Successfully" });
-  } catch (e) {}
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 //delete specified post. DELETE MESSED UP SO USING A POST REQUEST AUTH

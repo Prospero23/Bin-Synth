@@ -26,23 +26,26 @@ function EditForm({ post }) {
     const id = post._id;
     const authorId = post.author._id;
 
-    console.log(post);
-
     //send data to API route
-    const res = await fetch(`http://localhost:3000/api/posts/${post._id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ title, description, id, authorId }),
-    });
-
-    const result = await res.json();
-
-    localStorage.setItem("result", JSON.stringify(result));
-
-    //sends back to the show page of a post with hard reload
-    window.location.href = `${id}`;
+    try{
+      const res = await fetch(`http://localhost:3000/api/posts/${post._id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, description, id, authorId }),
+      });
+ 
+      const result = await res.json();
+ 
+      localStorage.setItem("result", JSON.stringify(result));
+ 
+      //sends back to the show page of a post with hard reload
+      window.location.href = `${id}`;
+    } catch(e){
+      console.log('error', e)
+    }
+     
   };
   return (
     <div>
@@ -59,6 +62,7 @@ function EditForm({ post }) {
             {...register("title", {
               required: { value: true, message: "Actually say something!" },
               validate: (value) => !!value.trim() || "not just spaces :(",
+              maxLength: {value: 40, message: "Too Many Characters"} //match with schema
             })}
             id="title"
             className="w-full px-4 py-2 border rounded focus:outline-none focus:border-sky-500"
@@ -76,6 +80,8 @@ function EditForm({ post }) {
             {...register("description", {
               required: { value: true, message: "Actually say something!" },
               validate: (value) => !!value.trim() || "not just spaces :(",
+              maxLength: {value: 400, message: "Too Many Characters"} //match with schema
+
             })}
             id="description"
             cols="30"
@@ -108,9 +114,7 @@ export default EditForm;
 //ISSUE THAT NEEDS TO BE FIXED
 //https://github.com/vercel/next.js/issues/47447
 
-//change description and title
 
-//use effect to reload a page?
 
 // {...register("description", {
 //   required: { value: true, message: "Actually say something!" },

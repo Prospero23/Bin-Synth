@@ -20,13 +20,3 @@ async function EditPage({searchParams}: {searchParams:{post:string}}){
 export const dynamic = 'force-dynamic'
 
 export default EditPage;
-
-
-//check to see if there is a campground and then render the edit page
-
-
-
-
-
-//feed the data from the top level somehow? 
-//is it better to use state and save this? only update when i need to and update the state as need be 

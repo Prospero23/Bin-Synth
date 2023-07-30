@@ -25,7 +25,7 @@ const PostSchema = new mongoose.Schema({
 
     type: String,
     required: [true, "Please provide a title for your song."],
-    maxlength: [20, "Name cannot be more than 60 characters"],
+    maxlength: [40, "Name cannot be more than 40 characters"],
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,
@@ -42,6 +42,9 @@ const PostSchema = new mongoose.Schema({
   description: {
     /* how would you describe your music? */
     type: String,
+    required: [true, "Please provide a description for your song."],
+    maxlength: [400, "Max description is 400 characters"]
+
   },
   comments: [
     {
