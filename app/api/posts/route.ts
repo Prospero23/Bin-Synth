@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import dbConnect from "../../../lib/dbConnect";
-import Post from "../../../models/Post";
+import dbConnect from "@/lib/dbConnect";
+import Post from "@/models/Post";
+import User from '@/models/User'
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { v2 as cloudinary } from "cloudinary";
@@ -80,6 +81,10 @@ export async function POST(request: Request) {
 
     dbConnect();
     const post = new Post({ title, description, dateMade, mouseActions });
+    //@ts-ignore
+    const user = await User.findById(session.user.id)
+
+    user.posts.push(post._id); //save post to user
 
     post.image = {
       url: imageUrl,
@@ -89,11 +94,13 @@ export async function POST(request: Request) {
     //@ts-ignore
     post.author = session.user.id;
 
+
     //console.log('IMAGE', post.image)
     //console.log('post', post);
 
     //save post to DB
     await post.save();
+    await user.save();
 
     return NextResponse.json({ message: "New Post Created" });
   } catch (e) {
