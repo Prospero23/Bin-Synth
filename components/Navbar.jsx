@@ -79,12 +79,12 @@ export default function Home() {
         </div>
         <nav
           className={`${
-            isOpen ? "block" : "hidden px-2 pt-2 pb-4 sm:flex sm:p-0"
+            isOpen ? "block sm:flex": "hidden px-2 pt-2 pb-4 sm:flex sm:p-0"
           }`}
         >
           <Link
             href="/posts"
-            className="block px-2 py-1 text-white font-semibold rounded hover:bg-gray-800"
+            className="block px-2 py-1 text-white font-semibold rounded hover:bg-sky-500"
           >
             Community Creations
           </Link>
@@ -92,18 +92,18 @@ export default function Home() {
             <>
               <Link
                 href={`/users/${session.user.id}`}
-                className="mt-1 block px-2 py-1 text-white font-semibold rounded hover:bg-gray-800 sm:mt-0 sm:ml-2"
+                className=" block px-2 py-1 text-white font-semibold rounded hover:bg-sky-500 sm:mt-0 sm:ml-2"
               >
                 Profile
                 <img
-                  className="w-8 h-8 rounded-full inline ml-2"
+                  className="w-6 h-6 rounded-full inline ml-2"
                   src={session.user.image}
                   alt="Profile Photo"
                 />
               </Link>
               <Link
                 href="#"
-                className="mt-1 block px-2 py-1 text-white font-semibold rounded hover:bg-gray-800 sm:mt-0 sm:ml-2" //little offset
+                className=" block px-2 py-1 text-white font-semibold rounded hover:bg-sky-500 sm:mt-0 sm:ml-2" //little offset
                 onClick={handleSignOut}
               >
                 Logout
@@ -112,7 +112,7 @@ export default function Home() {
           ) : (
             <Link
               href="/users/login"
-              className="mt-1 block px-2 py-1 text-white font-semibold rounded hover:bg-gray-800 sm:mt-0 sm:ml-2"
+              className=" block px-2 py-1 text-white font-semibold rounded hover:bg-sky-500 sm:mt-0 sm:ml-2"
             >
               Login
             </Link>
