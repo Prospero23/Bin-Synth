@@ -29,7 +29,7 @@ export default function StartSynthPopup({setIsStarted}) {
         className="max-w-md mx-auto p-8 modal-box shadow-sm shadow-gray-100 text-gray-100"
       >
         <h1 className="w-full text-center text-2xl mb-1">Are You Ready?</h1>
-        <p className="text-center">Use mouse movements to control the synth.</p>
+        <p className="text-center">Use mouse/touch movements to control the synth.</p>
         <div className=" justify-evenly flex my-2">
           <button className="hover:text-green-500">START</button>
         </div>
