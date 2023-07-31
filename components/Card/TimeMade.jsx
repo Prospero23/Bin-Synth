@@ -3,9 +3,16 @@
 import { useState } from "react"
 
 export default function TimeMade({dateMade}){
+
+     const [isLong, setIsLong]= useState(false)
+
+    const date = dateMade.toString().split(" ")
+    const shortDate = date.slice(0,4).join(" "); //get short date
+
+
     return (
         <>
-    {dateMade.toString()}
+    {isLong ? dateMade.toString() : shortDate}
     </>
     )
 }

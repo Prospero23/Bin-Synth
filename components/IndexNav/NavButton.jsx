@@ -31,7 +31,7 @@ const NavButton = ({ type, className }) => {
       href={
         // <pathname>?sort=desc
         pathname + "?" + createQueryString("page", `${nextPage}`)
-      } className=" mx-40 hover:bg-sky-500"
+      } className="hover:bg-sky-500"
     >
       {type === "next"
         ? "NEXT"

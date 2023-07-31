@@ -4,9 +4,6 @@ import TimeMade from "@/components/Card/TimeMade";
 
 function Card({ post }) {
 
-  const date = post.dateMade.toString().split(" ")
-  const shortDate = date.slice(0,4).join(" "); //get short date
-
   return (
 <Link
 href={`/posts/${post._id}`}

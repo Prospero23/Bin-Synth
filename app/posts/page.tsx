@@ -17,7 +17,7 @@ export default async function Index({
     <main className="flex justify-center w-full">
       <Toast />
       <div className="">
-        <h1 className="text-4xl text-center mt-24 mb-6">Community Creations</h1>
+        <h1 className=" text-3xl md:text-4xl text-center mt-24 mb-6">Community Creations</h1>
         <div className="w-full col-start-3">
           <Link
             href="/synth"
@@ -30,10 +30,12 @@ export default async function Index({
           //@ts-ignore
           return <Card post={post} key={post._id} />;
         })}
+        <div className="flex justify-between md:text-2xl mx-8 md:mx-0">
         {/* @ts-ignore */}
-        {/* <NavButton type='prev'/> */}
+        <NavButton type='prev'/>
         {/* @ts-ignore */}
-        {/* <NavButton type='next' /> */}
+        <NavButton type='next' />
+        </div>
       </div>
     </main>
   );

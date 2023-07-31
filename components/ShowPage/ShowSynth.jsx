@@ -75,8 +75,10 @@ const ShowSynth = ({ actionsArray }) => {
     let scale = 0.725; //how much space canvas takes
 
     p5.setup = function () {
-      let height = p5.windowHeight * scale;
-      p5.createCanvas(height, height);
+
+      let side= p5.min(p5.windowHeight, p5.windowWidth) * scale
+
+      p5.createCanvas(side, side);
       p5.background(0);
     };
 
@@ -172,10 +174,9 @@ const ShowSynth = ({ actionsArray }) => {
       p5.rect(0, p5.height - 10, progress.current, 10);
 
     };
-    p5.windowResized = function () { //MAKE BETTER LATER
-      const size = Math.min(p5.windowWidth * scale, p5.windowHeight * scale)
-      p5.resizeCanvas(size, size);
-      console.log(p5.windowHeight * scale)
+    p5.windowResized = function () {
+      let sideLength = p5.min(p5.windowHeight, p5.windowWidth) * scale
+      p5.resizeCanvas(sideLength, sideLength);
     };
   };
 
