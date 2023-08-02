@@ -32,3 +32,5 @@ const LikeButton = () => {
 
 export default LikeButton;
 //maybe add hover state?
+
+//move likes from user to post? and then just check if user id is in likes array 
