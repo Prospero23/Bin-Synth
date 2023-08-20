@@ -28,7 +28,7 @@ function EditForm({ post }) {
 
     //send data to API route
     try{
-      const res = await fetch(`http://localhost:3000/api/posts/${post._id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${post._id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
