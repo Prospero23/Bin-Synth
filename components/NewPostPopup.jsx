@@ -51,7 +51,7 @@ export default function NewPostPopup({ post, isModalOpen }) {
     multiData.append("mouseActions", JSON.stringify(givenData.mouseActions));
 
     //send data to API route
-    const res = await fetch(`${process.env.BASE_URL}/api/posts/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/`, {
       method: "POST",
       body: multiData,
     });
