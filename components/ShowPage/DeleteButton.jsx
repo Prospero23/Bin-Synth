@@ -39,7 +39,7 @@ export default function DeleteButton({id, authorId}) {
 
   return (
     <>
-      <button onClick={handleClick} className='float-right hover:text-red-500 hover:underline'>Delete</button>
+      <button onClick={handleClick} className=' hover:text-red-500 hover:underline'>Delete</button>
     <DeletePostPop isModalOpen={isModalOpen} closeModal={closeModal} handleDelete={deletionFunction}/>
     </>
   );

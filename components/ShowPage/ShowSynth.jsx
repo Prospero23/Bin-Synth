@@ -70,15 +70,26 @@ const ShowSynth = ({ actionsArray }) => {
     };
   }, []);
 
+  useEffect(() => {
+
+  })
+
   const sketch = (p5) => {
     p5Instance.current = p5;
-    let scale = 0.725; //how much space canvas takes
+    let scale = 0.70; //how much space canvas takes
+
+    //maybe change scale based on device dims?
 
     p5.setup = function () {
 
       let side= p5.min(p5.windowHeight, p5.windowWidth) * scale
 
-      p5.createCanvas(side, side);
+      if (p5.windowWidth < 500){
+        side = p5.windowWidth
+      }
+
+      let canvas = p5.createCanvas(side, side)
+      
       p5.background(0);
     };
 
@@ -176,7 +187,22 @@ const ShowSynth = ({ actionsArray }) => {
     };
     p5.windowResized = function () {
       let sideLength = p5.min(p5.windowHeight, p5.windowWidth) * scale
+
+      if (p5.windowWidth < 500){
+        sideLength = p5.windowWidth
+      }
+
       p5.resizeCanvas(sideLength, sideLength);
+
+
+      // if (sideLength < rect.width){
+      //   let difference = rect.width - side 
+      //   console.log(difference)
+      //   p5.canvas.position(difference/2, 0)
+
+      // }
+
+
     };
   };
 
@@ -194,7 +220,7 @@ const ShowSynth = ({ actionsArray }) => {
           <p className="h-full text-center text-5xl">Loading Synth........</p>
         }
       >
-        <NextReactP5Wrapper sketch={sketch} />
+        <NextReactP5Wrapper sketch={sketch} className="flex items-center" id="react-p5-wrapper"/>
         <button
           onClick={startPlayback}
           className="hover:text-green-500 hover:underline"
