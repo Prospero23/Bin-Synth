@@ -9,7 +9,7 @@ import Toast from "@/components/Toast"
 
 async function ShowPage({ params }: { params: { id: string} }) {
   const { id } = params;
-  const post = await getPost(id); //add fail check TODO 
+  const post = await getPost(id); //add fail check TODO TODO
   const session = await getAuthSession() // add fail check TODO
 
   return (
