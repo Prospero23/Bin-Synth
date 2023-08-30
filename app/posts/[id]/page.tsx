@@ -7,13 +7,14 @@ import Link from "next/link";
 import Toast from "@/components/Toast"
 
 
-async function ShowPage({ params }: { params: { id: string } }) {
+async function ShowPage({ params }: { params: { id: string} }) {
   const { id } = params;
-  const post = await getPost(id);
-  const session = await getAuthSession()
+  const post = await getPost(id); //add fail check TODO 
+  const session = await getAuthSession() // add fail check TODO
 
   return (
-    <main className="flex flex-col items-center justify-center">
+    <main>
+      <div className="flex flex-col items-center justify-center">
       <div className="relative h-screen flex flex-col items-center justify-center">
         <Toast/>
         {/* @ts-ignore */}
@@ -32,7 +33,10 @@ async function ShowPage({ params }: { params: { id: string } }) {
       ) : (
         <Link href="/users/login">Login to Comment</Link>
       )}
-      
+      </div>
+      {/* <div className="absolute top-52 right-0 w-1/4">
+        <p>HEKKO</p>
+      </div> */}
     </main>
   );
 }

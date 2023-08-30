@@ -6,7 +6,7 @@ import ShowSynth from "@/components/ShowPage/ShowSynth";
 import LikeButton from '@/components/ShowPage/LikeButton'
 
 
-export default async function ShowCard({ post, session }) {
+export default function ShowCard({ post, session }) {
   //check to see if session user is the owner of post
 
   const isAuthor = post.author._id === session?.user.id;
@@ -15,9 +15,9 @@ export default async function ShowCard({ post, session }) {
     <div className="flex-col justify-center mt-28 relative"> 
          <div className="flex items-center justify-center">
       <h1 className="text-center text-2xl md:text-4xl mb-2 lg:mb-3">{post.title}</h1>
-      {/* <div className="absolute right-0 bottom-0 sm:top-0">
-      <LikeButton />
-      </div> */}
+      <div className="absolute right-0 bottom-0 sm:top-0">
+      {/* <LikeButton /> */}
+      </div>
     </div>
       <h2 className="text-center text-sm md:text-lg">By: <Link href={`/users/${post.author._id}`} className="hover:underline hover:text-sky-500 mb-1 lg:mb-2">{post.author.name}</Link></h2>
       {isAuthor && (
