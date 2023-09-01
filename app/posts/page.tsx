@@ -14,7 +14,7 @@ export default async function Index({
   const posts = JSON.parse(JSON.stringify(data));
 
   return (
-    <main className="flex justify-center w-full">
+    <main className="flex justify-center w-full min-h-screen">
       <Toast />
       <div className="">
         <h1 className=" text-3xl md:text-4xl text-center mt-24 mb-6">Community Creations</h1>
