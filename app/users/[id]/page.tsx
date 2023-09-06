@@ -1,7 +1,9 @@
-import ShowSynth from "@/components/ShowPage/ShowSynth";
+import ProfileSynth from "@/components/ProfileSynth";
 import { getAuthSession } from "@/lib/auth";
 import dbConnect from "@/lib/dbConnect";
 import User from "@/models/User";
+import Post from "@/models/Post";
+
 
 async function getUser(id:string){
     try{
@@ -9,7 +11,24 @@ async function getUser(id:string){
     await dbConnect();
     const user = await User.findById(id).populate({path: 'posts', select: 'mouseActions'})
 
-    return user
+    //glitchy but works for now
+    const allMouseActions = user.posts.flatMap((post, postIndex) =>
+    post.mouseActions.map(({ event, x, y, prevX, prevY, time }) => ({ //turn into simple object so no shit recursion error
+      event,
+      x,
+      y,
+      prevX,
+      prevY,
+      time: time + (10000 * postIndex),
+    }))
+  );
+    const plainObject = {
+        name: user.name,
+        allMouseActions: allMouseActions,
+       postNumber: user.posts.length
+      };
+
+    return plainObject
     }
     catch(e){
         console.log('error: ', e)
@@ -18,26 +37,20 @@ async function getUser(id:string){
  
 export default async function profilePage({ params }: { params: { id: string } }){
     const { id } = params;
-    const array = [3]
 
     const user = await getUser(id);
-
-    let allActions:typeof array = [];
-
-    for (let post of user.posts){
-        allActions.concat(post.mouseActions)
-    }
-
-    console.log(allActions)
-
 
 return(
     <main className="flex flex-col w-screen h-screen items-center">
         <h1 className="text-4xl text-center mt-24 mb-4">{user.name}</h1>
-        <ShowSynth actionsArray={array}/>
+          <ProfileSynth user = {user}/>
     </main>
 )
 }
 
 
 //select: 'actions array'
+
+
+
+//need better erro handndnndle

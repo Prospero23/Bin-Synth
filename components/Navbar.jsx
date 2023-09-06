@@ -15,7 +15,7 @@ export default function Home() {
   const { data: session, status } = useSession();
 
 
-  console.log(session)
+  
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,7 +29,7 @@ export default function Home() {
   }, [prevScrollPos]);
 
   const handleSignOut = () => {
-    console.log("bang");
+    
     signOut({
       redirect: false,
     });

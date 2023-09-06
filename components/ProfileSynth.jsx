@@ -12,7 +12,11 @@ import {
 
 import { drawFunction } from "@/lib/synth/visualHelper";
 
-const ShowSynth = ({ actionsArray }) => {
+const ProfileSynth = ({ user }) => {
+
+
+  //console.log(user)
+
   const fmSynth = useRef(null);
   const randomPulseSynth = useRef(null);
   const granularSynth = useRef(null);
@@ -22,6 +26,12 @@ const ShowSynth = ({ actionsArray }) => {
   const recordingStartTime = useRef(0);
   const playbackIndex = useRef(0);
   const progress = useRef(0);
+
+  const numberPosts = user.postNumber
+  const actionsArray = user.allMouseActions 
+
+
+  const timeLength = 10000 * numberPosts; //total length
 
   useEffect(() => {
     // Create the Tone.js synths and effects
@@ -61,6 +71,7 @@ const ShowSynth = ({ actionsArray }) => {
     granularSynth.current.chain(Tone.Destination);
     sineSynth.current.chain(Tone.Destination);
 
+
     return () => {
       // Clean up the Tone.js resources when the component unmounts
       fmSynth.current.dispose();
@@ -77,6 +88,8 @@ const ShowSynth = ({ actionsArray }) => {
     //maybe change scale based on device dims?
 
     p5.setup = function () {
+
+        //console.log(actionsArray)
 
       let side= p5.min(p5.windowHeight, p5.windowWidth) * scale
 
@@ -100,7 +113,7 @@ const ShowSynth = ({ actionsArray }) => {
         const scaleX = p5.width;
         const scaleY = p5.height;
 
-        progress.current = (elapsedTime / 10000) * p5.width;
+        progress.current = (elapsedTime / timeLength) * p5.width;
 
         while (playbackIndex.current < actionsArray.length) {
           let action = actionsArray[playbackIndex.current];
@@ -165,7 +178,7 @@ const ShowSynth = ({ actionsArray }) => {
           }
         }
 
-        if (elapsedTime >= 10000) {
+        if (elapsedTime >= timeLength) {
           isPlaying.current = false;
           synthEnd(
             p5,
@@ -190,15 +203,6 @@ const ShowSynth = ({ actionsArray }) => {
 
       p5.resizeCanvas(sideLength, sideLength);
 
-
-      // if (sideLength < rect.width){
-      //   let difference = rect.width - side 
-      //   console.log(difference)
-      //   p5.canvas.position(difference/2, 0)
-
-      // }
-
-
     };
   };
 
@@ -222,15 +226,13 @@ const ShowSynth = ({ actionsArray }) => {
           className="hover:text-green-500 hover:underline"
         >
           START
-        </button>
+        </button> 
       </Suspense>
     </>
   );
 };
 
-export default ShowSynth;
+export default ProfileSynth;
 
 //add some error logic with Array.isArray(arrayasdfa)
-//NOT STORING PROPER IMAGE END
-
 //add a pause button and such
