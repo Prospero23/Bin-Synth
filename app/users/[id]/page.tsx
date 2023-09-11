@@ -5,6 +5,9 @@ import User from "@/models/User";
 import Post from "@/models/Post";
 
 
+const MAX_RETRIES = 10
+
+
 
 type MouseAction = {
   event: object;
@@ -21,7 +24,8 @@ type Post = {
   mouseActions: Array<MouseAction>
 }
 
-async function getUser(id:string){
+//@ts-ignore
+async function getUser(id:string, retries = 0){
     try{
 
     await dbConnect();
@@ -46,13 +50,21 @@ async function getUser(id:string){
 
     return plainObject
     }
-    catch(e){
-        console.log('error: ', e)
+    catch (error) {
+      //RETRY
+      if (retries < MAX_RETRIES) {
+        //console.log(`Retrying... (${retries + 1})`);
+        return await getUser(id, retries + 1);
+      } else {
+        console.error(`Failed to fetch after ${MAX_RETRIES} attempts.`);
+        return []; // Or you can decide what to return in case of persistent failure
+      }
     }
 }
  
 export default async function profilePage({ params }: { params: { id: string } }){
     const { id } = params;
+
 
     const user = await getUser(id);
 
