@@ -24,7 +24,7 @@ export default function Toast(error){
           localStorage.removeItem('result')
         }
         if (error.retrieve === true){
-          toast('failed to fetch posts', {
+          toast('Failed to Fetch Post(s)', {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: true,

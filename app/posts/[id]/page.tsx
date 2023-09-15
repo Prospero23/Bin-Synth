@@ -9,14 +9,36 @@ import Toast from "@/components/Toast"
 
 async function ShowPage({ params }: { params: { id: string} }) {
   const { id } = params;
-  const post = await getPost(id); //add fail check TODO TODO
-  const session = await getAuthSession() // add fail check TODO
+  let post;
+  let session;
+  let errorClient = false;
+
+
+  try{
+  const postFetched = await getPost(id); //add fail check TODO TODO
+
+  if (postFetched){
+    post = postFetched;
+  }
+  else{
+    errorClient = true;
+  }
+  } catch (error){
+    console.log('super weird error', error)
+   
+  }
+  try{
+    const sessionFetched = await getAuthSession() // add fail check TODO
+    session = sessionFetched
+  } catch (error) {
+    console.log('error fetching session info: ', error)
+  }
 
   return (
     <main>
       <div className="flex flex-col items-center justify-center">
       <div className="relative h-screen flex flex-col items-center justify-center">
-        <Toast/>
+        <Toast error={errorClient}/>
         {/* @ts-ignore */}
         <ShowCard post={post} session={session} />
         <div className="absolute bottom-0">
