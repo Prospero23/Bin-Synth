@@ -9,13 +9,25 @@ export default async function Index({
 }: {
   searchParams: { page: number };
 }) {
-  const data = await getAllPosts(searchParams.page);
-  //fix stupid error popup
-  const posts = JSON.parse(JSON.stringify(data));
+
+  let allPosts;
+  let errorClient = false; 
+
+  try {
+    const posts = await getAllPosts(searchParams.page);
+    if (posts.length === 0) {
+      //console.log('error loading posts')
+      errorClient = true
+    } else {
+      allPosts = posts
+    }
+  } catch (error) {
+    console.error("Really Bad Error", error);
+  }
 
   return (
     <main className="flex justify-center w-full min-h-screen">
-      <Toast />
+      <Toast retrieve = {errorClient}/>
       <div className="">
         <h1 className=" text-3xl md:text-4xl text-center mt-24 mb-6">Community Creations</h1>
         <div className="w-full col-start-3">
@@ -26,14 +38,13 @@ export default async function Index({
             Click ME to try SYNTH
           </Link>
         </div>
-        {data.map((post: object) => {
+        {allPosts && allPosts.map((post: object) => {
           //@ts-ignore
           return <Card post={post} key={post._id} />;
         })}
         <div className="flex justify-between md:text-2xl mx-8 md:mx-0">
-        {/* @ts-ignore */}
+        
         <NavButton type='prev'/>
-        {/* @ts-ignore */}
         <NavButton type='next' />
         </div>
       </div>
@@ -44,14 +55,6 @@ export default async function Index({
 // /posts /posts/new
 // /posts/:id /posts/:id/edit
 
-//creation date, creator
-//button needs to be rendered client side and have a click event
 
-//add types to the shit soo that that stupid parse thing doesnt have to happen
 
-//fix key thing
 
-//maybe add sorting? or some other form of looking at posts
-//infitite scroll?
-
-//ERROR HANDLING

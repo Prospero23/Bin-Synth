@@ -4,7 +4,7 @@ import { useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { useCallback } from "react";
 
-const NavButton = ({ type, className }) => {
+const NavButton = ({ type}) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
