@@ -66,7 +66,7 @@ export default Card;
       <span className="absolute inset-x-0 bottom-0 h-2 bg-white"></span>
       <div className="sm:flex sm:justify-between sm:gap-4">
         <div>
-          <h3 className="text-lg font-bold text-white sm:text-xl">
+          <h3 className="text-lg font-bold sm:text-xl">
             {post.title}
           </h3>
 

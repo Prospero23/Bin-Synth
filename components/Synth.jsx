@@ -43,8 +43,6 @@ const Synth = ({ post }) => {
     let isRelease = true;
     let mouseActions = []; //MOUSE ACTIONS ARRAY
 
-    let inCanvas = false;
-
     //SOUND///
     const fmSynth = new Tone.FMSynth();
     fmSynth.oscillator.type = "sawtooth";

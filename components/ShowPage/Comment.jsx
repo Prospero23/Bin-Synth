@@ -52,7 +52,7 @@ export default function Comment({ comment, postId }) {
 
           {clicked && (
             <button
-              className="absolute bottom-2 right-2 p-2 text-white rounded-full transition-opacity duration-300 opacity-30 hover:opacity-100"
+              className="absolute bottom-2 right-2 p-2 rounded-full transition-opacity duration-300 opacity-30 hover:opacity-100"
               onClick={handleDelete}
             >
               X

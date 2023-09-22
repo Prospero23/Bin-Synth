@@ -87,7 +87,7 @@ export default function Home() {
         >
           <Link
             href="/posts"
-            className="block px-2 py-1 text-white font-semibold rounded hover:bg-sky-500"
+            className="block px-2 py-1 font-semibold rounded hover:bg-sky-500"
           >
             Community Creations
           </Link>
@@ -95,7 +95,7 @@ export default function Home() {
             <>
               <Link
                 href={`/users/${session.user.id}`}
-                className=" block px-2 py-1 text-white font-semibold rounded hover:bg-sky-500 sm:mt-0 sm:ml-2"
+                className=" block px-2 py-1 font-semibold rounded hover:bg-sky-500 sm:mt-0 sm:ml-2"
               >
                 Profile
                 <img
@@ -106,7 +106,7 @@ export default function Home() {
               </Link>
               <Link
                 href="#"
-                className=" block px-2 py-1 text-white font-semibold rounded hover:bg-sky-500 sm:mt-0 sm:ml-2" //little offset
+                className=" block px-2 py-1 font-semibold rounded hover:bg-sky-500 sm:mt-0 sm:ml-2" //little offset
                 onClick={handleSignOut}
               >
                 Logout
@@ -115,7 +115,7 @@ export default function Home() {
           ) : (
             <Link
               href="/users/login"
-              className=" block px-2 py-1 text-white font-semibold rounded hover:bg-sky-500 sm:mt-0 sm:ml-2"
+              className=" block px-2 py-1 font-semibold rounded hover:bg-sky-500 sm:mt-0 sm:ml-2"
             >
               Login
             </Link>

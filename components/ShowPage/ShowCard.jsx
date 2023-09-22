@@ -40,7 +40,7 @@ export default function ShowCard({ post, session }) {
       <div className="text-right -mt-5 uppercase">
         <Link
           href="/posts" 
-          className=" text-white hover:bg-sky-500"
+          className=" hover:bg-sky-500"
         >
           All Posts
         </Link>
