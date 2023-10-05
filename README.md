@@ -26,5 +26,5 @@ To get started, simply:
 5. Visit localhost in the browser and check it out
 
 
-##Contributing 
+## Contributing 
 Please let me know any features that should be added and I would love to work on them. Pull requests are always welcome. 
