@@ -14,7 +14,7 @@ export default async function Index({
   let errorClient = false; 
 
   try {
-    const posts = await getAllPosts(searchParams.page);
+    const posts = await getAllPosts(searchParams.page, 3);
     if (posts.length === 0) {
       //console.log('error loading posts')
       errorClient = true
