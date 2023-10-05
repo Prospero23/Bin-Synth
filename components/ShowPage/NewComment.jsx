@@ -24,7 +24,7 @@ export default function NewComment({ id }) {
 
     try {
       const res = await fetch(
-        `http://localhost:3000/api/posts/${id}/comments`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${id}/comments`,
         {
           method: "POST",
           headers: {
