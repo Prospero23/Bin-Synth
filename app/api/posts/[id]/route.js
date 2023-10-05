@@ -32,8 +32,6 @@ export async function PATCH(request) {
       description
     });
 
-    console.log(post)
-
     await post.save();
 
     return NextResponse.json({ message: "Post Updated Successfully" });
@@ -58,9 +56,6 @@ export async function POST(request) {
     const { id, authorId } = await request.json();
 
     if (!id) return NextResponse.json({ message: "Post Id Required " });
-
-     console.log("SESSION", session.user.id);
-     console.log("AUTHOR", authorId)
 
     //check authorship
     if (session.user.id !== authorId) {

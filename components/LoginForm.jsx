@@ -12,7 +12,7 @@ export default function Login() {
 
   const loginWithGoogle = () => {
     setIsLoading(true);
-    console.log('bang')
+    //console.log('bang')
 
     try {
       signIn("google", { callbackUrl: '/users/login/loggedIn' })

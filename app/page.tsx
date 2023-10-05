@@ -11,9 +11,7 @@ export default function Home() {
               10 Seconds, 1 Synth, 1 Attempt
             </h2>
             <Link
-              className="btn bg-opacity-50 text-gray-300 hover:bg-sky-500 hover:text-gray-100"
-              data-te-ripple-init
-              data-te-ripple-color="light"
+              className="btn bg-transparent text-gray-200 hover:bg-sky-500 hover:text-gray-100 hover:bg-opacity-50"
               href="/posts"
             >
               Enter Community

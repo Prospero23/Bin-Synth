@@ -45,7 +45,7 @@ function NewForm({ post }) {
     });
 
     const result = await res.json();
-    console.log(result);
+    //console.log(result);
 
     //sends back to the show page of a post with hard reload
     window.location.href = `/posts`;

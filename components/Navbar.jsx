@@ -48,13 +48,13 @@ export default function Home() {
   return (
     <>
       <div
-        className={`bg-base-100 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3 fixed w-full z-10 transition-opacity duration-400 bg-opacity-70 ${
+        className={`bg-grey-100 bg-black sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-6 fixed w-full z-10 transition-opacity duration-400 bg-opacity-70 ${
           navbarVisible ? "opacity-100" : "opacity-0"
         }`}
       >
         <div className="flex items-center justify-between px-4 py-3 sm:p-0">
           <div>
-            <Link href="/synth" className="btn btn-ghost normal-case text-xl">
+            <Link href="/synth" className=" text-white normal-case text-xl hover:bg-sky-500 hover:bg-opacity-80 p-4 rounded-md">
               BinSynth
             </Link>
           </div>
@@ -87,7 +87,7 @@ export default function Home() {
         >
           <Link
             href="/posts"
-            className="block px-2 py-1 font-semibold rounded hover:bg-sky-500"
+            className="block px-2 py-1 font-semibold rounded hover:bg-sky-500 hover:bg-opacity-80"
           >
             Community Creations
           </Link>
@@ -95,7 +95,7 @@ export default function Home() {
             <>
               <Link
                 href={`/users/${session.user.id}`}
-                className=" block px-2 py-1 font-semibold rounded hover:bg-sky-500 sm:mt-0 sm:ml-2"
+                className=" block px-2 py-1 font-semibold rounded hover:bg-sky-500 hover:bg-opacity-80 sm:mt-0 sm:ml-2"
               >
                 Profile
                 <img
@@ -106,7 +106,7 @@ export default function Home() {
               </Link>
               <Link
                 href="#"
-                className=" block px-2 py-1 font-semibold rounded hover:bg-sky-500 sm:mt-0 sm:ml-2" //little offset
+                className=" block px-2 py-1 font-semibold rounded hover:bg-sky-500 hover:bg-opacity-80 sm:mt-0 sm:ml-2" //little offset
                 onClick={handleSignOut}
               >
                 Logout

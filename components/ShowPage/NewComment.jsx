@@ -52,7 +52,7 @@ export default function NewComment({ id }) {
       <div className="mb-1">
         <label
           htmlFor="body"
-          className="block text-gray-300 font-semibold mb-2"
+          className="block text-gray-100 font-semibold mb-2"
         >
           New Comment
         </label>
@@ -63,7 +63,7 @@ export default function NewComment({ id }) {
 })}          id="body"
           cols="30"
           rows="3"
-          className="w-full px-4 py-2 border rounded focus:outline-none focus:border-sky-500"
+          className="w-full px-4 py-2 border rounded focus:outline-none focus:border-sky-500 bg-black"
         ></textarea>
         <p>{errors.body?.message}</p>
       </div>
