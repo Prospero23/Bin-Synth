@@ -14,7 +14,7 @@ export default async function Index({
   let errorClient = false; 
 
   try {
-    const posts = await getAllPosts(searchParams.page, 3);
+    const posts = await getAllPosts(searchParams.page, 0);
     if (posts.length === 0) {
       //console.log('error loading posts')
       errorClient = true
@@ -22,14 +22,14 @@ export default async function Index({
       allPosts = posts
     }
   } catch (error) {
-    console.error("Really Bad Error", error);
+    console.error("unhandled error: ", error);
   }
 
   return (
     <main className="flex justify-center w-full min-h-screen">
       <Toast retrieve = {errorClient}/>
       <div className="">
-        <h1 className=" text-3xl md:text-4xl text-center mt-24 mb-6">Community Creations</h1>
+        <h1 className="text-3xl md:text-4xl text-center mt-24 mb-6">Community Creations</h1>
         <div className="w-full col-start-3">
           <Link
             href="/synth"
@@ -44,8 +44,8 @@ export default async function Index({
         })}
         <div className="flex justify-between md:text-2xl mx-8 md:mx-0">
         
-        <NavButton type='prev'/>
-        <NavButton type='next' />
+        <NavButton type="prev"/>
+        <NavButton type="next" />
         </div>
       </div>
     </main>

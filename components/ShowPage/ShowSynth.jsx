@@ -184,8 +184,12 @@ const ShowSynth = ({ actionsArray }) => {
     p5.windowResized = function () {
       let sideLength = p5.min(p5.windowHeight, p5.windowWidth) * scale
 
-      if (p5.windowWidth < 500){
-        sideLength = p5.windowWidth
+      if (p5.windowWidth < 500 && p5.windowHeight >= 800){
+        sideLength = p5.windowWidth * scale
+      }
+      if (p5.windowHeight < 800){
+        console.log('BANG')
+        sideLength = p5.windowHeight * (scale - 0.2)
       }
 
       p5.resizeCanvas(sideLength, sideLength);

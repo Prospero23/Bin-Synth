@@ -7,12 +7,11 @@ import LikeButton from '@/components/ShowPage/LikeButton'
 
 
 export default function ShowCard({ post, session }) {
-  //check to see if session user is the owner of post
 
   const isAuthor = post.author._id === session?.user.id;
 
   return (
-    <div className="flex-col justify-center mt-28 relative"> 
+    <div className="flex-col justify-center mt-24 relative"> 
          <div className="flex items-center justify-center">
       <h1 className="text-center text-2xl md:text-4xl mb-2 lg:mb-3">{post.title}</h1>
       <div className="absolute right-0 bottom-0 sm:top-0">
