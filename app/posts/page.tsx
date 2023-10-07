@@ -11,7 +11,7 @@ export default async function Index({
 }) {
 
   let allPosts;
-  let errorClient = false; 
+  let errorClient = false;
 
   try {
     const posts = await getAllPosts(searchParams.page, 0);
@@ -27,7 +27,7 @@ export default async function Index({
 
   return (
     <main className="flex justify-center w-full min-h-screen">
-      <Toast retrieve = {errorClient}/>
+      <Toast retrieve={errorClient} />
       <div className="">
         <h1 className="text-3xl md:text-4xl text-center mt-24 mb-6">Community Creations</h1>
         <div className="w-full col-start-3">
@@ -38,14 +38,17 @@ export default async function Index({
             Click ME to try SYNTH
           </Link>
         </div>
-        {allPosts && allPosts.map((post: object) => {
-          //@ts-ignore
-          return <Card post={post} key={post._id} />;
+        {allPosts && allPosts.map((post) => {
+          if (post) {
+            return <Card post={post} key={post._id} />;
+          } else {
+            return //IMPROVE THIS TO FALLBACK UI?
+          }
         })}
         <div className="flex justify-between md:text-2xl mx-8 md:mx-0">
-        
-        <NavButton type="prev"/>
-        <NavButton type="next" />
+
+          <NavButton type="prev" />
+          <NavButton type="next" />
         </div>
       </div>
     </main>

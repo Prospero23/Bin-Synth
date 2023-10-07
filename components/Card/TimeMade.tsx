@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 
-export default function TimeMade({dateMade}){
+export default function TimeMade({dateMade}: {dateMade: Date}){
 
      const [isLong, setIsLong]= useState(false)
 

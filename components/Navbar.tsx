@@ -6,16 +6,17 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { toast } from "react-toastify";
+import { ExtendedSession } from "@/lib/types";
 
 export default function Home() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [prevScrollPos, setPrevScrollPos] = useState(0);
-  const [navbarVisible, setNavbarVisible] = useState(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [prevScrollPos, setPrevScrollPos] = useState<number>(0);
+  const [navbarVisible, setNavbarVisible] = useState<boolean>(true);
 
   const { data: session, status } = useSession();
 
 
-  
+const extendedSession = session as ExtendedSession
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,7 +30,7 @@ export default function Home() {
   }, [prevScrollPos]);
 
   const handleSignOut = () => {
-    
+
     signOut({
       redirect: false,
     });
@@ -48,9 +49,8 @@ export default function Home() {
   return (
     <>
       <div
-        className={`bg-grey-100 bg-black sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-6 fixed w-full z-10 transition-opacity duration-400 bg-opacity-70 ${
-          navbarVisible ? "opacity-100" : "opacity-0"
-        }`}
+        className={`bg-grey-100 bg-black sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-6 fixed w-full z-10 transition-opacity duration-400 bg-opacity-70 ${navbarVisible ? "opacity-100" : "opacity-0"
+          }`}
       >
         <div className="flex items-center justify-between px-4 py-3 sm:p-0">
           <div>
@@ -81,9 +81,8 @@ export default function Home() {
           </div>
         </div>
         <nav
-          className={`${
-            isOpen ? "block sm:flex": "hidden px-2 pt-2 pb-4 sm:flex sm:p-0"
-          }`}
+          className={`${isOpen ? "block sm:flex" : "hidden px-2 pt-2 pb-4 sm:flex sm:p-0"
+            }`}
         >
           <Link
             href="/posts"
@@ -91,18 +90,18 @@ export default function Home() {
           >
             Community Creations
           </Link>
-          {session?.user ? (
+          {status === "authenticated" && extendedSession.user ? (
             <>
               <Link
-                href={`/users/${session.user.id}`}
+                href={`/users/${extendedSession.user.id}`}
                 className=" block px-2 py-1 font-semibold rounded hover:bg-sky-500 hover:bg-opacity-80 sm:mt-0 sm:ml-2"
               >
                 Profile
-                <img
-                  className="w-6 h-6 rounded-full inline ml-2"
-                  src={session.user.image}
-                  alt="Profile Photo"
-                />
+                {
+                  extendedSession.user.image
+                    ? <img className="w-6 h-6 rounded-full inline ml-2" src={extendedSession.user.image} alt="Profile Photo" />
+                    : null
+                }
               </Link>
               <Link
                 href="#"
@@ -125,3 +124,4 @@ export default function Home() {
     </>
   );
 }
+//extend user

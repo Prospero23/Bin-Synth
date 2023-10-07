@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 import Comment from "@/models/Comment";
+import { type Image, type MouseAction, type PostDocument } from "@/lib/types";
 
-const ImageSchema = new mongoose.Schema({
+const ImageSchema = new mongoose.Schema<Image>({
   url: String,
   filename: String,
 });
 
-const MouseActionSchema = new mongoose.Schema({
+const MouseActionSchema = new mongoose.Schema<MouseAction>({
   event: String,
   x: Number,
   y: Number,
@@ -15,11 +16,11 @@ const MouseActionSchema = new mongoose.Schema({
   time: Number,
 });
 
-ImageSchema.virtual("thumbnail").get(function () {
+ImageSchema.virtual("thumbnail").get(function (this: Image) {
   return this.url.replace("/upload", "/upload/w_200");
 });
 
-const PostSchema = new mongoose.Schema({
+const PostSchema = new mongoose.Schema<PostDocument>({
   title: {
     /* The title of the track */
 
@@ -63,7 +64,7 @@ const PostSchema = new mongoose.Schema({
   ]
 });
 
-PostSchema.post("findOneAndDelete", async function (doc) {
+PostSchema.post<PostDocument>("findOneAndDelete", async function (doc: PostDocument | null) {
   if (doc) {
     await Comment.deleteMany({
       _id: {
@@ -73,7 +74,10 @@ PostSchema.post("findOneAndDelete", async function (doc) {
   }
 });
 
-export default mongoose.models.Post || mongoose.model("Post", PostSchema);
+const PostModel: mongoose.Model<PostDocument> = mongoose.models.Post || mongoose.model<PostDocument>("Post", PostSchema);
+
+
+export default PostModel;
 
 //title, author, dateMade, description
 

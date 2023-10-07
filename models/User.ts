@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import {type UserDocument} from "@/lib/types"
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema<UserDocument>({
   email: {
     type: String,
     required: true,
@@ -29,8 +30,9 @@ const UserSchema = new mongoose.Schema({
     },
   ],
 });
+const UserModel: mongoose.Model<UserDocument> = mongoose.models.User || mongoose.model<UserDocument>("User", UserSchema);
 
-export default mongoose.models.User || mongoose.model("User", UserSchema);
+export default UserModel
 
 //at some point, need to really think about why im modeling as i am modeling. one to many vs whatever
 

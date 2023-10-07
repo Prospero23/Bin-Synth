@@ -1,8 +1,9 @@
 import Link from "next/link";
 import DateMade from "@/components/Card/TimeMade"
 import TimeMade from "@/components/Card/TimeMade";
+import { PostDocument } from "@/lib/types";
 
-function Card({ post }) {
+function Card({ post } : {post: PostDocument}) {
 
   return (
 <Link
@@ -19,7 +20,7 @@ className=" relative block overflow-hidden rounded-lg border border-gray-100 ite
         </h3>
 
         <p className="mt-1 text-xs font-medium text-gray-300">
-          By {post.author.name}
+        By {'name' in post.author ? post.author.name : 'Unknown'}
         </p>
       </div>
     </div>

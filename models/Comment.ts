@@ -1,16 +1,13 @@
 import mongoose from 'mongoose';
+import {type CommentDocument} from "@/lib/types"
 
-
-
-const CommentSchema = new mongoose.Schema({
+const CommentSchema = new mongoose.Schema<CommentDocument>({
 
     body: {
       /* body of comment */
       type: String,
       required: [true, "comment must have text"],
-      maxlength:[10000],
-      required: [true, "Must keave a COMMENT."],
-
+      maxlength: [10000, "Max length for comment is 10000 characters"]
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
@@ -19,7 +16,10 @@ const CommentSchema = new mongoose.Schema({
     }
   });
   
-  export default mongoose.models.Comment || mongoose.model("Comment", CommentSchema);
+
+  const CommentModel: mongoose.Model<CommentDocument> = mongoose.models.Comment || mongoose.model<CommentDocument>("Comment", CommentSchema);
+
+  export default CommentModel;
   
   //at some point, need to really think about why im modeling as i am modeling. one to many vs whatever
   
