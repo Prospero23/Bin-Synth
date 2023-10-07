@@ -11,17 +11,19 @@ import {
 } from "@/lib/synth/soundHelper";
 
 import { drawFunction } from "@/lib/synth/visualHelper";
+import { P5CanvasInstance } from "@p5-wrapper/react";
+import { MouseAction } from "@/lib/types";
 
-const ShowSynth = ({ actionsArray }) => {
-  const fmSynth = useRef(null);
-  const randomPulseSynth = useRef(null);
-  const granularSynth = useRef(null);
-  const sineSynth = useRef(null);
-  const isPlaying = useRef(false);
-  const p5Instance = useRef(null);
-  const recordingStartTime = useRef(0);
-  const playbackIndex = useRef(0);
-  const progress = useRef(0);
+const ShowSynth = ({ actionsArray } : {actionsArray: MouseAction[]}) => {
+  const fmSynth = useRef<Tone.FMSynth | null>(null);
+  const randomPulseSynth = useRef<Tone.Synth | null>(null);
+  const granularSynth = useRef<Tone.GrainPlayer | null>(null);
+  const sineSynth = useRef<Tone.Synth | null>(null);
+  const isPlaying = useRef<boolean>(false);
+  const p5Instance = useRef<P5CanvasInstance | null>(null);
+  const recordingStartTime = useRef<number>(0);
+  const playbackIndex = useRef<number>(0);
+  const progress = useRef<number>(0);
 
   useEffect(() => {
     // Create the Tone.js synths and effects
@@ -63,14 +65,14 @@ const ShowSynth = ({ actionsArray }) => {
 
     return () => {
       // Clean up the Tone.js resources when the component unmounts
-      fmSynth.current.dispose();
-      randomPulseSynth.current.dispose();
-      granularSynth.current.dispose();
-      sineSynth.current.dispose();
+      fmSynth.current?.dispose();
+      randomPulseSynth.current?.dispose();
+      granularSynth.current?.dispose();
+      sineSynth.current?.dispose();
     };
   }, []);
 
-  const sketch = (p5) => {
+  const sketch = (p5: P5CanvasInstance) => {
     p5Instance.current = p5;
     let scale = 0.70; //how much space canvas takes
 
@@ -78,14 +80,14 @@ const ShowSynth = ({ actionsArray }) => {
 
     p5.setup = function () {
 
-      let side= p5.min(p5.windowHeight, p5.windowWidth) * scale
+      let side = p5.min(p5.windowHeight, p5.windowWidth) * scale
 
-      if (p5.windowWidth < 500){
+      if (p5.windowWidth < 500) {
         side = p5.windowWidth
       }
 
       let canvas = p5.createCanvas(side, side)
-      
+
       p5.background(0);
     };
 
@@ -184,10 +186,10 @@ const ShowSynth = ({ actionsArray }) => {
     p5.windowResized = function () {
       let sideLength = p5.min(p5.windowHeight, p5.windowWidth) * scale
 
-      if (p5.windowWidth < 500 && p5.windowHeight >= 800){
+      if (p5.windowWidth < 500 && p5.windowHeight >= 800) {
         sideLength = p5.windowWidth * scale
       }
-      if (p5.windowHeight < 800){
+      if (p5.windowHeight < 800) {
         console.log('BANG')
         sideLength = p5.windowHeight * (scale - 0.2)
       }
@@ -220,7 +222,7 @@ const ShowSynth = ({ actionsArray }) => {
           <p className="h-full text-center text-5xl">Loading Synth........</p>
         }
       >
-        <NextReactP5Wrapper sketch={sketch} className="flex items-center" id="react-p5-wrapper"/>
+        <NextReactP5Wrapper sketch={sketch} className="flex items-center" id="react-p5-wrapper" />
         <button
           onClick={startPlayback}
           className="hover:text-green-500 hover:underline"

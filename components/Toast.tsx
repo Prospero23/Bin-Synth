@@ -3,8 +3,11 @@
 import {toast} from "react-toastify"
 import { useEffect } from "react";
 
+interface ToastProps {
+  error: boolean
+} //TODO: make less janky and next friendly
 
-export default function Toast(error){
+export default function Toast(error: boolean){
     useEffect(() => {
         // Get the value from local storage if it exists
         const result = localStorage.getItem('result')|| "";

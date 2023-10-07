@@ -3,6 +3,12 @@ import { User, Session } from "next-auth";
 
 
 // MONGOOSE DATA TYPES
+export interface Cached {
+  conn: mongoose.Mongoose | null;
+  promise: Promise<mongoose.Mongoose> | null;
+}
+
+
 export interface Image {
   url: string;
   filename: string;

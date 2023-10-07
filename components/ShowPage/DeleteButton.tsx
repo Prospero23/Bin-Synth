@@ -5,7 +5,7 @@ import { useState } from "react";
 import DeletePostPop from '@/components/ShowPage/DeletePostPop'
 
 
-export default function DeleteButton({id, authorId}) {
+export default function DeleteButton({id, authorId} : {id: string, authorId: string}) {
   const [isModalOpen, setIsModalOpen] = useState(false); //controls for popup
 
   const openModal = () => {

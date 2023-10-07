@@ -65,7 +65,7 @@ export const getAllPosts = async (page = 1, retries = 0): Promise<PostDocument[]
 
 
 //get single post
-export async function getPost(id: ObjectId, retries = 0): Promise<PostDocument | null[]> {
+export async function getPost(id: string, retries = 0): Promise<PostDocument | null> {
 
   if (!isValidObjectId(id)) {
     throw new Error("not valid id")
@@ -77,11 +77,14 @@ export async function getPost(id: ObjectId, retries = 0): Promise<PostDocument |
   try {
     const result = await Post.findById(id).populate({
       path: "comments",
+      model: "Comment",
       populate: {
         path: "author",
+        model: "User"
       },
     }).populate({
-      path: "author"
+      path: "author",
+      model: "User",
     })
     const post = JSON.parse(JSON.stringify(result));
     return post;
@@ -93,7 +96,7 @@ export async function getPost(id: ObjectId, retries = 0): Promise<PostDocument |
       return await getPost(id, retries + 1);
     } else {
       //console.error(`Failed to fetch after ${MAX_RETRIES} attempts.`);
-      return []; // Or you can decide what to return in case of persistent failure
+      return null; // Or you can decide what to return in case of persistent failure
     }
   }
 }

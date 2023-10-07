@@ -1,4 +1,6 @@
 import mongoose from 'mongoose'
+import { Cached } from '@/lib/types'
+
 
 const MONGODB_URI = process.env.MONGODB_URI
 
@@ -13,9 +15,11 @@ if (!MONGODB_URI) {
  * in development. This prevents connections growing exponentially
  * during API Route usage.
  */
-let cached = global.mongoose
+// @ts-expect-error this works fine
+let cached: Cached = global.mongoose;
 
 if (!cached) {
+  // @ts-expect-error this works fine
   cached = global.mongoose = { conn: null, promise: null }
 }
 
@@ -28,10 +32,11 @@ async function dbConnect() {
     const opts = {
       bufferCommands: false,
     }
-
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      return mongoose
-    })
+    if (MONGODB_URI != null) {
+      cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+        return mongoose
+      })
+    }
   }
 
   try {
@@ -47,6 +52,6 @@ async function dbConnect() {
 export default dbConnect
 
 
-export function isValidObjectId(id){
+export function isValidObjectId(id: string): boolean {
   return mongoose.Types.ObjectId.isValid(id);
 }
