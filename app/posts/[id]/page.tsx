@@ -24,6 +24,7 @@ async function ShowPage({ params }: { params: { id: string } }) {
     else {
       errorClient = true;
       post = null;
+      throw Error
     }
   } catch (error) {
     console.log('super weird error', error)

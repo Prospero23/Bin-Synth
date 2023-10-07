@@ -2,8 +2,9 @@ import { isValidObjectId } from "@/lib/dbConnect";
 import Post from "@/models/Post";
 import dbConnect from "@/lib/dbConnect";
 import { type ObjectId } from "mongoose";
+import User from "@/models/User"
 
-import { PostDocument } from "../types";
+import { MouseAction, PostDocument, UserDocument } from "../types";
 
 const MAX_RETRIES = 3;
 
@@ -43,7 +44,7 @@ export const getAllPosts = async (page = 1, retries = 0): Promise<PostDocument[]
         .populate({
           path: "author",
           model: "User"
-       })
+        })
         .sort({ dateMade: -1 });
 
       return (lastPageResults);
@@ -97,6 +98,59 @@ export async function getPost(id: string, retries = 0): Promise<PostDocument | n
     } else {
       //console.error(`Failed to fetch after ${MAX_RETRIES} attempts.`);
       return null; // Or you can decide what to return in case of persistent failure
+    }
+  }
+}
+
+
+//get user's posts
+
+interface UserResult {
+  name: string;
+  allMouseActions: MouseAction[];
+  postNumber: number | undefined;
+}
+
+export async function getUser(id: string, retries = 0): Promise<UserResult | undefined> {
+  try {
+    await dbConnect();
+
+    const user = await User.findById(id).populate({
+      path: 'posts',
+      select: 'mouseActions'
+    });
+
+    if (user) {
+      const userWithPosts = user as unknown as { posts: PostDocument[] };
+
+      const allMouseActions = userWithPosts.posts.flatMap((post: PostDocument, postIndex: number) =>
+        post.mouseActions.map(({ event, x, y, prevX, prevY, time }) => ({
+          event,
+          x,
+          y,
+          prevX,
+          prevY,
+          time: time + (10000 * postIndex),
+        }))
+      );
+
+
+      return {
+        name: user.name,
+        allMouseActions: allMouseActions,
+        postNumber: user.posts?.length
+      };
+    } if (!user) {
+      throw new Error(`User with ID: ${id} not found`);
+    }
+  } catch (error) {
+    if (retries < MAX_RETRIES) {
+      // Consider adding a delay here using setTimeout or a sleep function
+      // Example: await new Promise(res => setTimeout(res, 1000)); // Waits for 1 second
+      return await getUser(id, retries + 1);
+    } else {
+      console.error(`Failed to fetch after ${MAX_RETRIES} attempts.`);
+      throw error; // You might want to propagate the error instead of returning a default value
     }
   }
 }
