@@ -1,7 +1,7 @@
 // Import the necessary modules
-import { v2 as cloudinary } from 'cloudinary';
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
-import multer from 'multer';
+import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import multer from "multer";
 
 // Configure Cloudinary
 cloudinary.config({
@@ -12,15 +12,15 @@ cloudinary.config({
 
 // Create the multer storage using Cloudinary
 const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
+  cloudinary,
   params: {
-    folder: 'posts', // Specify the folder where the images will be stored on Cloudinary
-    allowed_formats: ['png'], // Specify the allowed image formats
+    folder: "posts", // Specify the folder where the images will be stored on Cloudinary
+    allowed_formats: ["png"], // Specify the allowed image formats
     public_id: (req, file) => file.originalname, // Use the original file name as the public ID
   },
 });
 
 // Create the multer upload middleware
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 export { cloudinary, storage, upload };

@@ -1,4 +1,4 @@
-"use client"; //client to let synth error about hydration go away
+"use client"; // client to let synth error about hydration go away
 
 import * as Tone from "tone";
 import { NextReactP5Wrapper } from "@p5-wrapper/next";
@@ -13,9 +13,7 @@ import {
 import { drawFunction } from "@/lib/synth/visualHelper";
 
 const ProfileSynth = ({ user }) => {
-
-
-  //console.log(user)
+  // console.log(user)
 
   const fmSynth = useRef(null);
   const randomPulseSynth = useRef(null);
@@ -27,11 +25,10 @@ const ProfileSynth = ({ user }) => {
   const playbackIndex = useRef(0);
   const progress = useRef(0);
 
-  const numberPosts = user.postNumber
-  const actionsArray = user.allMouseActions 
+  const numberPosts = user.postNumber;
+  const actionsArray = user.allMouseActions;
 
-
-  const timeLength = 10000 * numberPosts; //total length
+  const timeLength = 10000 * numberPosts; // total length
 
   useEffect(() => {
     // Create the Tone.js synths and effects
@@ -66,11 +63,10 @@ const ProfileSynth = ({ user }) => {
       bitCrusher,
       compressor,
       limiter,
-      Tone.Destination
+      Tone.Destination,
     );
     granularSynth.current.chain(Tone.Destination);
     sineSynth.current.chain(Tone.Destination);
-
 
     return () => {
       // Clean up the Tone.js resources when the component unmounts
@@ -83,22 +79,21 @@ const ProfileSynth = ({ user }) => {
 
   const sketch = (p5) => {
     p5Instance.current = p5;
-    let scale = 0.70; //how much space canvas takes
+    const scale = 0.7; // how much space canvas takes
 
-    //maybe change scale based on device dims?
+    // maybe change scale based on device dims?
 
     p5.setup = function () {
+      // console.log(actionsArray)
 
-        //console.log(actionsArray)
+      let side = p5.min(p5.windowHeight, p5.windowWidth) * scale;
 
-      let side= p5.min(p5.windowHeight, p5.windowWidth) * scale
-
-      if (p5.windowWidth < 500){
-        side = p5.windowWidth
+      if (p5.windowWidth < 500) {
+        side = p5.windowWidth;
       }
 
-      let canvas = p5.createCanvas(side, side)
-      
+      const canvas = p5.createCanvas(side, side);
+
       p5.background(0);
     };
 
@@ -109,14 +104,14 @@ const ProfileSynth = ({ user }) => {
       p5.rect(0, 0, p5.width, p5.height);
 
       if (isPlaying.current) {
-        let elapsedTime = p5.millis() - recordingStartTime.current;
+        const elapsedTime = p5.millis() - recordingStartTime.current;
         const scaleX = p5.width;
         const scaleY = p5.height;
 
         progress.current = (elapsedTime / timeLength) * p5.width;
 
         while (playbackIndex.current < actionsArray.length) {
-          let action = actionsArray[playbackIndex.current];
+          const action = actionsArray[playbackIndex.current];
           if (action.time <= elapsedTime) {
             if (action.event === "dragged") {
               drawFunction(
@@ -124,7 +119,7 @@ const ProfileSynth = ({ user }) => {
                 action.x * scaleX,
                 action.y * scaleY,
                 action.prevX * scaleX,
-                action.prevY * scaleY
+                action.prevY * scaleY,
               );
               synthMove(
                 p5,
@@ -133,7 +128,7 @@ const ProfileSynth = ({ user }) => {
                 granularSynth.current,
                 sineSynth.current,
                 action.x * scaleX,
-                action.y * scaleY
+                action.y * scaleY,
               );
             }
 
@@ -143,7 +138,7 @@ const ProfileSynth = ({ user }) => {
                 action.x * scaleX,
                 action.y * scaleY,
                 action.prevX * scaleX,
-                action.prevY * scaleY
+                action.prevY * scaleY,
               );
               synthStart(
                 p5,
@@ -152,7 +147,7 @@ const ProfileSynth = ({ user }) => {
                 granularSynth.current,
                 sineSynth.current,
                 action.x * scaleX,
-                action.y * scaleY
+                action.y * scaleY,
               );
             }
 
@@ -162,14 +157,14 @@ const ProfileSynth = ({ user }) => {
                 action.x * scaleX,
                 action.y * scaleY,
                 action.prevX * scaleX,
-                action.prevY * scaleY
+                action.prevY * scaleY,
               );
               synthEnd(
                 p5,
                 fmSynth.current,
                 randomPulseSynth.current,
                 granularSynth.current,
-                sineSynth.current
+                sineSynth.current,
               );
             }
             playbackIndex.current++;
@@ -185,24 +180,22 @@ const ProfileSynth = ({ user }) => {
             fmSynth.current,
             randomPulseSynth.current,
             granularSynth.current,
-            sineSynth.current
+            sineSynth.current,
           );
         }
       }
 
       p5.fill(255);
       p5.rect(0, p5.height - 10, progress.current, 10);
-
     };
     p5.windowResized = function () {
-      let sideLength = p5.min(p5.windowHeight, p5.windowWidth) * scale
+      let sideLength = p5.min(p5.windowHeight, p5.windowWidth) * scale;
 
-      if (p5.windowWidth < 500){
-        sideLength = p5.windowWidth
+      if (p5.windowWidth < 500) {
+        sideLength = p5.windowWidth;
       }
 
       p5.resizeCanvas(sideLength, sideLength);
-
     };
   };
 
@@ -220,13 +213,17 @@ const ProfileSynth = ({ user }) => {
           <p className="h-full text-center text-5xl">Loading Synth........</p>
         }
       >
-        <NextReactP5Wrapper sketch={sketch} className="flex items-center" id="react-p5-wrapper"/>
+        <NextReactP5Wrapper
+          sketch={sketch}
+          className="flex items-center"
+          id="react-p5-wrapper"
+        />
         <button
           onClick={startPlayback}
           className="hover:text-green-500 hover:underline"
         >
           START
-        </button> 
+        </button>
       </Suspense>
     </>
   );
@@ -234,5 +231,5 @@ const ProfileSynth = ({ user }) => {
 
 export default ProfileSynth;
 
-//add some error logic with Array.isArray(arrayasdfa)
-//add a pause button and such
+// add some error logic with Array.isArray(arrayasdfa)
+// add a pause button and such

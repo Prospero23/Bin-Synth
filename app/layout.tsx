@@ -4,8 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { NextAuthProvider } from "./providers";
 import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-
+import "react-toastify/dist/ReactToastify.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,7 +24,7 @@ export default function RootLayout({
         <NextAuthProvider>
           <Navbar />
           {children}
-          <ToastContainer className='w-full'/>
+          <ToastContainer className="w-full" />
           <Footer />
         </NextAuthProvider>
       </body>

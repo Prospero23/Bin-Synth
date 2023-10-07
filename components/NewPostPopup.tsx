@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-
 export default function NewPostPopup({ post, isModalOpen }) {
   const {
     register,
@@ -18,7 +17,6 @@ export default function NewPostPopup({ post, isModalOpen }) {
       formData: post.mouseActions,
     },
   });
-
   const [isLoading, setIsLoading] = useState(false);
 
   const [givenData, setGivenData] = useState({
@@ -38,26 +36,26 @@ export default function NewPostPopup({ post, isModalOpen }) {
     });
   }, [post]);
 
-  //FIX HAVE
+  // FIX HAVE
   const onSubmit = async (formData) => {
-    setIsLoading(true); //change graphic to show load
+    setIsLoading(true); // change graphic to show load
 
-    //submit as multi-type form
+    // submit as multi-type form
     const multiData = new FormData();
-    multiData.append("title", formData.title); //title + desc from form, else from state
+    multiData.append("title", formData.title); // title + desc from form, else from state
     multiData.append("description", formData.description);
     multiData.append("dateMade", givenData.dateMade);
     multiData.append("image", givenData.image);
     multiData.append("mouseActions", JSON.stringify(givenData.mouseActions));
 
-    //send data to API route
+    // send data to API route
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/`, {
       method: "POST",
       body: multiData,
     });
 
     const result = await res.json();
-    localStorage.setItem("result", JSON.stringify(result)); //result to local storage
+    localStorage.setItem("result", JSON.stringify(result)); // result to local storage
 
     // //sends back to the show page of a post with hard reload FIX
     window.location.href = `/posts`;
@@ -130,4 +128,4 @@ export default function NewPostPopup({ post, isModalOpen }) {
   );
 }
 
-//make button inactive after click
+// make button inactive after click

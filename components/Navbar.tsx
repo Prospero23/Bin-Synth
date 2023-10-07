@@ -1,12 +1,10 @@
 "use client";
 
-
-
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { toast } from "react-toastify";
-import { ExtendedSession } from "@/lib/types";
+import { type ExtendedSession } from "@/lib/types";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -15,8 +13,7 @@ export default function Home() {
 
   const { data: session, status } = useSession();
 
-
-const extendedSession = session as ExtendedSession
+  const extendedSession = session as ExtendedSession;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,11 +23,12 @@ const extendedSession = session as ExtendedSession
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, [prevScrollPos]);
 
   const handleSignOut = () => {
-
     signOut({
       redirect: false,
     });
@@ -49,18 +47,24 @@ const extendedSession = session as ExtendedSession
   return (
     <>
       <div
-        className={`bg-grey-100 bg-black sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-6 fixed w-full z-10 transition-opacity duration-400 bg-opacity-70 ${navbarVisible ? "opacity-100" : "opacity-0"
-          }`}
+        className={`bg-grey-100 bg-black sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-6 fixed w-full z-10 transition-opacity duration-400 bg-opacity-70 ${
+          navbarVisible ? "opacity-100" : "opacity-0"
+        }`}
       >
         <div className="flex items-center justify-between px-4 py-3 sm:p-0">
           <div>
-            <Link href="/synth" className=" text-white normal-case text-xl hover:bg-sky-500 hover:bg-opacity-80 p-4 rounded-md">
+            <Link
+              href="/synth"
+              className=" text-white normal-case text-xl hover:bg-sky-500 hover:bg-opacity-80 p-4 rounded-md"
+            >
               BinSynth
             </Link>
           </div>
           <div className="sm:hidden">
             <button
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={() => {
+                setIsOpen(!isOpen);
+              }}
               type="button"
               className="block text-gray-500 hover:text-white focus:text-white focus:outline-none"
             >
@@ -81,8 +85,9 @@ const extendedSession = session as ExtendedSession
           </div>
         </div>
         <nav
-          className={`${isOpen ? "block sm:flex" : "hidden px-2 pt-2 pb-4 sm:flex sm:p-0"
-            }`}
+          className={`${
+            isOpen ? "block sm:flex" : "hidden px-2 pt-2 pb-4 sm:flex sm:p-0"
+          }`}
         >
           <Link
             href="/posts"
@@ -97,15 +102,17 @@ const extendedSession = session as ExtendedSession
                 className=" block px-2 py-1 font-semibold rounded hover:bg-sky-500 hover:bg-opacity-80 sm:mt-0 sm:ml-2"
               >
                 Profile
-                {
-                  extendedSession.user.image
-                    ? <img className="w-6 h-6 rounded-full inline ml-2" src={extendedSession.user.image} alt="Profile Photo" />
-                    : null
-                }
+                {extendedSession.user.image ? (
+                  <img
+                    className="w-6 h-6 rounded-full inline ml-2"
+                    src={extendedSession.user.image}
+                    alt="Profile Photo"
+                  />
+                ) : null}
               </Link>
               <Link
                 href="#"
-                className=" block px-2 py-1 font-semibold rounded hover:bg-sky-500 hover:bg-opacity-80 sm:mt-0 sm:ml-2" //little offset
+                className=" block px-2 py-1 font-semibold rounded hover:bg-sky-500 hover:bg-opacity-80 sm:mt-0 sm:ml-2" // little offset
                 onClick={handleSignOut}
               >
                 Logout
@@ -124,4 +131,4 @@ const extendedSession = session as ExtendedSession
     </>
   );
 }
-//extend user
+// extend user

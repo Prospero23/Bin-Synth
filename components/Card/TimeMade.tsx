@@ -1,18 +1,12 @@
-'use client'
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 
-export default function TimeMade({dateMade}: {dateMade: Date}){
+export default function TimeMade({ dateMade }: { dateMade: Date }) {
+  const [isLong, setIsLong] = useState(false);
 
-     const [isLong, setIsLong]= useState(false)
+  const date = dateMade.toString().split(" ");
+  const shortDate = date.slice(0, 4).join(" "); // get short date
 
-    const date = dateMade.toString().split(" ")
-    const shortDate = date.slice(0,4).join(" "); //get short date
-
-
-    return (
-        <>
-    {isLong ? dateMade.toString() : shortDate}
-    </>
-    )
+  return <>{isLong ? dateMade.toString() : shortDate}</>;
 }

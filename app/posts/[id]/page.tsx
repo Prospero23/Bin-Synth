@@ -4,9 +4,8 @@ import Comment from "@/components/ShowPage/Comment";
 import NewComment from "@/components/ShowPage/NewComment";
 import { getAuthSession } from "@/lib/auth";
 import Link from "next/link";
-import Toast from "@/components/Toast"
-import { ExtendedSession } from "@/lib/types";
-
+import Toast from "@/components/Toast";
+import { type ExtendedSession } from "@/lib/types";
 
 async function ShowPage({ params }: { params: { id: string } }) {
   const { id } = params;
@@ -14,28 +13,25 @@ async function ShowPage({ params }: { params: { id: string } }) {
   let session;
   let errorClient = false;
 
-
   try {
-    const postFetched = await getPost(id); //add fail check TODO TODO
+    const postFetched = await getPost(id); // add fail check TODO TODO
 
     if (postFetched != null) {
       post = postFetched;
-    }
-    else {
+    } else {
       errorClient = true;
       post = null;
-      throw Error
+      throw Error;
     }
   } catch (error) {
-    console.log('super weird error', error)
-
+    console.log("super weird error", error);
   }
   try {
-    const sessionFetched = await getAuthSession() // add fail check TODO
-    session = sessionFetched
+    const sessionFetched = await getAuthSession(); // add fail check TODO
+    session = sessionFetched;
   } catch (error) {
-    console.log('error fetching session info: ', error)
-    session = null
+    console.log("error fetching session info: ", error);
+    session = null;
   }
 
   const extendedSession = session as ExtendedSession;
@@ -51,12 +47,20 @@ async function ShowPage({ params }: { params: { id: string } }) {
             <p className="mb-1">Scroll down for comments &#x2193;</p>
           </div>
         </div>
-        {post ? post.comments.map(c => {
-          if ('_id' in c) {
-            return <Comment comment={c} postId={params.id} key={c._id!.toString()} />;
-          }
-          return null; // or another suitable default value
-        }) : null}
+        {post
+          ? post.comments.map((c) => {
+              if ("_id" in c) {
+                return (
+                  <Comment
+                    comment={c}
+                    postId={params.id}
+                    key={c._id.toString()}
+                  />
+                );
+              }
+              return null; // or another suitable default value
+            })
+          : null}
 
         {session?.user ? (
           <NewComment id={id} />
@@ -73,9 +77,9 @@ async function ShowPage({ params }: { params: { id: string } }) {
 
 export default ShowPage;
 
-//need to add super much error handling
+// need to add super much error handling
 
-//should make some component for a comment and then map over array of comments with it + add something to make a comment
-//fix styling later on
+// should make some component for a comment and then map over array of comments with it + add something to make a comment
+// fix styling later on
 
-//fix the typescript stuff
+// fix the typescript stuff

@@ -1,20 +1,18 @@
-import Synth from '@/components/Synth'
+import Synth from "@/components/Synth";
 
-
-export default function SynthPage(){
-
+export default function SynthPage() {
   const newPost = {
-    author: '',
-    title: '',
-    dateMade: '',
-    description: '',
-    picture: '',
-  }
+    author: "",
+    title: "",
+    dateMade: "",
+    description: "",
+    picture: "",
+  };
 
-    return(
+  return (
     <div className="h-screen">
-        {/* @ts-ignore */}
-        <Synth post={newPost}/>
+      {/* @ts-expect-error */}
+      <Synth post={newPost} />
     </div>
-    )
+  );
 }

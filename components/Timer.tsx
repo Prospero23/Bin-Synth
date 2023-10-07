@@ -17,11 +17,7 @@ const Timer = ({ initialTime, isStarted }) => {
 
   return (
     <div className="absolute top-28 right-28 pointer-events-none text-red-500 font-bold text-2xl text-center z-30">
-      {timeRemaining > 0 ? (
-        <h2>{timeRemaining}</h2>
-      ) : (
-        <h2>Done</h2>
-      )}
+      {timeRemaining > 0 ? <h2>{timeRemaining}</h2> : <h2>Done</h2>}
     </div>
   );
 };
