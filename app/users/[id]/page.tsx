@@ -1,5 +1,5 @@
 import ProfileSynth from "@/components/ProfileSynth";
-import { getUser } from "@/lib/RESTFUL/Post";
+import { getUser } from "@/lib/server_actions/getPost";
 
 export default async function profilePage({
   params,

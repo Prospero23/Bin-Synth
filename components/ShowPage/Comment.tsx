@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useState } from "react";
 
@@ -21,7 +21,7 @@ export default function Comment({ comment, postId }) {
       `http://localhost:3000/api/posts/${postId}/comments/${comment._id}`,
       {
         method: "POST",
-      }
+      },
     );
     // You can perform any additional deletion logic here
     // e.g., make an API call to delete the comment from the server
@@ -64,5 +64,4 @@ export default function Comment({ comment, postId }) {
   );
 }
 
-
-// 
+//

@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { toast } from "react-toastify";
 import { type ExtendedSession } from "@/lib/types";
+import Image from "next/image";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -29,19 +30,23 @@ export default function Home() {
   }, [prevScrollPos]);
 
   const handleSignOut = () => {
-    signOut({
-      redirect: false,
-    });
-    toast.success("successfully logged out", {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
+    try {
+      void signOut({
+        redirect: false,
+      });
+      toast.success("successfully logged out", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } catch (error) {
+      toast.error(`error signing out`);
+    }
   };
 
   return (
@@ -95,17 +100,21 @@ export default function Home() {
           >
             Community Creations
           </Link>
-          {status === "authenticated" && extendedSession.user ? (
+          {status === "authenticated" &&
+          extendedSession.user !== undefined &&
+          extendedSession.user !== null ? (
             <>
               <Link
                 href={`/users/${extendedSession.user.id}`}
                 className=" block px-2 py-1 font-semibold rounded hover:bg-sky-500 hover:bg-opacity-80 sm:mt-0 sm:ml-2"
               >
                 Profile
-                {extendedSession.user.image ? (
-                  <img
+                {extendedSession.user.image != null ? (
+                  <Image
                     className="w-6 h-6 rounded-full inline ml-2"
                     src={extendedSession.user.image}
+                    width={50}
+                    height={50}
                     alt="Profile Photo"
                   />
                 ) : null}
@@ -131,4 +140,3 @@ export default function Home() {
     </>
   );
 }
-// extend user

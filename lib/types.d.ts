@@ -1,6 +1,5 @@
-import mongoose from "mongoose";
-import { User, Session } from "next-auth";
-
+import type mongoose from "mongoose";
+import { type User, type Session } from "next-auth";
 
 // MONGOOSE DATA TYPES
 export interface Cached {
@@ -8,11 +7,10 @@ export interface Cached {
   promise: Promise<mongoose.Mongoose> | null;
 }
 
-
 export interface Image {
   url: string;
   filename: string;
-  thumbnail?: string;  // This is a virtual
+  thumbnail?: string; // This is a virtual
 }
 
 export interface MouseAction {
@@ -23,7 +21,6 @@ export interface MouseAction {
   prevY: number;
   time: number;
 }
-
 
 export interface PostDocument extends mongoose.Document {
   title: string;
@@ -44,18 +41,15 @@ interface CommentAttributes {
 
 export type CommentDocument = CommentAttributes & mongoose.Document;
 
-
 interface UserAttributes {
   email: string;
   name: string;
   image: string;
-  posts?: mongoose.Types.ObjectId[];  // optional array of post IDs
-  likes?: mongoose.Types.ObjectId[];  // optional array of post IDs
+  posts?: mongoose.Types.ObjectId[]; // optional array of post IDs
+  likes?: mongoose.Types.ObjectId[]; // optional array of post IDs
 }
 
-export interface UserDocument extends mongoose.Document, UserAttributes { }
-
-
+export interface UserDocument extends mongoose.Document, UserAttributes {}
 
 // AUTH TYPES
 interface ExtendedUser extends User {
@@ -66,6 +60,4 @@ export interface ExtendedSession extends Session {
   user?: ExtendedUser;
 }
 
-
-
-
+export type Result<T> = { data: T; error: null } | { data: null; error: Error };

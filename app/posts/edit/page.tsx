@@ -1,5 +1,5 @@
 import EditForm from "@/components/EditForm";
-import { getPost } from "@/lib/RESTFUL/Post";
+import { getPost } from "@/lib/server_actions/getPost";
 import Toast from "@/components/Toast";
 
 async function EditPage({ searchParams }: { searchParams: { post: string } }) {
