@@ -11,7 +11,6 @@ export default function Test() {
 
   return (
     <div className="h-screen flex flex-col justify-center items-center">
-      {/* @ts-expect-error */}
       <Synth post={newPost} />
     </div>
   );
