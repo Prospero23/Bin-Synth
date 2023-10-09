@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { type Cached } from "@/types";
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
@@ -15,9 +14,9 @@ if (MONGODB_URI == null) {
  * during API Route usage.
  */
 // @ts-expect-error this works fine
-let cached: Cached = global.mongoose;
+let cached = global.mongoose;
 
-if (cached != null) {
+if (cached == null) {
   // @ts-expect-error this works fine
   cached = global.mongoose = { conn: null, promise: null };
 }

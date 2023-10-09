@@ -3,7 +3,7 @@ import clientPromise from "@/lib/mongodb";
 import GoogleProvider from "next-auth/providers/google";
 import User from "@/models/User";
 import { getServerSession } from "next-auth/next";
-import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import { type AuthOptions } from "next-auth";
 
 export const authOptions: AuthOptions = {
@@ -30,7 +30,7 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (!user) return token;
+      if (user == null) return token;
 
       await dbConnect();
 
