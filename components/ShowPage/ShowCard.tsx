@@ -3,7 +3,6 @@
 import DeleteButton from "@/components/ShowPage/DeleteButton";
 import Link from "next/link";
 import ShowSynth from "@/components/ShowPage/ShowSynth";
-import LikeButton from "@/components/ShowPage/LikeButton";
 import { type ExtendedSession, type PostDocument } from "@/types";
 
 export default function ShowCard({
@@ -13,7 +12,8 @@ export default function ShowCard({
   post: PostDocument;
   session: ExtendedSession;
 }) {
-  const isAuthor = session?.user ? post.author._id === session.user.id : false;
+  const isAuthor =
+    session?.user != null ? post.author._id === session.user.id : false;
 
   return (
     <div className="flex-col justify-center mt-24 relative">
@@ -25,7 +25,7 @@ export default function ShowCard({
           {/* <LikeButton /> */}
         </div>
       </div>
-      {post.author && "name" in post.author ? (
+      {post.author != null && "name" in post.author ? (
         <h2 className="text-center text-sm md:text-lg">
           By:
           <Link

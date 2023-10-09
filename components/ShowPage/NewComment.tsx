@@ -1,10 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
+import { type FieldValues, useForm } from "react-hook-form";
+import { type ToastContainerProps, toast } from "react-toastify";
 
-export default function NewComment({ id }) {
+export default function NewComment({ id }: { id: string }) {
   const {
     register,
     handleSubmit,
@@ -12,18 +12,17 @@ export default function NewComment({ id }) {
   } = useForm();
   const router = useRouter();
 
-  const toastConfig = {
+  const toastConfig: ToastContainerProps = {
     position: "top-center",
     autoClose: 5000,
     hideProgressBar: true,
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
-    progress: undefined,
     theme: "dark",
   };
 
-  async function onSubmit(data) {
+  async function onSubmit(data: FieldValues) {
     // Send data to API route
 
     try {
@@ -63,13 +62,14 @@ export default function NewComment({ id }) {
         <textarea
           {...register("body", {
             required: { value: true, message: "Actually say something!" },
-            validate: (value) => !!value.trim() || "not just spaces :(",
+            validate: (value) => value.trim() !== "" || "not just spaces :(",
           })}
           id="body"
-          cols="30"
-          rows="3"
+          cols={30}
+          rows={3}
           className="w-full px-4 py-2 border rounded focus:outline-none focus:border-sky-500 bg-black"
         ></textarea>
+        {/* @ts-expect-error this works fine */}
         <p>{errors.body?.message}</p>
       </div>
       <div className="w-full flex flex-col mb-1">
