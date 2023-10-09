@@ -1,31 +1,30 @@
 "use client";
 
-export default function DeletePostPop({ isModalOpen, closeModal, handleDelete }) {
+interface DeletePostPopProp {
+  isModalOpen: boolean;
+  closeModal: () => void;
+  handleDelete: () => Promise<void>;
+}
 
-
-  //HANDLE SUBMIT HERE
-  const handleSubmit = async (e) => {
+export default function DeletePostPop({
+  isModalOpen,
+  closeModal,
+  handleDelete,
+}: DeletePostPopProp) {
+  // HANDLE SUBMIT HERE
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    handleDelete()
-    closeModal()
-
-    
-
+    await handleDelete();
+    closeModal();
   };
 
-  const handleNo = (e) =>{
-    e.preventDefault()
-    closeModal()
-  }
-
+  const handleNo = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    closeModal();
+  };
 
   return (
-    <dialog
-      id="deletePost"
-      className="modal"
-      autoFocus
-      open={isModalOpen ? "open" : false}
-    >
+    <dialog id="deletePost" className="modal" autoFocus open={isModalOpen}>
       <form
         method="dialog"
         onSubmit={handleSubmit}
@@ -33,14 +32,14 @@ export default function DeletePostPop({ isModalOpen, closeModal, handleDelete })
       >
         <h1 className="w-full text-center">Confirm Deletion</h1>
         <div className=" justify-evenly flex my-2">
-        <button className="hover:text-green-500">YES</button>
-        <button className="hover:text-red-500" onClick={handleNo}>NO</button>
+          <button className="hover:text-green-500">YES</button>
+          <button className="hover:text-red-500" onClick={handleNo}>
+            NO
+          </button>
         </div>
-        
       </form>
     </dialog>
   );
 }
 
-
-//make button inactive after click
+// make button inactive after click

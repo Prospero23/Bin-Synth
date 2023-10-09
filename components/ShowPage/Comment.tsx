@@ -1,11 +1,48 @@
 "use client";
 
 import { useState } from "react";
+import { type APIResponse, type CommentDocument } from "@/types";
 
-export default function Comment({ comment, postId }) {
+export default function Comment({
+  comment,
+  postId,
+}: {
+  comment: CommentDocument;
+  postId: string;
+}) {
   const [clicked, setClicked] = useState(false);
   const [deleted, setDeleted] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
+
+  const { body, author } = comment;
+
+  const handleDelete = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:3000/api/posts/${postId}/comments/${comment._id}`,
+        {
+          method: "POST",
+        },
+      );
+
+      const data: APIResponse = await res.json();
+
+      if ("error" in data && data.error != null) {
+        throw new Error(data.error);
+      } else if ("message" in data && data.message != null) {
+        setDeleted(true);
+      } else {
+        throw new Error("Unknown response structure.");
+      }
+    } catch (e) {
+      if (e instanceof Error) {
+        console.error(e.message);
+        throw e;
+      } else {
+        throw new Error("Non-error thrown...");
+      }
+    }
+  };
 
   const handleClick = () => {
     if (deleted) {
@@ -15,23 +52,8 @@ export default function Comment({ comment, postId }) {
     }
   };
 
-  const handleDelete = async () => {
-    setDeleted(true);
-    const res = await fetch(
-      `http://localhost:3000/api/posts/${postId}/comments/${comment._id}`,
-      {
-        method: "POST",
-      },
-    );
-    // You can perform any additional deletion logic here
-    // e.g., make an API call to delete the comment from the server
-    setIsHidden(true); // Hide the component after the deletion animation
-  };
-
   const handleAnimationEnd = () => {
-    if (deleted) {
-      setIsHidden(true); // Hide the component once the fade-out animation is completed
-    }
+    setIsHidden(true); // Hide the component once the fade-out animation is completed
   };
 
   return (
@@ -47,8 +69,8 @@ export default function Comment({ comment, postId }) {
         <p className="text-red-500">Comment deleted.</p>
       ) : (
         <>
-          <p>{comment.body}</p>
-          <h1>- {comment.author.name}</h1>
+          <p>{body}</p>
+          <h1>- {"name" in author ? author.name : "Unknown Author"}</h1>
 
           {clicked && (
             <button
@@ -65,3 +87,4 @@ export default function Comment({ comment, postId }) {
 }
 
 //
+// const Comment: React.FC<CommentProps>

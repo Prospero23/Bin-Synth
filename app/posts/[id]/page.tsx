@@ -5,7 +5,7 @@ import NewComment from "@/components/ShowPage/NewComment";
 import { getAuthSession } from "@/lib/auth";
 import Link from "next/link";
 import Toast from "@/components/Toast";
-import { type ExtendedSession } from "@/types";
+import { type CommentDocument, type ExtendedSession } from "@/types";
 
 async function ShowPage({ params }: { params: { id: string } }) {
   const { id } = params;
@@ -36,8 +36,11 @@ async function ShowPage({ params }: { params: { id: string } }) {
   } catch (error) {
     throw new Error("error getting session information");
   }
-
   const extendedSession = session as ExtendedSession;
+
+  function isComment(object: any): object is CommentDocument {
+    return "_id" in object;
+  }
 
   return (
     <main>
@@ -53,7 +56,7 @@ async function ShowPage({ params }: { params: { id: string } }) {
         </div>
         {post != null
           ? post.comments.map((c) => {
-              if ("_id" in c) {
+              if (isComment(c)) {
                 return (
                   <Comment
                     comment={c}
@@ -62,7 +65,7 @@ async function ShowPage({ params }: { params: { id: string } }) {
                   />
                 );
               }
-              return null; // or another suitable default value
+              return null;
             })
           : null}
 

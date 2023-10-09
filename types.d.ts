@@ -30,14 +30,14 @@ export interface PostDocument extends mongoose.Document {
   mouseActions: MouseAction[];
   dateMade: Date;
   description: string;
-  comments: mongoose.Types.ObjectId[] | Comment[];
+  comments: mongoose.Types.ObjectId[] | CommentDocument[];
   likeCount: number;
   likes: mongoose.Types.ObjectId[] | string[];
 }
 
 interface CommentAttributes {
   body: string;
-  author: mongoose.Schema.Types.ObjectId;
+  author: mongoose.Schema.Types.ObjectId | UserDocument;
 }
 
 export type CommentDocument = CommentAttributes & mongoose.Document;
@@ -46,7 +46,7 @@ interface UserAttributes {
   email: string;
   name: string;
   image: string;
-  posts?: mongoose.Types.ObjectId[]; // optional array of post IDs
+  posts?: mongoose.Types.ObjectId[] | PostDocument[]; // optional array of post IDs
   likes?: mongoose.Types.ObjectId[]; // optional array of post IDs
 }
 
