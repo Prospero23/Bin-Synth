@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 
-const Timer = ({ initialTime, isStarted }) => {
+const Timer = ({
+  initialTime,
+  isStarted,
+}: {
+  initialTime: number;
+  isStarted: boolean;
+}) => {
   const [timeRemaining, setTimeRemaining] = useState(initialTime);
 
   useEffect(() => {
