@@ -23,7 +23,7 @@ async function EditPage({ searchParams }: { searchParams: { post: string } }) {
     <div className="h-screen flex flex-col items-center justify-center">
       <h1>EDIT</h1>
       <EditForm post={post} />
-      <Toast error={errorClient} />
+      <Toast />
     </div>
   );
 }
