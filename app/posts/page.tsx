@@ -2,6 +2,7 @@ import Card from "@/components/Card/Card";
 import getAllPosts from "@/lib/server_actions/getAllPosts";
 import Link from "next/link";
 import NavButton from "@/components/IndexNav/NavButton";
+import Toast from "@/components/Toast";
 
 export default async function Index({
   searchParams,
@@ -24,6 +25,7 @@ export default async function Index({
 
   return (
     <main className="flex justify-center w-full min-h-screen">
+      <Toast />
       <div className="">
         <h1 className="text-3xl md:text-4xl text-center mt-24 mb-6">
           Community Creations
