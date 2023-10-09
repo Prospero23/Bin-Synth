@@ -2,13 +2,18 @@
 
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import { type APIResponse, type PostDocument } from "@/lib/types";
 
 // pass in the props -> so i can send the request from the page element itself?
 
 // use react hook form for validation
 // add warning on refresh to lose changes?
+interface EditData {
+  title: string;
+  description: string;
+}
 
-function EditForm({ post }) {
+function EditForm({ post }: { post: PostDocument }) {
   const {
     register,
     handleSubmit,
@@ -20,35 +25,43 @@ function EditForm({ post }) {
     },
   });
 
-  const onSubmit = async (data) => {
-    // pull out the two elements needed
-    const { title, description } = data;
-    const id = post._id;
-    const authorId = post.author._id;
-
-    // send data to API route
+  const updatePost = async (
+    data: EditData,
+    postId: string,
+    authorId: string,
+  ) => {
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${post._id}`,
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${postId}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ title, description, id, authorId }),
+          body: JSON.stringify({ ...data, id: postId, authorId }),
         },
       );
 
-      const result = await res.json();
+      const result: APIResponse = await response.json();
 
-      localStorage.setItem("result", JSON.stringify(result));
+      if ("error" in result) {
+        // Handle error scenario using result.error
+        localStorage.setItem("error", JSON.stringify(result));
+      } else {
+        // Handle success scenario using result.message
+        localStorage.setItem("result", JSON.stringify(result));
+      }
 
-      // sends back to the show page of a post with hard reload
-      window.location.href = `${id}`;
-    } catch (e) {
-      console.log("error", e);
+      window.location.href = `${postId}`;
+    } catch (error) {
+      console.log("error", error);
     }
   };
+
+  const onSubmit = async (data: EditData) => {
+    await updatePost(data, post._id, post.author._id);
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className="max-w-md mx-auto p-2">
@@ -63,7 +76,8 @@ function EditForm({ post }) {
             type="text"
             {...register("title", {
               required: { value: true, message: "Actually say something!" },
-              validate: (value) => !!value.trim() || "not just spaces :(",
+              validate: (value) =>
+                !(value.trim().length === 0) || "not just spaces :(",
               maxLength: { value: 40, message: "Too Many Characters" }, // match with schema
             })}
             id="title"
@@ -81,12 +95,13 @@ function EditForm({ post }) {
           <textarea
             {...register("description", {
               required: { value: true, message: "Actually say something!" },
-              validate: (value) => !!value.trim() || "not just spaces :(",
+              validate: (value) =>
+                !(value.trim().length === 0) || "not just spaces :(",
               maxLength: { value: 400, message: "Too Many Characters" }, // match with schema
             })}
             id="description"
-            cols="30"
-            rows="10"
+            cols={30}
+            rows={10}
             className="w-full px-4 py-2 border rounded focus:outline-none focus:border-sky-500"
           ></textarea>
           <p>{errors.description?.message}</p>
@@ -111,8 +126,6 @@ export default EditForm;
 
 // edit description, title for now
 
-// i like the idea of having each of the photos just being a random photo of some thing
-// ISSUE THAT NEEDS TO BE FIXED
 // https://github.com/vercel/next.js/issues/47447
 
 // {...register("description", {

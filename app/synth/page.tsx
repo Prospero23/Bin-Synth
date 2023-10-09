@@ -11,7 +11,6 @@ export default function SynthPage() {
 
   return (
     <div className="h-screen">
-      {/* @ts-expect-error */}
       <Synth post={newPost} />
     </div>
   );

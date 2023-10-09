@@ -61,3 +61,22 @@ export interface ExtendedSession extends Session {
 }
 
 export type Result<T> = { data: T; error: null } | { data: null; error: Error };
+
+export interface SuccessResponse {
+  message: string;
+}
+
+export interface ErrorResponse {
+  error: string;
+  status: number;
+}
+
+export type APIResponse = SuccessResponse | ErrorResponse;
+
+export interface PostFormDataType {
+  title: string;
+  description: string;
+  imageFile: string; // or Blob if it's a file object
+  dateMade: Date; // or Date if it's a date object
+  mouseActions: MouseAction[]; // define a more specific type if possible
+}

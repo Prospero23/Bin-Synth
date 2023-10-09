@@ -1,29 +1,31 @@
 import EditForm from "@/components/EditForm";
 import { getPost } from "@/lib/server_actions/getPost";
-import Toast from "@/components/Toast";
+import { type PostDocument } from "@/lib/types";
 
 async function EditPage({ searchParams }: { searchParams: { post: string } }) {
   const postId = searchParams.post;
   // get the post with specified ID
-  let post;
-  let errorClient = false;
+  let postDoc: PostDocument | null = null;
   try {
     const postFetched = await getPost(postId); // add fail check TODO TODO
 
-    if (postFetched) {
-      post = postFetched;
+    if (postFetched.data != null) {
+      postDoc = postFetched.data;
+    } else if (postFetched.error != null) {
+      throw new Error(postFetched.error.message);
     } else {
-      errorClient = true;
+      throw new Error("Nothing was returned from request"); // or handle this case differently
     }
   } catch (error) {
-    console.log("super weird error", error);
+    if (error instanceof Error) {
+      console.error("Error in EditPage:", error.message);
+    }
   }
 
   return (
     <div className="h-screen flex flex-col items-center justify-center">
       <h1>EDIT</h1>
-      <EditForm post={post} />
-      <Toast />
+      {postDoc !== null && <EditForm post={postDoc} />}
     </div>
   );
 }

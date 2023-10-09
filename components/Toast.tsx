@@ -8,6 +8,7 @@ export default function Toast() {
     // Get the value from local storage if it exists
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     const result = localStorage.getItem("result") ?? "";
+    const error = localStorage.getItem("error") ?? "";
 
     if (result.length > 0) {
       try {
@@ -26,6 +27,28 @@ export default function Toast() {
             theme: "dark",
           });
           localStorage.removeItem("result");
+        }
+      } catch (err) {
+        console.error("Error parsing the result from localStorage:", err);
+      }
+    }
+    if (error.length > 0) {
+      try {
+        const resultObj = JSON.parse(error);
+
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+        if (resultObj?.message) {
+          toast(resultObj.error, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+          localStorage.removeItem("error");
         }
       } catch (err) {
         console.error("Error parsing the result from localStorage:", err);

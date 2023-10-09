@@ -2,17 +2,13 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import Post from "@/models/Post";
 import User from "@/models/User";
-import { type AuthOptions, getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { v2 as cloudinary } from "cloudinary";
-import { type MouseAction, type ExtendedSession } from "@/lib/types";
+import { type ExtendedSession, type PostFormDataType } from "@/lib/types";
 import mongoose from "mongoose";
 
-import {
-  UnauthorizedError,
-  BadRequestError,
-  CloudinaryError,
-} from "@/lib/exceptions";
+import { BadRequestError, CloudinaryError } from "@/lib/exceptions";
+import { authenticateSession, handleError } from "@/lib/routeHelpers";
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_KEY,
@@ -21,9 +17,8 @@ cloudinary.config({
 
 export async function POST(request: Request) {
   try {
-    // @ts-expect-error Todo: fix this error with authoptions
-    const sessionData = await getSessionData(authOptions);
-    const formData = await validateFormData(request);
+    const sessionData = await authenticateSession(authOptions);
+    const formData = await validateFormDataPost(request);
     const uploadResult = await uploadToCloudinary(formData.imageFile);
     await createPostInDb(sessionData, formData, uploadResult);
 
@@ -34,18 +29,10 @@ export async function POST(request: Request) {
     }
   }
 }
-async function getSessionData(
-  authOptions: AuthOptions,
-): Promise<ExtendedSession> {
-  const session = await getServerSession(authOptions);
-  if (session == null) throw new UnauthorizedError("No session info");
-  if (session.user == null)
-    throw new UnauthorizedError("You must be logged in.");
 
-  return session as ExtendedSession;
-}
-
-async function validateFormData(request: Request): Promise<FormDataType> {
+async function validateFormDataPost(
+  request: Request,
+): Promise<PostFormDataType> {
   const formData: FormData = await request.formData();
 
   const title = formData.get("title") as string;
@@ -127,27 +114,4 @@ async function createPostInDb(
   await user.save();
 }
 
-function handleError(error: Error) {
-  switch (error.name) {
-    case "UnauthorizedError":
-      return NextResponse.json({ error: error.message }, { status: 401 });
-    case "BadRequestError":
-      return NextResponse.json({ error: error.message }, { status: 400 });
-    // ... other cases ...
-    default:
-      return NextResponse.json(
-        { error: "Internal Server Error" },
-        { status: 500 },
-      );
-  }
-}
-
 // add better types
-
-interface FormDataType {
-  title: string;
-  description: string;
-  imageFile: string; // or Blob if it's a file object
-  dateMade: Date; // or Date if it's a date object
-  mouseActions: MouseAction[]; // define a more specific type if possible
-}
