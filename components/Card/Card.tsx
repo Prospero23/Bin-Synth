@@ -1,6 +1,6 @@
 import Link from "next/link";
 import TimeMade from "@/components/Card/TimeMade";
-import { type PostDocument } from "@/lib/types";
+import { type PostDocument } from "@/types";
 import Image from "next/image";
 
 function Card({ post }: { post: PostDocument }) {

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { toast } from "react-toastify";
-import { type ExtendedSession } from "@/lib/types";
+import { type ExtendedSession } from "@/types";
 import Image from "next/image";
 
 export default function Home() {

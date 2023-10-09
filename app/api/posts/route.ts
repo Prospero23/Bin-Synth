@@ -4,7 +4,7 @@ import Post from "@/models/Post";
 import User from "@/models/User";
 import { authOptions } from "@/lib/auth";
 import { v2 as cloudinary } from "cloudinary";
-import { type ExtendedSession, type PostFormDataType } from "@/lib/types";
+import { type ExtendedSession, type PostFormDataType } from "@/types";
 import mongoose from "mongoose";
 
 import { BadRequestError, CloudinaryError } from "@/lib/exceptions";

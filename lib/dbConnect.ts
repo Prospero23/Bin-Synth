@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-import { type Cached } from "@/lib/types";
+import { type Cached } from "@/types";
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
-if (!MONGODB_URI) {
+if (MONGODB_URI == null) {
   throw new Error(
     "Please define the MONGODB_URI environment variable inside .env.local",
   );
@@ -17,17 +17,17 @@ if (!MONGODB_URI) {
 // @ts-expect-error this works fine
 let cached: Cached = global.mongoose;
 
-if (!cached) {
+if (cached != null) {
   // @ts-expect-error this works fine
   cached = global.mongoose = { conn: null, promise: null };
 }
 
 async function dbConnect() {
-  if (cached.conn) {
+  if (cached.conn != null) {
     return cached.conn;
   }
 
-  if (!cached.promise) {
+  if (cached.promise == null) {
     const opts = {
       bufferCommands: false,
     };

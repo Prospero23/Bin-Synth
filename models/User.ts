@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import {type UserDocument} from "@/lib/types"
+import { type UserDocument } from "@/types";
 
 const UserSchema = new mongoose.Schema<UserDocument>({
   email: {
@@ -19,21 +19,23 @@ const UserSchema = new mongoose.Schema<UserDocument>({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Post",
-      //required: true,
+      // required: true,
     },
   ],
   likes: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Post",
-      //required: true
+      // required: true
     },
   ],
 });
-const UserModel: mongoose.Model<UserDocument> = mongoose.models.User || mongoose.model<UserDocument>("User", UserSchema);
+const UserModel: mongoose.Model<UserDocument> =
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+  mongoose.models.User || mongoose.model<UserDocument>("User", UserSchema);
 
-export default UserModel
+export default UserModel;
 
-//at some point, need to really think about why im modeling as i am modeling. one to many vs whatever
+// at some point, need to really think about why im modeling as i am modeling. one to many vs whatever
 
-//title, author, dateMade, description
+// title, author, dateMade, description

@@ -2,6 +2,7 @@
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import multer from "multer";
+import { env } from "process";
 
 // Configure Cloudinary
 cloudinary.config({
@@ -14,6 +15,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
+    // @ts-expect-error folder does exist on for cloudinary storage
     folder: "posts", // Specify the folder where the images will be stored on Cloudinary
     allowed_formats: ["png"], // Specify the allowed image formats
     public_id: (req, file) => file.originalname, // Use the original file name as the public ID

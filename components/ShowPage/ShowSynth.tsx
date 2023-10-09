@@ -1,4 +1,4 @@
-"use client"; //client to let synth error about hydration go away
+"use client"; // client to let synth error about hydration go away
 
 import * as Tone from "tone";
 import { NextReactP5Wrapper } from "@p5-wrapper/next";
@@ -11,10 +11,10 @@ import {
 } from "@/lib/synth/soundHelper";
 
 import { drawFunction } from "@/lib/synth/visualHelper";
-import { P5CanvasInstance } from "@p5-wrapper/react";
-import { MouseAction } from "@/lib/types";
+import { type P5CanvasInstance } from "@p5-wrapper/react";
+import { type MouseAction } from "@/types";
 
-const ShowSynth = ({ actionsArray } : {actionsArray: MouseAction[]}) => {
+const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
   const fmSynth = useRef<Tone.FMSynth | null>(null);
   const randomPulseSynth = useRef<Tone.Synth | null>(null);
   const granularSynth = useRef<Tone.GrainPlayer | null>(null);
@@ -58,7 +58,7 @@ const ShowSynth = ({ actionsArray } : {actionsArray: MouseAction[]}) => {
       bitCrusher,
       compressor,
       limiter,
-      Tone.Destination
+      Tone.Destination,
     );
     granularSynth.current.chain(Tone.Destination);
     sineSynth.current.chain(Tone.Destination);
@@ -74,19 +74,18 @@ const ShowSynth = ({ actionsArray } : {actionsArray: MouseAction[]}) => {
 
   const sketch = (p5: P5CanvasInstance) => {
     p5Instance.current = p5;
-    let scale = 0.70; //how much space canvas takes
+    const scale = 0.7; // how much space canvas takes
 
-    //maybe change scale based on device dims?
+    // maybe change scale based on device dims?
 
     p5.setup = function () {
-
-      let side = p5.min(p5.windowHeight, p5.windowWidth) * scale
+      let side = p5.min(p5.windowHeight, p5.windowWidth) * scale;
 
       if (p5.windowWidth < 500) {
-        side = p5.windowWidth
+        side = p5.windowWidth;
       }
 
-      let canvas = p5.createCanvas(side, side)
+      p5.createCanvas(side, side);
 
       p5.background(0);
     };
@@ -98,14 +97,14 @@ const ShowSynth = ({ actionsArray } : {actionsArray: MouseAction[]}) => {
       p5.rect(0, 0, p5.width, p5.height);
 
       if (isPlaying.current) {
-        let elapsedTime = p5.millis() - recordingStartTime.current;
+        const elapsedTime = p5.millis() - recordingStartTime.current;
         const scaleX = p5.width;
         const scaleY = p5.height;
 
         progress.current = (elapsedTime / 10000) * p5.width;
 
         while (playbackIndex.current < actionsArray.length) {
-          let action = actionsArray[playbackIndex.current];
+          const action = actionsArray[playbackIndex.current];
           if (action.time <= elapsedTime) {
             if (action.event === "dragged") {
               drawFunction(
@@ -113,7 +112,7 @@ const ShowSynth = ({ actionsArray } : {actionsArray: MouseAction[]}) => {
                 action.x * scaleX,
                 action.y * scaleY,
                 action.prevX * scaleX,
-                action.prevY * scaleY
+                action.prevY * scaleY,
               );
               synthMove(
                 p5,
@@ -122,7 +121,7 @@ const ShowSynth = ({ actionsArray } : {actionsArray: MouseAction[]}) => {
                 granularSynth.current,
                 sineSynth.current,
                 action.x * scaleX,
-                action.y * scaleY
+                action.y * scaleY,
               );
             }
 
@@ -132,7 +131,7 @@ const ShowSynth = ({ actionsArray } : {actionsArray: MouseAction[]}) => {
                 action.x * scaleX,
                 action.y * scaleY,
                 action.prevX * scaleX,
-                action.prevY * scaleY
+                action.prevY * scaleY,
               );
               synthStart(
                 p5,
@@ -141,7 +140,7 @@ const ShowSynth = ({ actionsArray } : {actionsArray: MouseAction[]}) => {
                 granularSynth.current,
                 sineSynth.current,
                 action.x * scaleX,
-                action.y * scaleY
+                action.y * scaleY,
               );
             }
 
@@ -151,14 +150,14 @@ const ShowSynth = ({ actionsArray } : {actionsArray: MouseAction[]}) => {
                 action.x * scaleX,
                 action.y * scaleY,
                 action.prevX * scaleX,
-                action.prevY * scaleY
+                action.prevY * scaleY,
               );
               synthEnd(
                 p5,
                 fmSynth.current,
                 randomPulseSynth.current,
                 granularSynth.current,
-                sineSynth.current
+                sineSynth.current,
               );
             }
             playbackIndex.current++;
@@ -174,37 +173,33 @@ const ShowSynth = ({ actionsArray } : {actionsArray: MouseAction[]}) => {
             fmSynth.current,
             randomPulseSynth.current,
             granularSynth.current,
-            sineSynth.current
+            sineSynth.current,
           );
         }
       }
 
       p5.fill(255);
       p5.rect(0, p5.height - 10, progress.current, 10);
-
     };
     p5.windowResized = function () {
-      let sideLength = p5.min(p5.windowHeight, p5.windowWidth) * scale
+      let sideLength = p5.min(p5.windowHeight, p5.windowWidth) * scale;
 
       if (p5.windowWidth < 500 && p5.windowHeight >= 800) {
-        sideLength = p5.windowWidth * scale
+        sideLength = p5.windowWidth * scale;
       }
       if (p5.windowHeight < 800) {
-        console.log('BANG')
-        sideLength = p5.windowHeight * (scale - 0.2)
+        console.log("BANG");
+        sideLength = p5.windowHeight * (scale - 0.2);
       }
 
       p5.resizeCanvas(sideLength, sideLength);
 
-
       // if (sideLength < rect.width){
-      //   let difference = rect.width - side 
+      //   let difference = rect.width - side
       //   console.log(difference)
       //   p5.canvas.position(difference/2, 0)
 
       // }
-
-
     };
   };
 
@@ -222,7 +217,11 @@ const ShowSynth = ({ actionsArray } : {actionsArray: MouseAction[]}) => {
           <p className="h-full text-center text-5xl">Loading Synth........</p>
         }
       >
-        <NextReactP5Wrapper sketch={sketch} className="flex items-center" id="react-p5-wrapper" />
+        <NextReactP5Wrapper
+          sketch={sketch}
+          className="flex items-center"
+          id="react-p5-wrapper"
+        />
         <button
           onClick={startPlayback}
           className="hover:text-green-500 hover:underline"
@@ -236,7 +235,7 @@ const ShowSynth = ({ actionsArray } : {actionsArray: MouseAction[]}) => {
 
 export default ShowSynth;
 
-//add some error logic with Array.isArray(arrayasdfa)
-//NOT STORING PROPER IMAGE END
+// add some error logic with Array.isArray(arrayasdfa)
+// NOT STORING PROPER IMAGE END
 
-//add a pause button and such
+// add a pause button and such

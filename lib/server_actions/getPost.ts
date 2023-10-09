@@ -1,7 +1,7 @@
 import dbConnect, { isValidObjectId } from "@/lib/dbConnect";
 import Post from "@/models/Post";
 
-import { type PostDocument, type Result } from "../types";
+import { type PostDocument, type Result } from "../../types";
 
 const MAX_RETRIES = 3;
 

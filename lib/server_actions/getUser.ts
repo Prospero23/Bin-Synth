@@ -1,5 +1,5 @@
 import User from "@/models/User";
-import { type MouseAction, type PostDocument } from "../types";
+import { type MouseAction, type PostDocument } from "../../types";
 import dbConnect from "../dbConnect";
 import type mongoose from "mongoose";
 

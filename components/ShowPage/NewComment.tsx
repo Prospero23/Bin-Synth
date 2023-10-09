@@ -2,22 +2,26 @@
 
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import {toast} from "react-toastify"
+import { toast } from "react-toastify";
 
 export default function NewComment({ id }) {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const router = useRouter();
 
   const toastConfig = {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-  }
+    position: "top-center",
+    autoClose: 5000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "dark",
+  };
 
   async function onSubmit(data) {
     // Send data to API route
@@ -31,16 +35,16 @@ export default function NewComment({ id }) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(data),
-        }
+        },
       );
 
       if (!res.ok) {
-        toast.error('Failed to Submit Comment', toastConfig);
+        toast.error("Failed to Submit Comment", toastConfig);
       }
 
       const result = await res.json();
       // Handle the response data
-      toast.success(result.message, toastConfig)
+      toast.success(result.message, toastConfig);
       router.refresh();
     } catch (error) {
       // Handle any other errors that occurred during the request
@@ -57,10 +61,11 @@ export default function NewComment({ id }) {
           New Comment
         </label>
         <textarea
-{...register("body", { 
-  required: { value: true, message: "Actually say something!" },
-  validate: value => !!value.trim() || 'not just spaces :(' 
-})}          id="body"
+          {...register("body", {
+            required: { value: true, message: "Actually say something!" },
+            validate: (value) => !!value.trim() || "not just spaces :(",
+          })}
+          id="body"
           cols="30"
           rows="3"
           className="w-full px-4 py-2 border rounded focus:outline-none focus:border-sky-500 bg-black"

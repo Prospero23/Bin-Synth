@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import Comment from "@/models/Comment";
-import { type Image, type MouseAction, type PostDocument } from "@/lib/types";
+import { type Image, type MouseAction, type PostDocument } from "@/types";
 
 const ImageSchema = new mongoose.Schema<Image>({
   url: String,
@@ -33,7 +33,7 @@ const PostSchema = new mongoose.Schema<PostDocument>({
     ref: "User",
   },
   image: ImageSchema,
-  mouseActions:[MouseActionSchema],
+  mouseActions: [MouseActionSchema],
   dateMade: {
     /* date of post */
 
@@ -44,8 +44,7 @@ const PostSchema = new mongoose.Schema<PostDocument>({
     /* how would you describe your music? */
     type: String,
     required: [true, "Please provide a description for your song."],
-    maxlength: [400, "Max description is 400 characters"]
-
+    maxlength: [400, "Max description is 400 characters"],
   },
   comments: [
     {
@@ -59,26 +58,30 @@ const PostSchema = new mongoose.Schema<PostDocument>({
   likes: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
+      ref: "User",
+    },
+  ],
+});
+
+PostSchema.post<PostDocument>(
+  "findOneAndDelete",
+  async function (doc: PostDocument | null) {
+    if (doc != null) {
+      await Comment.deleteMany({
+        _id: {
+          $in: doc.comments,
+        },
+      });
     }
-  ]
-});
+  },
+);
 
-PostSchema.post<PostDocument>("findOneAndDelete", async function (doc: PostDocument | null) {
-  if (doc) {
-    await Comment.deleteMany({
-      _id: {
-        $in: doc.comments,
-      },
-    });
-  }
-});
-
-const PostModel: mongoose.Model<PostDocument> = mongoose.models.Post || mongoose.model<PostDocument>("Post", PostSchema);
-
+const PostModel: mongoose.Model<PostDocument> =
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+  mongoose.models.Post || mongoose.model<PostDocument>("Post", PostSchema);
 
 export default PostModel;
 
-//title, author, dateMade, description
+// title, author, dateMade, description
 
-//add likes and the LIKE
+// add likes and the LIKE

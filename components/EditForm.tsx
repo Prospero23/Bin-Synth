@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import Link from "next/link";
-import { type APIResponse, type PostDocument } from "@/lib/types";
+import { type APIResponse, type PostDocument } from "@/types";
 
 // pass in the props -> so i can send the request from the page element itself?
 

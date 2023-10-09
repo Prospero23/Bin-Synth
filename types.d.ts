@@ -1,4 +1,5 @@
 import type mongoose from "mongoose";
+import { type Db } from "mongodb";
 import { type User, type Session } from "next-auth";
 
 // MONGOOSE DATA TYPES
@@ -79,4 +80,18 @@ export interface PostFormDataType {
   imageFile: string; // or Blob if it's a file object
   dateMade: Date; // or Date if it's a date object
   mouseActions: MouseAction[]; // define a more specific type if possible
+}
+
+declare namespace NodeJS {
+  interface Global {
+    _mongoClientPromise?: Db;
+  }
+}
+
+declare global {
+  namespace NodeJS {
+    interface Global {
+      _mongoClientPromise: any;
+    }
+  }
 }

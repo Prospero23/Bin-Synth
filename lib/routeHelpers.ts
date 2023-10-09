@@ -2,7 +2,7 @@ import { type AuthOptions } from "next-auth";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { UnauthorizedError, ForbiddenError } from "./exceptions";
-import { type ExtendedSession } from "./types";
+import { type ExtendedSession } from "../types";
 
 export async function authenticateSession( // should find user in db instead of bs i am doing right now
   authOptions: AuthOptions,

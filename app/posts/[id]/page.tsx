@@ -5,7 +5,7 @@ import NewComment from "@/components/ShowPage/NewComment";
 import { getAuthSession } from "@/lib/auth";
 import Link from "next/link";
 import Toast from "@/components/Toast";
-import { type ExtendedSession } from "@/lib/types";
+import { type ExtendedSession } from "@/types";
 
 async function ShowPage({ params }: { params: { id: string } }) {
   const { id } = params;

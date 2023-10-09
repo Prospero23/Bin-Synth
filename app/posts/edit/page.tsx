@@ -1,6 +1,6 @@
 import EditForm from "@/components/EditForm";
 import { getPost } from "@/lib/server_actions/getPost";
-import { type PostDocument } from "@/lib/types";
+import { type PostDocument } from "@/types";
 
 async function EditPage({ searchParams }: { searchParams: { post: string } }) {
   const postId = searchParams.post;

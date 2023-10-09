@@ -36,7 +36,7 @@ export const authOptions: AuthOptions = {
 
       const dbUser = await User.findOne({ email: user.email });
 
-      if (dbUser) {
+      if (dbUser != null) {
         return {
           id: dbUser._id.toString(),
           name: dbUser.name,
@@ -64,6 +64,7 @@ export const authOptions: AuthOptions = {
     },
 
     async session({ token, session }) {
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       if (token) {
         session.user.id = token.id;
         session.user.name = token.name;
