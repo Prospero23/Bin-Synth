@@ -22,7 +22,7 @@ interface NewPost {
   title: string;
   dateMade: string | Date;
   description: string;
-  image: string;
+  picture: string;
 }
 
 const Synth = ({ post }: { post: NewPost }) => {

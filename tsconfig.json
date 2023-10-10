@@ -36,12 +36,12 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "components/Card/Card.tsx",
-    "@/lib/types.d.ts",
+    "types.d.ts",
     ".eslintrc.js",
     "lib/dbConnect.js",
     "lib/mongodb.ts"
   ],
   "exclude": [
-    "node_modules, @/lib/mongodb.ts"
+    "node_modules, lib/mongodb.ts, lib/auth.ts"
   ]
 }

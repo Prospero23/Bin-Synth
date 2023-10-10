@@ -5,7 +5,7 @@ interface NewPost {
   title: string;
   dateMade: string;
   description: string;
-  image: string;
+  picture: string;
 }
 
 export default function SynthPage() {
@@ -14,7 +14,7 @@ export default function SynthPage() {
     title: "",
     dateMade: "",
     description: "",
-    image: "",
+    picture: "",
   };
 
   return (

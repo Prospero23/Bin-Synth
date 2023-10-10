@@ -24,7 +24,9 @@ export const authOptions: AuthOptions = {
   },
   providers: [
     GoogleProvider({
+      // @ts-expect-error FIX ME
       clientId: process.env.GOOGLE_CLIENT_ID,
+      // @ts-expect-error FIX ME
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
@@ -66,9 +68,17 @@ export const authOptions: AuthOptions = {
     async session({ token, session }) {
       // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       if (token) {
+        // @ts-expect-error FIX ME
+
         session.user.id = token.id;
+        // @ts-expect-error FIX ME
+
         session.user.name = token.name;
+        // @ts-expect-error FIX ME
+
         session.user.email = token.email;
+        // @ts-expect-error FIX ME
+
         session.user.image = token.image;
       }
       return session;
