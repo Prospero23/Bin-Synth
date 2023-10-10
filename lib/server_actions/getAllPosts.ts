@@ -1,6 +1,4 @@
 import dbConnect from "@/lib/dbConnect";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import User from "@/models/User";
 import Post from "@/models/Post";
 import { type Result, type PostDocument } from "@/types";
 const PAGE_SIZE = 10;
@@ -39,7 +37,8 @@ const fetchPostsForPage = async (page: number) => {
   return await Post.find({})
     .limit(PAGE_SIZE)
     .skip(skip)
-    .populate({ path: "author", model: "User" })
+    .populate({ path: "author" }) // populate({ path: "author", model: "User" })
+
     .sort({ dateMade: -1 });
 };
 
