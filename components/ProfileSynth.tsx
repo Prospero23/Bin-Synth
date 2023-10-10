@@ -11,16 +11,18 @@ import {
 } from "@/lib/synth/soundHelper";
 
 import { drawFunction } from "@/lib/synth/visualHelper";
+import { type P5CanvasInstance } from "@p5-wrapper/react";
+import { type UserResult } from "@/types";
 
-const ProfileSynth = ({ user }) => {
+const ProfileSynth = ({ user }: { user: UserResult }) => {
   // console.log(user)
 
-  const fmSynth = useRef(null);
-  const randomPulseSynth = useRef(null);
-  const granularSynth = useRef(null);
-  const sineSynth = useRef(null);
+  const fmSynth = useRef<Tone.FMSynth | null>(null);
+  const randomPulseSynth = useRef<Tone.Synth | null>(null);
+  const granularSynth = useRef<Tone.GrainPlayer | null>(null);
+  const sineSynth = useRef<Tone.Synth | null>(null);
   const isPlaying = useRef(false);
-  const p5Instance = useRef(null);
+  const p5Instance = useRef<P5CanvasInstance>(null);
   const recordingStartTime = useRef(0);
   const playbackIndex = useRef(0);
   const progress = useRef(0);
@@ -28,7 +30,7 @@ const ProfileSynth = ({ user }) => {
   const numberPosts = user.postNumber;
   const actionsArray = user.allMouseActions;
 
-  const timeLength = 10000 * numberPosts; // total length
+  const timeLength = 10000 * (numberPosts ?? 0); // total length
 
   useEffect(() => {
     // Create the Tone.js synths and effects
@@ -70,14 +72,14 @@ const ProfileSynth = ({ user }) => {
 
     return () => {
       // Clean up the Tone.js resources when the component unmounts
-      fmSynth.current.dispose();
-      randomPulseSynth.current.dispose();
-      granularSynth.current.dispose();
-      sineSynth.current.dispose();
+      fmSynth.current?.dispose();
+      randomPulseSynth.current?.dispose();
+      granularSynth.current?.dispose();
+      sineSynth.current?.dispose();
     };
   }, []);
 
-  const sketch = (p5) => {
+  const sketch = (p5: P5CanvasInstance) => {
     p5Instance.current = p5;
     const scale = 0.7; // how much space canvas takes
 
@@ -92,7 +94,7 @@ const ProfileSynth = ({ user }) => {
         side = p5.windowWidth;
       }
 
-      const canvas = p5.createCanvas(side, side);
+      p5.createCanvas(side, side);
 
       p5.background(0);
     };
@@ -200,10 +202,12 @@ const ProfileSynth = ({ user }) => {
   };
 
   const startPlayback = () => {
-    recordingStartTime.current = p5Instance.current.millis();
-    isPlaying.current = true;
-    p5Instance.current.background(0);
-    playbackIndex.current = 0;
+    if (p5Instance.current != null) {
+      recordingStartTime.current = p5Instance.current.millis();
+      isPlaying.current = true;
+      p5Instance.current.background(0);
+      playbackIndex.current = 0;
+    }
   };
 
   return (

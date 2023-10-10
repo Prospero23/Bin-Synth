@@ -1,12 +1,20 @@
 import Synth from "@/components/Synth";
 
+interface NewPost {
+  author: string;
+  title: string;
+  dateMade: string;
+  description: string;
+  image: string;
+}
+
 export default function SynthPage() {
-  const newPost = {
+  const newPost: NewPost = {
     author: "",
     title: "",
     dateMade: "",
     description: "",
-    picture: "",
+    image: "",
   };
 
   return (
@@ -15,3 +23,4 @@ export default function SynthPage() {
     </div>
   );
 }
+// probably make the synths classes after much better make

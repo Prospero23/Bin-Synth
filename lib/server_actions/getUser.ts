@@ -1,14 +1,11 @@
 import User from "@/models/User";
-import { type MouseAction, type PostDocument } from "../../types";
+import {
+  type MouseAction,
+  type PostDocument,
+  type UserResult,
+} from "../../types";
 import dbConnect from "../dbConnect";
 import type mongoose from "mongoose";
-
-interface UserResult {
-  name: string;
-  allMouseActions: MouseAction[];
-  postNumber: number | undefined;
-}
-
 const MAX_RETRIES = 3;
 
 function aggregateMouseActions(posts: PostDocument[]): MouseAction[] {

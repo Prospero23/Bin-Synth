@@ -2,7 +2,7 @@
 
 import StartSynthPopup from "@/components/StartSynthPopup";
 
-import { useEffect, Suspense, useState } from "react";
+import { useEffect, Suspense, useState, useRef } from "react";
 import { NextReactP5Wrapper } from "@p5-wrapper/next";
 import Timer from "@/components/Timer";
 import NewPostPopup from "./NewPostPopup";
@@ -14,31 +14,41 @@ import {
   synthEnd,
 } from "@/lib/synth/soundHelper";
 import { drawFunction, recordAction } from "@/lib/synth/visualHelper";
+import { type P5CanvasInstance } from "@p5-wrapper/react";
+import { type MouseAction } from "@/types";
 
-const Synth = ({ post }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false); // controls for popup to submit
-  const [isStarted, setIsStarted] = useState(false);
+interface NewPost {
+  author: string;
+  title: string;
+  dateMade: string | Date;
+  description: string;
+  image: string;
+}
+
+const Synth = ({ post }: { post: NewPost }) => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // controls for popup to submit
+  const [isStarted, setIsStarted] = useState<boolean>(false);
   const [updatedPost, setUpdatedPost] = useState(post);
 
-  let p5Context;
-  let startTime; // Time playing is started
+  let p5Context: P5CanvasInstance;
+  const startTime = useRef<number>(-1);
 
   const openModal = () => {
     setIsModalOpen(true);
   };
 
   /// //////////SKETCH STUFF////////////////////
-  const sketch = (p5) => {
+  const sketch = (p5: P5CanvasInstance) => {
     p5Context = p5; // get access to p5 outside of sketch
 
-    Tone.start();
+    void Tone.start();
     const countdown = 10000;
     const offset = 70; // canvas vert offset
     let photoTaken = false;
-    let canvasMain;
+    let canvasMain: P5CanvasInstance;
     let isClick = false;
     let isRelease = true;
-    const mouseActions = []; // MOUSE ACTIONS ARRAY
+    const mouseActions: MouseAction[] = []; // MOUSE ACTIONS ARRAY
 
     // SOUND///
     const fmSynth = new Tone.FMSynth();
@@ -77,7 +87,7 @@ const Synth = ({ post }) => {
     granularSynth.chain(Tone.Destination);
     sineSynth.chain(Tone.Destination);
 
-    function logisticMap(x, r) {
+    function logisticMap(x: number, r: number): number {
       // randomizer for the pitch of pulseSynth
       return r * x * (1 - x);
     }
@@ -93,7 +103,7 @@ const Synth = ({ post }) => {
     /// ////DRAW///////
     p5.draw = function () {
       if (isStarted) {
-        const elapsedTime = p5.millis() - startTime; // how long recording has been going
+        const elapsedTime = p5.millis() - startTime.current; // how long recording has been going
         const remainingTime = countdown - elapsedTime; // calc remaining time
 
         const randTime = 50;
@@ -107,12 +117,12 @@ const Synth = ({ post }) => {
           randomPulseSynth.frequency.value = frequency * 440;
         }
         // drawing FUNCTIONALITY
-        if (p5.mouseIsPressed) {
+        if (p5.mouseIsPressed === true) {
           drawFunction(p5, p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY);
         }
 
         /// RECORDING STUFF ///
-        if (p5.mouseIsPressed && isClick && isInCanvas()) {
+        if (p5.mouseIsPressed === true && isClick && isInCanvas()) {
           recordAction(p5, elapsedTime, mouseActions, "click");
           synthStart(
             p5,
@@ -126,13 +136,13 @@ const Synth = ({ post }) => {
 
           isClick = false; // Reset after the first click action
           return;
-        } else if (isRelease && !p5.mouseIsPressed) {
+        } else if (isRelease && p5.mouseIsPressed === false) {
           // release of mouse
           recordAction(p5, elapsedTime, mouseActions, "release");
           synthEnd(p5, fmSynth, randomPulseSynth, granularSynth, sineSynth);
           isRelease = false; // Reset after the release action
           return;
-        } else if (p5.mouseIsPressed && isInCanvas()) {
+        } else if (p5.mouseIsPressed === true && isInCanvas()) {
           // drag event capture
           recordAction(p5, elapsedTime, mouseActions, "dragged");
 
@@ -190,7 +200,7 @@ const Synth = ({ post }) => {
     };
   };
 
-  function saveCanvas(canvas, mouseActions) {
+  function saveCanvas(canvas: P5CanvasInstance, mouseActions: MouseAction[]) {
     const canvasURL = canvas.toDataURL("image/png");
     // Update the post object
     setUpdatedPost((prevPost) => ({
@@ -206,9 +216,9 @@ const Synth = ({ post }) => {
   useEffect(() => {
     if (isStarted) {
       // Trigger any necessary actions when the modal opens
-      startTime = p5Context.millis();
+      startTime.current = p5Context.millis();
     }
-  }, [isStarted]);
+  }, [isStarted, p5Context]);
 
   return (
     <>
@@ -219,6 +229,7 @@ const Synth = ({ post }) => {
         <NextReactP5Wrapper sketch={sketch} />
       </Suspense>
       <StartSynthPopup setIsStarted={setIsStarted} />
+      {/* @ts-expect-error this will be fixed with refactor */}
       <NewPostPopup isModalOpen={isModalOpen} post={updatedPost} />
     </>
   );

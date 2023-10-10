@@ -95,3 +95,9 @@ declare global {
     }
   }
 }
+
+export interface UserResult {
+  name: string;
+  allMouseActions: MouseAction[];
+  postNumber: number | undefined;
+}

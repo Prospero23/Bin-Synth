@@ -1,15 +1,18 @@
 "use client";
+import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 
-import { useEffect, useState } from "react";
-
-export default function StartSynthPopup({ setIsStarted }) {
+export default function StartSynthPopup({
+  setIsStarted,
+}: {
+  setIsStarted: Dispatch<SetStateAction<boolean>>;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     setIsOpen(true);
   }, []);
 
   // HANDLE SUBMIT HERE
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // handleDelete();
     setIsStarted(true); // start synth
@@ -17,12 +20,7 @@ export default function StartSynthPopup({ setIsStarted }) {
   };
 
   return (
-    <dialog
-      id="deletePost"
-      className="modal"
-      autoFocus
-      open={isOpen ? "open" : false}
-    >
+    <dialog id="deletePost" className="modal" autoFocus open={isOpen}>
       <form
         method="dialog"
         onSubmit={handleSubmit}

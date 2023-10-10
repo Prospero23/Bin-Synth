@@ -2,8 +2,23 @@
 
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { type MouseAction } from "@/types";
 
-export default function NewPostPopup({ post, isModalOpen }) {
+interface UpdatedPost {
+  title: string;
+  description: string;
+  dateMade: Date;
+  image: string;
+  mouseActions: MouseAction[];
+}
+
+export default function NewPostPopup({
+  post,
+  isModalOpen,
+}: {
+  post: UpdatedPost;
+  isModalOpen: boolean;
+}) {
   const {
     register,
     handleSubmit,
@@ -32,20 +47,23 @@ export default function NewPostPopup({ post, isModalOpen }) {
     setGivenData({
       dateMade: post.dateMade,
       image: post.image,
+      // @ts-expect-error will fix later
       mouseActions: post.mouseActions,
     });
   }, [post]);
 
   // FIX HAVE
-  const onSubmit = async (formData) => {
+  const onSubmit = async (formData: UpdatedPost) => {
     setIsLoading(true); // change graphic to show load
 
     // submit as multi-type form
     const multiData = new FormData();
     multiData.append("title", formData.title); // title + desc from form, else from state
     multiData.append("description", formData.description);
+    // @ts-expect-error will fix later
     multiData.append("dateMade", givenData.dateMade);
     multiData.append("image", givenData.image);
+    // @ts-expect-error will fix later
     multiData.append("mouseActions", JSON.stringify(givenData.mouseActions));
 
     // send data to API route
@@ -61,14 +79,10 @@ export default function NewPostPopup({ post, isModalOpen }) {
     window.location.href = `/posts`;
   };
   return (
-    <dialog
-      id="newPost"
-      className="modal"
-      autoFocus
-      open={isModalOpen ? "open" : false}
-    >
+    <dialog id="newPost" className="modal" autoFocus open={isModalOpen}>
       <form
         method="dialog"
+        // @ts-expect-error will fix later
         onSubmit={handleSubmit(onSubmit)}
         className="max-w-md mx-auto p-2 modal-box"
       >
@@ -85,7 +99,9 @@ export default function NewPostPopup({ post, isModalOpen }) {
             id="title"
             {...register("title", {
               required: { value: true, message: "Actually say something!" },
-              validate: (value) => !!value.trim() || "not just spaces :(",
+              validate: (value) =>
+                !(value.trim().length === 0) || "not just spaces :(",
+              maxLength: { value: 40, message: "Too Many Characters" }, // match with schema
             })}
             className="w-full px-4 py-2 border rounded focus:outline-none focus:border-sky-500"
           />
@@ -101,11 +117,13 @@ export default function NewPostPopup({ post, isModalOpen }) {
           <textarea
             {...register("description", {
               required: { value: true, message: "Actually say something!" },
-              validate: (value) => !!value.trim() || "not just spaces :(",
+              validate: (value) =>
+                !(value.trim().length === 0) || "not just spaces :(",
+              maxLength: { value: 40, message: "Too Many Characters" }, // match with schema
             })}
             id="description"
-            cols="30"
-            rows="5"
+            cols={30}
+            rows={5}
             className="w-full px-4 py-2 border rounded focus:outline-none focus:border-sky-500"
           ></textarea>
           <p>{errors.description?.message}</p>
