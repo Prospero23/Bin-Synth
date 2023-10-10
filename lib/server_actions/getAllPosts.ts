@@ -1,6 +1,6 @@
 import dbConnect from "@/lib/dbConnect";
-// @ts-expect-error this fixes "Schema has not been registered for model user"
-import User from "@models/User";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import User from "@/models/User";
 import Post from "@/models/Post";
 import { type Result, type PostDocument } from "@/types";
 const PAGE_SIZE = 10;

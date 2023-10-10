@@ -39,7 +39,8 @@
     "types.d.ts",
     ".eslintrc.js",
     "lib/dbConnect.js",
-    "lib/mongodb.ts"
+    "lib/mongodb.ts",
+    "tailwind.config.js"
   ],
   "exclude": [
     "node_modules, lib/mongodb.ts, lib/auth.ts"
