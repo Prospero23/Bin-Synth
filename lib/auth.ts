@@ -87,3 +87,5 @@ export const authOptions: AuthOptions = {
 };
 
 export const getAuthSession = async () => await getServerSession(authOptions);
+
+// todo: Auth has check built in that i can use to make this more clean
