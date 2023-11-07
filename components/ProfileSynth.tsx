@@ -1,14 +1,8 @@
 "use client"; // client to let synth error about hydration go away
 
-import * as Tone from "tone";
 import { NextReactP5Wrapper } from "@p5-wrapper/next";
-import { Suspense, useRef, useEffect } from "react";
-import {
-  granularOptions,
-  synthStart,
-  synthMove,
-  synthEnd,
-} from "@/lib/synth/soundHelper";
+import { Suspense, useRef } from "react";
+import useAudio from "./useAudio";
 
 import { drawFunction } from "@/lib/synth/visualHelper";
 import { type P5CanvasInstance } from "@p5-wrapper/react";
@@ -16,11 +10,8 @@ import { type UserResult } from "@/types";
 
 const ProfileSynth = ({ user }: { user: UserResult }) => {
   // console.log(user)
+  const { initAudio, startSynth, moveSynth, endSynth } = useAudio();
 
-  const fmSynth = useRef<Tone.FMSynth | null>(null);
-  const randomPulseSynth = useRef<Tone.Synth | null>(null);
-  const granularSynth = useRef<Tone.GrainPlayer | null>(null);
-  const sineSynth = useRef<Tone.Synth | null>(null);
   const isPlaying = useRef(false);
   const p5Instance = useRef<P5CanvasInstance>(null);
   const recordingStartTime = useRef(0);
@@ -31,53 +22,6 @@ const ProfileSynth = ({ user }: { user: UserResult }) => {
   const actionsArray = user.allMouseActions;
 
   const timeLength = 10000 * (numberPosts ?? 0); // total length
-
-  useEffect(() => {
-    // Create the Tone.js synths and effects
-    fmSynth.current = new Tone.FMSynth();
-    fmSynth.current.oscillator.type = "sawtooth";
-
-    randomPulseSynth.current = new Tone.Synth();
-    randomPulseSynth.current.oscillator.type = "sine";
-
-    granularSynth.current = new Tone.GrainPlayer(granularOptions);
-    sineSynth.current = new Tone.Synth();
-
-    const bitCrusher = new Tone.BitCrusher({
-      bits: 8,
-    });
-    const reverb = new Tone.Reverb({
-      decay: 5,
-    });
-    const limiter = new Tone.Limiter();
-    limiter.threshold.value = -50; // Adjust the threshold level as needed
-    const compressor = new Tone.Compressor(-20, 3);
-
-    const reverb1 = new Tone.Reverb({
-      decay: 0.5,
-    });
-
-    const distortion1 = new Tone.Distortion(0.3);
-
-    fmSynth.current.chain(reverb1, distortion1, Tone.Destination);
-    randomPulseSynth.current.chain(
-      reverb,
-      bitCrusher,
-      compressor,
-      limiter,
-      Tone.Destination,
-    );
-    granularSynth.current.chain(Tone.Destination);
-    sineSynth.current.chain(Tone.Destination);
-
-    return () => {
-      // Clean up the Tone.js resources when the component unmounts
-      fmSynth.current?.dispose();
-      randomPulseSynth.current?.dispose();
-      granularSynth.current?.dispose();
-      sineSynth.current?.dispose();
-    };
-  }, []);
 
   const sketch = (p5: P5CanvasInstance) => {
     p5Instance.current = p5;
@@ -97,6 +41,7 @@ const ProfileSynth = ({ user }: { user: UserResult }) => {
       p5.createCanvas(side, side);
 
       p5.background(0);
+      initAudio();
     };
 
     p5.draw = function () {
@@ -123,15 +68,7 @@ const ProfileSynth = ({ user }: { user: UserResult }) => {
                 action.prevX * scaleX,
                 action.prevY * scaleY,
               );
-              synthMove(
-                p5,
-                fmSynth.current,
-                randomPulseSynth.current,
-                granularSynth.current,
-                sineSynth.current,
-                action.x * scaleX,
-                action.y * scaleY,
-              );
+              moveSynth(p5, action.x * scaleX, action.y * scaleY);
             }
 
             if (action.event === "click") {
@@ -142,15 +79,7 @@ const ProfileSynth = ({ user }: { user: UserResult }) => {
                 action.prevX * scaleX,
                 action.prevY * scaleY,
               );
-              synthStart(
-                p5,
-                fmSynth.current,
-                randomPulseSynth.current,
-                granularSynth.current,
-                sineSynth.current,
-                action.x * scaleX,
-                action.y * scaleY,
-              );
+              startSynth(p5, action.x * scaleX, action.y * scaleY);
             }
 
             if (action.event === "release") {
@@ -161,13 +90,7 @@ const ProfileSynth = ({ user }: { user: UserResult }) => {
                 action.prevX * scaleX,
                 action.prevY * scaleY,
               );
-              synthEnd(
-                p5,
-                fmSynth.current,
-                randomPulseSynth.current,
-                granularSynth.current,
-                sineSynth.current,
-              );
+              endSynth(p5);
             }
             playbackIndex.current++;
           } else {
@@ -177,13 +100,7 @@ const ProfileSynth = ({ user }: { user: UserResult }) => {
 
         if (elapsedTime >= timeLength) {
           isPlaying.current = false;
-          synthEnd(
-            p5,
-            fmSynth.current,
-            randomPulseSynth.current,
-            granularSynth.current,
-            sineSynth.current,
-          );
+          endSynth(p5);
         }
       }
 
