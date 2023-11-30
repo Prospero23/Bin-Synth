@@ -1,9 +1,15 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import DeleteButton from "@/components/ShowPage/DeleteButton";
 import Link from "next/link";
-import ShowSynth from "@/components/ShowPage/ShowSynth";
 import { type ExtendedSession, type PostDocument } from "@/types";
+const ShowSynth = dynamic(
+  async () => await import("@/components/ShowPage/ShowSynth"),
+  {
+    ssr: false, // This will only render the component on the client-side
+  },
+);
 
 export default function ShowCard({
   post,

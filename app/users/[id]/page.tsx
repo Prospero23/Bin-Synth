@@ -1,6 +1,11 @@
-import ProfileSynth from "@/components/ProfileSynth";
 import { getUser } from "@/lib/server_actions/getUser";
-
+import dynamic from "next/dynamic";
+const ProfileSynth = dynamic(
+  async () => await import("@/components/ProfileSynth"),
+  {
+    ssr: false, // This will only render the component on the client-side
+  },
+);
 export default async function profilePage({
   params,
 }: {
