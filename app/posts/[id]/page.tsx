@@ -62,6 +62,7 @@ async function ShowPage({ params }: { params: { id: string } }) {
                     comment={c}
                     postId={params.id}
                     key={c._id.toString()}
+                    session={extendedSession}
                   />
                 );
               }
