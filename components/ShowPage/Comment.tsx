@@ -33,7 +33,7 @@ export default function Comment({
 
     try {
       const res = await fetch(
-        `http://localhost:3000/api/posts/${postId}/comments/${comment._id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${postId}/comments/${comment._id}`,
         {
           method: "POST",
         },
