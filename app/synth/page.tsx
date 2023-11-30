@@ -1,5 +1,7 @@
-import Synth from "@/components/Synth";
-
+import dynamic from "next/dynamic";
+const Synth = dynamic(async () => await import("@/components/Synth"), {
+  ssr: false, // This will only render the component on the client-side
+});
 interface NewPost {
   author: string;
   title: string;

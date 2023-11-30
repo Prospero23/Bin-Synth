@@ -1,7 +1,6 @@
 "use client";
 
 import StartSynthPopup from "@/components/StartSynthPopup";
-
 import { useEffect, Suspense, useState, useRef } from "react";
 import { NextReactP5Wrapper } from "@p5-wrapper/next";
 import Timer from "@/components/Timer";
@@ -9,6 +8,7 @@ import NewPostPopup from "./NewPostPopup";
 import { drawFunction, recordAction } from "@/lib/synth/visualHelper";
 import { type P5CanvasInstance } from "@p5-wrapper/react";
 import { type MouseAction } from "@/types";
+
 import useAudio from "./useAudio";
 interface NewPost {
   author: string;
