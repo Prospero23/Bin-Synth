@@ -19,7 +19,7 @@ export default async function profilePage({
 
   return (
     <main className="flex flex-col w-screen h-screen items-center">
-      <h1 className="text-4xl text-center mt-24 mb-4">{user?.name}</h1>
+      <h1 className="text-4xl text-center mt-24 mb-4">{user?.username}</h1>
       {user.postNumber !== undefined && <ProfileSynth user={user} />}
     </main>
   );
