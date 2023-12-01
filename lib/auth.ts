@@ -37,7 +37,7 @@ export const authOptions: AuthOptions = {
       await dbConnect();
 
       const dbUser = await User.findOne({ email: user.email });
-
+      console.log(dbUser);
       if (dbUser != null) {
         return {
           id: dbUser._id.toString(),
@@ -83,9 +83,16 @@ export const authOptions: AuthOptions = {
       }
       return session;
     },
+    signIn: async ({ user, account, profile }) => {
+      console.log("Sign In Error:", user, account, profile);
+      return true; // Or handle errors
+    },
+    redirect: async ({ url, baseUrl }) => {
+      console.log("Redirect Error:", url, baseUrl);
+      return baseUrl;
+    },
   },
 };
-
 export const getAuthSession = async () => await getServerSession(authOptions);
 
 // todo: Auth has check built in that i can use to make this more clean
