@@ -59,6 +59,7 @@ export const authOptions: AuthOptions = {
 
       const newUser = new User({
         name: user.name,
+        username: "placeholder",
         email: user.email,
         image: user.image,
         posts: [],
