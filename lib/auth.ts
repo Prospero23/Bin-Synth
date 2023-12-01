@@ -4,7 +4,17 @@ import GoogleProvider from "next-auth/providers/google";
 import User from "@/models/User";
 import { getServerSession } from "next-auth/next";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import { type AuthOptions } from "next-auth";
+import { type AuthOptions, type User as NextUser } from "next-auth";
+
+interface CustomUser extends NextUser {
+  id: string;
+}
+
+declare module "next-auth" {
+  interface Session {
+    user?: CustomUser;
+  }
+}
 
 export const authOptions: AuthOptions = {
   adapter: MongoDBAdapter(clientPromise, {
@@ -65,21 +75,34 @@ export const authOptions: AuthOptions = {
       };
     },
 
-    async session({ token, session }) {
-      if (token !== undefined) {
-        // @ts-expect-error FIX ME
-
-        session.user.id = token.id;
-        // @ts-expect-error FIX ME
-
-        session.user.name = token.name;
-        // @ts-expect-error FIX ME
-
-        session.user.email = token.email;
-        // @ts-expect-error FIX ME
-
-        session.user.image = token.image;
+    async session({ session, token }) {
+      // Initialize session.user with default values for CustomUser properties
+      if (session.user == null) {
+        session.user = {
+          id: "", // Default value for 'id'
+          name: "", // Default value for 'name'
+          email: "", // Default value for 'email'
+          image: "", // Default value for 'image'
+          // Add default values for any other required properties of CustomUser
+        } satisfies CustomUser;
       }
+
+      // Type assertion is no longer necessary here since we've already initialized session.user as CustomUser
+      if (token != null) {
+        if (typeof token.id === "string") {
+          session.user.id = token.id;
+        }
+        if (typeof token.name === "string") {
+          session.user.name = token.name;
+        }
+        if (typeof token.email === "string") {
+          session.user.email = token.email;
+        }
+        if (typeof token.image === "string") {
+          session.user.image = token.image;
+        }
+      }
+
       return session;
     },
     // signIn: async ({ user, account, profile }) => {
