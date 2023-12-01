@@ -15,7 +15,7 @@ export const authOptions: AuthOptions = {
       VerificationTokens: "NextAuthVerificationTokens",
     },
   }),
-  debug: false,
+  debug: true,
   session: {
     strategy: "jwt",
   },
@@ -66,8 +66,7 @@ export const authOptions: AuthOptions = {
     },
 
     async session({ token, session }) {
-      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-      if (token) {
+      if (token !== undefined) {
         // @ts-expect-error FIX ME
 
         session.user.id = token.id;
