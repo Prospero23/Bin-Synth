@@ -45,6 +45,7 @@ export type CommentDocument = CommentAttributes & mongoose.Document;
 interface UserAttributes {
   email: string;
   name: string;
+  username: string;
   image: string;
   posts?: mongoose.Types.ObjectId[] | PostDocument[]; // optional array of post IDs
   likes?: mongoose.Types.ObjectId[]; // optional array of post IDs
