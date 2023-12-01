@@ -83,14 +83,14 @@ export const authOptions: AuthOptions = {
       }
       return session;
     },
-    signIn: async ({ user, account, profile }) => {
-      console.log("Sign In Error:", user, account, profile);
-      return true; // Or handle errors
-    },
-    redirect: async ({ url, baseUrl }) => {
-      console.log("Redirect Error:", url, baseUrl);
-      return baseUrl;
-    },
+    // signIn: async ({ user, account, profile }) => {
+    //   console.log("Sign In Error:", user, account, profile);
+    //   return true; // Or handle errors
+    // },
+    // redirect: async ({ url, baseUrl }) => {
+    //   console.log("Redirect Error:", url, baseUrl);
+    //   return baseUrl;
+    // },
   },
 };
 export const getAuthSession = async () => await getServerSession(authOptions);

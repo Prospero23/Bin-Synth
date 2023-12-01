@@ -13,7 +13,8 @@ export default function Login() {
     // console.log('bang')
 
     try {
-      void signIn("google", { callbackUrl: "users/login/loggedIn" });
+      // void signIn("google", { callbackUrl: "users/login/loggedIn" });
+      void signIn("google");
     } catch (error) {
       // send TOAST notification to user
       toast.error("Error signing in");
