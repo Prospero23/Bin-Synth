@@ -105,7 +105,7 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
         sideLength = p5.windowWidth * scale;
       }
       if (p5.windowHeight < 800) {
-        console.log("BANG");
+        // console.log("BANG");
         sideLength = p5.windowHeight * (scale - 0.2);
       }
 
