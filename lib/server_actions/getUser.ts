@@ -48,7 +48,7 @@ export async function getUser(
       if (isPostDocumentArray(user.posts)) {
         const allMouseActions = aggregateMouseActions(user.posts);
         return {
-          name: user.name,
+          username: user.username,
           allMouseActions,
           postNumber: user.posts?.length,
         };

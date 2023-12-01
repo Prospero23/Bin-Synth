@@ -3,7 +3,11 @@
 import dynamic from "next/dynamic";
 import DeleteButton from "@/components/ShowPage/DeleteButton";
 import Link from "next/link";
-import { type ExtendedSession, type PostDocument } from "@/types";
+import {
+  type UserDocument,
+  type ExtendedSession,
+  type PostDocument,
+} from "@/types";
 const ShowSynth = dynamic(
   async () => await import("@/components/ShowPage/ShowSynth"),
   {
@@ -20,6 +24,8 @@ export default function ShowCard({
 }) {
   const isAuthor =
     session?.user != null ? post.author._id === session.user.id : false;
+
+  const name = post.author as UserDocument;
 
   return (
     <div className="flex-col justify-center mt-24 relative">
@@ -38,7 +44,7 @@ export default function ShowCard({
             href={`/users/${post.author._id}`}
             className="hover:underline hover:text-sky-500 mb-1 lg:mb-2"
           >
-            {post.author.name}
+            {name.username}
           </Link>
         </h2>
       ) : (

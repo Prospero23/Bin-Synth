@@ -86,7 +86,7 @@ export default function Comment({
       ) : (
         <>
           <p>{body}</p>
-          <h1>- {"name" in author ? author.name : "Unknown Author"}</h1>
+          <h1>- {"username" in author ? author.username : "Unknown Author"}</h1>
 
           {isAuthor && clicked && (
             <button

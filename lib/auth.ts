@@ -51,7 +51,7 @@ export const authOptions: AuthOptions = {
       if (dbUser != null) {
         return {
           id: dbUser._id.toString(),
-          name: dbUser.name,
+          name: dbUser.username,
           email: dbUser.email,
           image: dbUser.image,
         };
@@ -70,7 +70,7 @@ export const authOptions: AuthOptions = {
 
       return {
         id: newUser._id.toString(),
-        name: newUser.name,
+        name: newUser.username,
         email: newUser.email,
         image: newUser.image,
       };

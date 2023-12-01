@@ -19,7 +19,8 @@ function Card({ post }: { post: PostDocument }) {
               </h3>
 
               <p className="mt-1 text-xs font-medium text-gray-300">
-                By {"name" in post.author ? post.author.name : "Unknown"}
+                By{" "}
+                {"username" in post.author ? post.author.username : "Unknown"}
               </p>
             </div>
           </div>

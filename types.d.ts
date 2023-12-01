@@ -44,7 +44,6 @@ export type CommentDocument = CommentAttributes & mongoose.Document;
 
 interface UserAttributes {
   email: string;
-  name: string;
   username: string;
   image: string;
   posts?: mongoose.Types.ObjectId[] | PostDocument[]; // optional array of post IDs
@@ -98,7 +97,7 @@ declare global {
 }
 
 export interface UserResult {
-  name: string;
+  username: string;
   allMouseActions: MouseAction[];
   postNumber: number | undefined;
 }
