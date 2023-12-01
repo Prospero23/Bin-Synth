@@ -13,7 +13,7 @@ const UserSchema = new mongoose.Schema<UserDocument>({
   },
   username: {
     type: String,
-    required: false,
+    required: true,
     unique: false, // Ensure that usernames are unique
   },
   image: {
