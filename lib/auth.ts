@@ -25,7 +25,7 @@ export const authOptions: AuthOptions = {
       VerificationTokens: "NextAuthVerificationTokens",
     },
   }),
-  debug: true,
+  debug: false,
   session: {
     strategy: "jwt",
   },
