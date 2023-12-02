@@ -44,21 +44,27 @@ export async function getUser(
       select: "mouseActions",
     });
 
-    if (user != null) {
-      if (isPostDocumentArray(user.posts)) {
-        const allMouseActions = aggregateMouseActions(user.posts);
-        return {
-          username: user.username,
-          allMouseActions,
-          postNumber: user.posts?.length,
-        };
-      }
+    if (user == null) {
+      throw new Error(`User with ID: ${id} not found`);
     }
-    throw new Error(`User with ID: ${id} not found`);
+
+    if (!isPostDocumentArray(user.posts) || user.posts.length === 0) {
+      return {
+        username: user.username,
+        allMouseActions: [],
+        postNumber: 0,
+      };
+    }
+
+    const allMouseActions = aggregateMouseActions(user.posts);
+    return {
+      username: user.username,
+      allMouseActions,
+      postNumber: user.posts.length,
+    };
   } catch (error) {
     if (retries < MAX_RETRIES) {
       // Consider adding a delay here using setTimeout or a sleep function
-      // Example: await new Promise(res => setTimeout(res, 1000)); // Waits for 1 second
       return await getUser(id, retries + 1);
     } else {
       console.error(`Failed to fetch after ${MAX_RETRIES} attempts.`);
