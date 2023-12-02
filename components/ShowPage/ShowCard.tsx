@@ -39,7 +39,7 @@ export default function ShowCard({
       </div>
       {post.author != null && "username" in post.author ? (
         <h2 className="text-center text-sm md:text-lg">
-          By:
+          By:{" "}
           <Link
             href={`/users/${post.author._id}`}
             className="hover:underline hover:text-sky-500 mb-1 lg:mb-2"
