@@ -37,7 +37,7 @@ export default function ShowCard({
           {/* <LikeButton /> */}
         </div>
       </div>
-      {post.author != null && "name" in post.author ? (
+      {post.author != null && "username" in post.author ? (
         <h2 className="text-center text-sm md:text-lg">
           By:
           <Link

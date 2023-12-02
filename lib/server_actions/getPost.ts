@@ -58,7 +58,7 @@ export async function getPost(
   }
 }
 
-// Example custom errors (you can expand on these):
+// Example custom errors
 class ValidationError extends Error {}
 class NotFoundError extends Error {}
 class DatabaseError extends Error {}
