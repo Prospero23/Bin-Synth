@@ -3,7 +3,6 @@ import getAllPosts from "@/lib/server_actions/getAllPosts";
 import Link from "next/link";
 import NavButton from "@/components/IndexNav/NavButton";
 import Toast from "@/components/Toast";
-
 export const dynamic = "force-dynamic";
 
 export default async function Index({

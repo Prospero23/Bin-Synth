@@ -6,7 +6,7 @@ import {
 } from "../../types";
 import dbConnect from "../dbConnect";
 import type mongoose from "mongoose";
-const MAX_RETRIES = 3;
+const MAX_RETRIES = 7;
 
 function aggregateMouseActions(posts: PostDocument[]): MouseAction[] {
   return posts.flatMap((post, postIndex) =>

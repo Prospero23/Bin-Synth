@@ -1,7 +1,7 @@
 "use client"; // client to let synth error about hydration go away
 
 import { NextReactP5Wrapper } from "@p5-wrapper/next";
-import { Suspense, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 
 import { drawFunction } from "@/lib/synth/visualHelper";
 import { type P5CanvasInstance } from "@p5-wrapper/react";
@@ -14,7 +14,14 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
   const recordingStartTime = useRef<number>(0);
   const playbackIndex = useRef<number>(0);
   const progress = useRef<number>(0);
-  const { initAudio, startSynth, moveSynth, endSynth } = useAudio();
+  const { initAudio, startSynth, moveSynth, endSynth, stopAudio } = useAudio();
+
+  useEffect(() => {
+    stopAudio();
+    return () => {
+      stopAudio();
+    };
+  });
 
   const sketch = (p5: P5CanvasInstance) => {
     p5Instance.current = p5;

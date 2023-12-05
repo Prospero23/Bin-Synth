@@ -65,6 +65,7 @@ export default function useAudio() {
     randomPulseSynth.volume.value = -100;
     granularSynth.volume.value = -100;
     sineSynth.volume.value = -100;
+    Tone.Transport.stop();
   }
 
   return { initAudio, startSynth, moveSynth, endSynth, stopAudio };
