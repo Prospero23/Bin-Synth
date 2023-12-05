@@ -20,7 +20,7 @@ export default function SynthPage() {
   };
 
   return (
-    <div className="h-screen">
+    <div className="h-screen overflow-hidden">
       <Synth post={newPost} />
     </div>
   );

@@ -60,5 +60,12 @@ export default function useAudio() {
     synthEnd(p5, fmSynth, randomPulseSynth, granularSynth, sineSynth);
   }
 
-  return { initAudio, startSynth, moveSynth, endSynth };
+  function stopAudio() {
+    fmSynth.volume.value = -100;
+    randomPulseSynth.volume.value = -100;
+    granularSynth.volume.value = -100;
+    sineSynth.volume.value = -100;
+  }
+
+  return { initAudio, startSynth, moveSynth, endSynth, stopAudio };
 }

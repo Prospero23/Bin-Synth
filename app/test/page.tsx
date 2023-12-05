@@ -12,7 +12,7 @@ export default function Test() {
   };
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center">
+    <div className="h-screen flex flex-col justify-center items-center touch-none">
       <Synth post={newPost} />
     </div>
   );

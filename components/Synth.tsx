@@ -22,7 +22,7 @@ const Synth = ({ post }: { post: NewPost }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // controls for popup to submit
   const [isStarted, setIsStarted] = useState<boolean>(false);
   const [updatedPost, setUpdatedPost] = useState(post);
-  const { initAudio, startSynth, moveSynth, endSynth } = useAudio();
+  const { initAudio, startSynth, moveSynth, endSynth, stopAudio } = useAudio();
 
   let p5Context: P5CanvasInstance;
   const startTime = useRef<number>(-1);
@@ -54,38 +54,40 @@ const Synth = ({ post }: { post: NewPost }) => {
       if (isStarted) {
         const elapsedTime = p5.millis() - startTime.current; // how long recording has been going
         const remainingTime = countdown - elapsedTime; // calc remaining time
+        if (remainingTime > 0) {
+          // drawing FUNCTIONALITY
+          if (p5.mouseIsPressed === true) {
+            drawFunction(p5, p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY);
+          }
 
-        // drawing FUNCTIONALITY
-        if (p5.mouseIsPressed === true) {
-          drawFunction(p5, p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY);
-        }
+          /// RECORDING STUFF ///
+          if (p5.mouseIsPressed === true && isClick && isInCanvas()) {
+            recordAction(p5, elapsedTime, mouseActions, "click");
+            startSynth(p5, p5.mouseX, p5.mouseY);
 
-        /// RECORDING STUFF ///
-        if (p5.mouseIsPressed === true && isClick && isInCanvas()) {
-          recordAction(p5, elapsedTime, mouseActions, "click");
-          startSynth(p5, p5.mouseX, p5.mouseY);
+            isClick = false; // Reset after the first click action
+            return;
+          } else if (isRelease && p5.mouseIsPressed === false) {
+            // release of mouse
+            recordAction(p5, elapsedTime, mouseActions, "release");
+            endSynth(p5);
+            isRelease = false; // Reset after the release action
+            return;
+          } else if (p5.mouseIsPressed === true && isInCanvas()) {
+            // drag event capture
+            recordAction(p5, elapsedTime, mouseActions, "dragged");
 
-          isClick = false; // Reset after the first click action
-          return;
-        } else if (isRelease && p5.mouseIsPressed === false) {
-          // release of mouse
-          recordAction(p5, elapsedTime, mouseActions, "release");
-          endSynth(p5);
-          isRelease = false; // Reset after the release action
-          return;
-        } else if (p5.mouseIsPressed === true && isInCanvas()) {
-          // drag event capture
-          recordAction(p5, elapsedTime, mouseActions, "dragged");
+            moveSynth(p5, p5.mouseX, p5.mouseY);
 
-          moveSynth(p5, p5.mouseX, p5.mouseY);
-
-          return;
+            return;
+          }
         }
 
         // end the loop
         if (remainingTime <= 0 && !photoTaken) {
           photoTaken = true;
           p5.noLoop();
+          stopAudio();
           openModal();
 
           // Call the function to save the canvas to Cloudinary
@@ -161,7 +163,5 @@ const Synth = ({ post }: { post: NewPost }) => {
 export default Synth;
 
 // maybe allow newpost to close early?
-
-// MOVE MOST LOGIC OUT OF THIS FILE
 
 // run code after ok button is pressed
