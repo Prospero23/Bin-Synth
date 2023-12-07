@@ -16,6 +16,7 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
   const progress = useRef<number>(0);
   const { initAudio, startSynth, moveSynth, endSynth, stopAudio } = useAudio();
 
+  // makes sure all audio is stopped when entering
   useEffect(() => {
     stopAudio();
     return () => {
@@ -25,19 +26,14 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
 
   const sketch = (p5: P5CanvasInstance) => {
     p5Instance.current = p5;
-    const scale = 0.7; // how much space canvas takes
-
-    // maybe change scale based on device dims?
+    let container: any;
 
     p5.setup = function () {
-      let side = p5.min(p5.windowHeight, p5.windowWidth) * scale;
-
-      if (p5.windowWidth < 500) {
-        side = p5.windowWidth;
-      }
-
-      p5.createCanvas(side, side);
-
+      container = document.getElementById("sketch-container");
+      const side = p5.min(container?.offsetWidth, container?.offsetHeight);
+      const canvas = p5.createCanvas(side, side);
+      console.log(container?.offsetWidth, container?.offsetHeight);
+      canvas.parent("sketch-container");
       p5.background(0);
       initAudio();
     };
@@ -106,24 +102,8 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
       p5.rect(0, p5.height - 10, progress.current, 10);
     };
     p5.windowResized = function () {
-      let sideLength = p5.min(p5.windowHeight, p5.windowWidth) * scale;
-
-      if (p5.windowWidth < 500 && p5.windowHeight >= 800) {
-        sideLength = p5.windowWidth * scale;
-      }
-      if (p5.windowHeight < 800) {
-        // console.log("BANG");
-        sideLength = p5.windowHeight * (scale - 0.2);
-      }
-
-      p5.resizeCanvas(sideLength, sideLength);
-
-      // if (sideLength < rect.width){
-      //   let difference = rect.width - side
-      //   console.log(difference)
-      //   p5.canvas.position(difference/2, 0)
-
-      // }
+      const side = p5.min(container?.offsetWidth, container?.offsetHeight);
+      p5.resizeCanvas(side, side);
     };
   };
 
@@ -141,11 +121,16 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
           <p className="h-full text-center text-5xl">Loading Synth........</p>
         }
       >
-        <NextReactP5Wrapper
-          sketch={sketch}
-          className="flex items-center"
-          id="react-p5-wrapper"
-        />
+        {/* Square Aspect Ratio Container */}
+        <div className="relative w-full" style={{ paddingTop: "100%" }}>
+          {/* Flex Container for Centering */}
+          <div
+            className="flex items-center justify-center absolute top-0 left-0 right-0 bottom-0"
+            id="sketch-container"
+          >
+            <NextReactP5Wrapper sketch={sketch} />
+          </div>
+        </div>
         <button
           onClick={startPlayback}
           className="hover:text-green-500 hover:underline"
@@ -158,8 +143,3 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
 };
 
 export default ShowSynth;
-
-// add some error logic with Array.isArray(arrayasdfa)
-// NOT STORING PROPER IMAGE END
-
-// add a pause button and such

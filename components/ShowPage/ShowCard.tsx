@@ -28,17 +28,14 @@ export default function ShowCard({
   const name = post.author as UserDocument;
 
   return (
-    <div className="flex-col justify-center mt-24 relative">
-      <div className="flex items-center justify-center">
-        <h1 className="text-center text-2xl md:text-4xl mb-2 lg:mb-3">
+    <div className="flex flex-col justify-center mt-12 md:mt-16 relative">
+      <div className="flex flex-col md:flex-row items-center justify-center">
+        <h1 className="text-center text-lg sm:text-xl md:text-3xl lg:text-4xl mb-2 lg:mb-3">
           {post.title}
         </h1>
-        <div className="absolute right-0 bottom-0 sm:top-0">
-          {/* <LikeButton /> */}
-        </div>
       </div>
       {post.author != null && "username" in post.author ? (
-        <h2 className="text-center text-sm md:text-lg">
+        <h2 className="text-center text-sm md:text-md lg:text-2xl">
           By:{" "}
           <Link
             href={`/users/${post.author._id}`}
@@ -64,9 +61,7 @@ export default function ShowCard({
           <DeleteButton id={post._id} authorId={post.author._id} />
         </div>
       )}
-      <div className="">
-        <ShowSynth actionsArray={post.mouseActions} />
-      </div>
+      <ShowSynth actionsArray={post.mouseActions} />
       <div className="text-right -mt-5 uppercase">
         <Link href="/posts" className=" hover:bg-sky-500">
           All Posts
