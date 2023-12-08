@@ -6,41 +6,47 @@ import { Suspense, useEffect, useRef } from "react";
 import { drawFunction } from "@/lib/synth/visualHelper";
 import { type P5CanvasInstance } from "@p5-wrapper/react";
 import { type MouseAction } from "@/types";
-// import useAudio from "../useAudio";
+import useAudio from "../useAudio";
 import Link from "next/link";
 
 const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
   const isPlaying = useRef<boolean>(false);
   const p5Instance = useRef<P5CanvasInstance | null>(null);
+  const bufferInstance = useRef<any | null>(null);
   const recordingStartTime = useRef<number>(0);
   const playbackIndex = useRef<number>(0);
   const progress = useRef<number>(0);
-  // const { initAudio, startSynth, moveSynth, endSynth, stopAudio } = useAudio();
+  const { initAudio, startSynth, moveSynth, endSynth, stopAudio } = useAudio();
 
-  // // makes sure all audio is stopped when entering
-  // useEffect(() => {
-  //   stopAudio();
-  //   return () => {
-  //     stopAudio();
-  //   };
-  // });
+  // makes sure all audio is stopped when entering
+  useEffect(() => {
+    stopAudio();
+    return () => {
+      stopAudio();
+    };
+  });
 
   const sketch = (p5: P5CanvasInstance) => {
     p5Instance.current = p5;
     let scale = set_scale();
+    let buffer: any;
+    const res_scale = 1;
 
     p5.setup = function () {
       const side = p5.min(p5.windowHeight, p5.windowWidth) * scale;
       p5.createCanvas(side, side);
       p5.background(0);
-      // initAudio();
+      buffer = p5.createGraphics(side * res_scale, side * res_scale);
+      bufferInstance.current = buffer;
+      buffer.background(0);
+      initAudio();
     };
 
     p5.draw = function () {
-      p5.stroke(255);
-      p5.strokeWeight(2);
-      p5.noFill();
-      p5.rect(0, 0, p5.width, p5.height);
+      p5.background(0);
+      buffer.stroke(255);
+      buffer.strokeWeight(2);
+      buffer.noFill();
 
       if (isPlaying.current) {
         const elapsedTime = p5.millis() - recordingStartTime.current;
@@ -55,32 +61,38 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
             if (action.event === "dragged") {
               drawFunction(
                 p5,
+                buffer,
                 action.x * scaleX,
                 action.y * scaleY,
                 action.prevX * scaleX,
                 action.prevY * scaleY,
+                res_scale,
               );
-              // moveSynth(p5, action.x * scaleX, action.y * scaleY);
+              moveSynth(p5, action.x * scaleX, action.y * scaleY);
             }
 
             if (action.event === "click") {
               drawFunction(
                 p5,
+                buffer,
                 action.x * scaleX,
                 action.y * scaleY,
                 action.prevX * scaleX,
                 action.prevY * scaleY,
+                res_scale,
               );
-              // startSynth(p5, action.x * scaleX, action.y * scaleY);
+              startSynth(p5, action.x * scaleX, action.y * scaleY);
             }
 
             if (action.event === "release") {
               drawFunction(
                 p5,
+                buffer,
                 action.x * scaleX,
                 action.y * scaleY,
                 action.prevX * scaleX,
                 action.prevY * scaleY,
+                res_scale,
               );
               // endSynth(p5);
             }
@@ -92,17 +104,29 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
 
         if (elapsedTime >= 10000) {
           isPlaying.current = false;
-          // endSynth(p5);
+          endSynth(p5);
         }
       }
+      p5.image(buffer, 0, 0, p5.width, p5.height);
+      p5.stroke(255);
+      p5.strokeWeight(2);
+      p5.noFill();
+      p5.rect(0, 0, p5.width, p5.height);
 
       p5.fill(255);
       p5.rect(0, p5.height - 10, progress.current, 10);
     };
     p5.windowResized = function () {
       scale = set_scale();
-      console.log(p5.windowHeight, p5.windowWidth);
+      // console.log(p5.windowHeight, p5.windowWidth);
       const side = p5.min(p5.windowWidth, p5.windowHeight) * scale;
+      // temp buffer to store canvas
+      const newBuffer = p5.createGraphics(side * res_scale, side * res_scale);
+      newBuffer.background(0);
+
+      newBuffer.image(buffer, 0, 0, side, side);
+      buffer = newBuffer;
+      bufferInstance.current = buffer;
       p5.resizeCanvas(side, side);
     };
 
@@ -121,7 +145,10 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
   const startPlayback = () => {
     recordingStartTime.current = p5Instance.current.millis();
     isPlaying.current = true;
+    bufferInstance.current.clear(); // Clear the buffer
+
     p5Instance.current.background(0);
+    bufferInstance.current.background(0);
     playbackIndex.current = 0;
   };
 
