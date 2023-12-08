@@ -51,11 +51,11 @@ export default function NewComment({ id }: { id: string }) {
     }
   }
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="border mt-2">
+    <form onSubmit={handleSubmit(onSubmit)} className="border mt-2 mx-16">
       <div className="mb-1">
         <label
           htmlFor="body"
-          className="block text-gray-100 font-semibold mb-2"
+          className="block text-gray-100 font-semibold mb-2 text-center sm:text-right sm:mr-8"
         >
           New Comment
         </label>

@@ -50,8 +50,8 @@ async function ShowPage({ params }: { params: { id: string } }) {
           {post != null ? (
             <ShowCard post={post} session={extendedSession} />
           ) : null}
-          <div className="absolute bottom-0">
-            <p className="mb-1 text-sm">Scroll down for comments &#x2193;</p>
+          <div className="absolute bottom-0 md:left-0">
+            <p className="text-sm">Scroll down for comments &#x2193;</p>
           </div>
         </div>
         {post != null
@@ -69,13 +69,13 @@ async function ShowPage({ params }: { params: { id: string } }) {
               return null;
             })
           : null}
-
-        {session?.user != null ? (
-          <NewComment id={id} />
-        ) : (
-          <Link href="/users/login">Login to Comment</Link>
-        )}
       </div>
+
+      {session?.user != null ? (
+        <NewComment id={id} />
+      ) : (
+        <Link href="/users/login">Login to Comment</Link>
+      )}
     </main>
   );
 }
