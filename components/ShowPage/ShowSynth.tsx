@@ -6,7 +6,7 @@ import { Suspense, useEffect, useRef } from "react";
 import { drawFunction } from "@/lib/synth/visualHelper";
 import { type P5CanvasInstance } from "@p5-wrapper/react";
 import { type MouseAction } from "@/types";
-import useAudio from "../useAudio";
+// import useAudio from "../useAudio";
 import Link from "next/link";
 
 const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
@@ -15,27 +15,25 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
   const recordingStartTime = useRef<number>(0);
   const playbackIndex = useRef<number>(0);
   const progress = useRef<number>(0);
-  const { initAudio, startSynth, moveSynth, endSynth, stopAudio } = useAudio();
+  // const { initAudio, startSynth, moveSynth, endSynth, stopAudio } = useAudio();
 
-  // makes sure all audio is stopped when entering
-  useEffect(() => {
-    stopAudio();
-    return () => {
-      stopAudio();
-    };
-  });
+  // // makes sure all audio is stopped when entering
+  // useEffect(() => {
+  //   stopAudio();
+  //   return () => {
+  //     stopAudio();
+  //   };
+  // });
 
   const sketch = (p5: P5CanvasInstance) => {
     p5Instance.current = p5;
-    let container: any;
-    let scale = 0.7;
+    let scale = set_scale();
 
     p5.setup = function () {
-      const side = p5.min(p5.windowHeight, p5.windowHeight) * scale;
+      const side = p5.min(p5.windowHeight, p5.windowWidth) * scale;
       p5.createCanvas(side, side);
-      console.log(container?.offsetWidth, container?.offsetHeight);
       p5.background(0);
-      initAudio();
+      // initAudio();
     };
 
     p5.draw = function () {
@@ -62,7 +60,7 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
                 action.prevX * scaleX,
                 action.prevY * scaleY,
               );
-              moveSynth(p5, action.x * scaleX, action.y * scaleY);
+              // moveSynth(p5, action.x * scaleX, action.y * scaleY);
             }
 
             if (action.event === "click") {
@@ -73,7 +71,7 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
                 action.prevX * scaleX,
                 action.prevY * scaleY,
               );
-              startSynth(p5, action.x * scaleX, action.y * scaleY);
+              // startSynth(p5, action.x * scaleX, action.y * scaleY);
             }
 
             if (action.event === "release") {
@@ -84,7 +82,7 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
                 action.prevX * scaleX,
                 action.prevY * scaleY,
               );
-              endSynth(p5);
+              // endSynth(p5);
             }
             playbackIndex.current++;
           } else {
@@ -94,7 +92,7 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
 
         if (elapsedTime >= 10000) {
           isPlaying.current = false;
-          endSynth(p5);
+          // endSynth(p5);
         }
       }
 
@@ -102,16 +100,22 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
       p5.rect(0, p5.height - 10, progress.current, 10);
     };
     p5.windowResized = function () {
+      scale = set_scale();
+      console.log(p5.windowHeight, p5.windowWidth);
+      const side = p5.min(p5.windowWidth, p5.windowHeight) * scale;
+      p5.resizeCanvas(side, side);
+    };
+
+    function set_scale() {
+      let scale = 0.7;
       if (p5.windowHeight < 610 && p5.windowWidth > 710) {
         scale = 0.6;
       }
       if (p5.windowHeight < 440 && p5.windowWidth > 710) {
         scale = 0.5;
       }
-      console.log(p5.windowHeight, p5.windowWidth);
-      const side = p5.min(p5.windowWidth, p5.windowHeight) * scale;
-      p5.resizeCanvas(side, side);
-    };
+      return scale;
+    }
   };
 
   const startPlayback = () => {
@@ -122,7 +126,7 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
   };
 
   return (
-    <div>
+    <>
       <Suspense
         fallback={
           <p className="h-full text-center text-5xl">Loading Synth........</p>
@@ -143,7 +147,7 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
           </div>
         </div>
       </Suspense>
-    </div>
+    </>
   );
 };
 

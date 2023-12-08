@@ -29,12 +29,12 @@ export default function ShowCard({
 
   return (
     <div className="flex flex-col mt-8 sm:flex-row items-center justify-center">
-      <div className="sm:mr-6">
-        <h1 className="text-center text-lg sm:text-xl md:text-3xl lg:text-4xl mb-2 lg:mb-3">
+      <div className="sm:mx-6 lg:mx-24">
+        <h1 className="text-center short-and-wide:text-sm text-lg sm:text-xl md:text-3xl lg:text-4xl mb-2 lg:mb-3">
           {post.title}
         </h1>
         {post.author != null && "username" in post.author ? (
-          <h2 className="text-center text-sm md:text-md lg:text-2xl">
+          <h2 className="text-center short-and-wide:text-sm text-sm md:text-md lg:text-2xl">
             By:{" "}
             <Link
               href={`/users/${post.author._id}`}
@@ -44,10 +44,12 @@ export default function ShowCard({
             </Link>
           </h2>
         ) : (
-          <h2 className="text-center text-sm md:text-lg">By: Who Knows?</h2>
+          <h2 className="text-center short-and-wide:text-sm text-sm md:text-md lg:text-2xl">
+            By: Who Knows?
+          </h2>
         )}
       </div>
-      {isAuthor && (
+      {/* {isAuthor && (
         <div className="flex justify-between">
           <Link
             href={{
@@ -60,8 +62,21 @@ export default function ShowCard({
           </Link>
           <DeleteButton id={post._id} authorId={post.author._id} />
         </div>
-      )}
+      )} */}
       <div>
+        <div className="flex justify-between">
+          <Link
+            href={{
+              pathname: "/posts/edit",
+              query: { post: post._id },
+            }}
+            className="hover:underline hover:text-sky-500"
+          >
+            Edit
+          </Link>
+          <DeleteButton id={post._id} authorId={post.author._id} />
+        </div>
+
         <ShowSynth actionsArray={post.mouseActions} />
       </div>
     </div>
