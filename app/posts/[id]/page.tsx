@@ -51,7 +51,7 @@ async function ShowPage({ params }: { params: { id: string } }) {
             <ShowCard post={post} session={extendedSession} />
           ) : null}
           <div className="absolute bottom-0">
-            <p className="mb-1">Scroll down for comments &#x2193;</p>
+            <p className="mb-1 text-sm">Scroll down for comments &#x2193;</p>
           </div>
         </div>
         {post != null

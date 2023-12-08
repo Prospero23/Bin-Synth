@@ -28,25 +28,25 @@ export default function ShowCard({
   const name = post.author as UserDocument;
 
   return (
-    <div className="flex flex-col justify-center mt-12 md:mt-16 relative">
-      <div className="flex flex-col md:flex-row items-center justify-center">
+    <div className="flex flex-col mt-8 sm:flex-row items-center justify-center">
+      <div className="sm:mr-6">
         <h1 className="text-center text-lg sm:text-xl md:text-3xl lg:text-4xl mb-2 lg:mb-3">
           {post.title}
         </h1>
+        {post.author != null && "username" in post.author ? (
+          <h2 className="text-center text-sm md:text-md lg:text-2xl">
+            By:{" "}
+            <Link
+              href={`/users/${post.author._id}`}
+              className="hover:underline hover:text-sky-500 mb-1 lg:mb-2"
+            >
+              {name.username}
+            </Link>
+          </h2>
+        ) : (
+          <h2 className="text-center text-sm md:text-lg">By: Who Knows?</h2>
+        )}
       </div>
-      {post.author != null && "username" in post.author ? (
-        <h2 className="text-center text-sm md:text-md lg:text-2xl">
-          By:{" "}
-          <Link
-            href={`/users/${post.author._id}`}
-            className="hover:underline hover:text-sky-500 mb-1 lg:mb-2"
-          >
-            {name.username}
-          </Link>
-        </h2>
-      ) : (
-        <h2 className="text-center text-sm md:text-lg">By: Who Knows?</h2>
-      )}
       {isAuthor && (
         <div className="flex justify-between">
           <Link
@@ -61,11 +61,8 @@ export default function ShowCard({
           <DeleteButton id={post._id} authorId={post.author._id} />
         </div>
       )}
-      <ShowSynth actionsArray={post.mouseActions} />
-      <div className="text-right -mt-5 uppercase">
-        <Link href="/posts" className=" hover:bg-sky-500">
-          All Posts
-        </Link>
+      <div>
+        <ShowSynth actionsArray={post.mouseActions} />
       </div>
     </div>
   );

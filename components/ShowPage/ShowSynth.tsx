@@ -7,6 +7,7 @@ import { drawFunction } from "@/lib/synth/visualHelper";
 import { type P5CanvasInstance } from "@p5-wrapper/react";
 import { type MouseAction } from "@/types";
 import useAudio from "../useAudio";
+import Link from "next/link";
 
 const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
   const isPlaying = useRef<boolean>(false);
@@ -27,13 +28,12 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
   const sketch = (p5: P5CanvasInstance) => {
     p5Instance.current = p5;
     let container: any;
+    let scale = 0.7;
 
     p5.setup = function () {
-      container = document.getElementById("sketch-container");
-      const side = p5.min(container?.offsetWidth, container?.offsetHeight);
-      const canvas = p5.createCanvas(side, side);
+      const side = p5.min(p5.windowHeight, p5.windowHeight) * scale;
+      p5.createCanvas(side, side);
       console.log(container?.offsetWidth, container?.offsetHeight);
-      canvas.parent("sketch-container");
       p5.background(0);
       initAudio();
     };
@@ -102,7 +102,14 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
       p5.rect(0, p5.height - 10, progress.current, 10);
     };
     p5.windowResized = function () {
-      const side = p5.min(container?.offsetWidth, container?.offsetHeight);
+      if (p5.windowHeight < 610 && p5.windowWidth > 710) {
+        scale = 0.6;
+      }
+      if (p5.windowHeight < 440 && p5.windowWidth > 710) {
+        scale = 0.5;
+      }
+      console.log(p5.windowHeight, p5.windowWidth);
+      const side = p5.min(p5.windowWidth, p5.windowHeight) * scale;
       p5.resizeCanvas(side, side);
     };
   };
@@ -115,30 +122,28 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
   };
 
   return (
-    <>
+    <div>
       <Suspense
         fallback={
           <p className="h-full text-center text-5xl">Loading Synth........</p>
         }
       >
-        {/* Square Aspect Ratio Container */}
-        <div className="relative w-full" style={{ paddingTop: "100%" }}>
-          {/* Flex Container for Centering */}
-          <div
-            className="flex items-center justify-center absolute top-0 left-0 right-0 bottom-0"
-            id="sketch-container"
-          >
-            <NextReactP5Wrapper sketch={sketch} />
+        <div className="flex items-center flex-col justify-center short-and-wide:justify-start">
+          <NextReactP5Wrapper sketch={sketch} />
+          <div className="flex flex-row justify-between w-full">
+            <button
+              className="hover:text-green-500 hover:underline"
+              onClick={startPlayback}
+            >
+              Play
+            </button>
+            <Link href="/posts" className=" hover:bg-sky-500">
+              All Posts
+            </Link>
           </div>
         </div>
-        <button
-          onClick={startPlayback}
-          className="hover:text-green-500 hover:underline"
-        >
-          START
-        </button>
       </Suspense>
-    </>
+    </div>
   );
 };
 

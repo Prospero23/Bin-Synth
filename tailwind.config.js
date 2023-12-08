@@ -24,6 +24,11 @@ module.exports = {
           },
         },
       },
+      screens: {
+        "short-and-wide": {
+          raw: "(min-width: 790px) and (max-height: 580px)",
+        },
+      },
     },
   },
   plugins: [require("daisyui")],
