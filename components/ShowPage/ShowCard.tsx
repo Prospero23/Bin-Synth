@@ -64,19 +64,20 @@ export default function ShowCard({
         </div>
       )} */}
       <div>
-        <div className="flex justify-between">
-          <Link
-            href={{
-              pathname: "/posts/edit",
-              query: { post: post._id },
-            }}
-            className="hover:underline hover:text-sky-500"
-          >
-            Edit
-          </Link>
-          <DeleteButton id={post._id} authorId={post.author._id} />
-        </div>
-
+        {isAuthor && (
+          <div className="flex justify-between">
+            <Link
+              href={{
+                pathname: "/posts/edit",
+                query: { post: post._id },
+              }}
+              className="hover:underline hover:text-sky-500"
+            >
+              Edit
+            </Link>
+            <DeleteButton id={post._id} authorId={post.author._id} />
+          </div>
+        )}
         <ShowSynth actionsArray={post.mouseActions} />
       </div>
     </div>

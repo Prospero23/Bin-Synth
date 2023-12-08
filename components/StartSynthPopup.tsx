@@ -28,7 +28,9 @@ export default function StartSynthPopup({
       >
         <h1 className="w-full text-center text-2xl mb-1">Are You Ready?</h1>
         <p className="text-center">
-          Use mouse/touch movements to control the synth.
+          Use mouse/touch movements to control the synth. Keep device
+          orientation the same throughout your performance for best experience
+          :)
         </p>
         <div className=" justify-evenly flex my-2">
           <button className="hover:text-green-500">START</button>
