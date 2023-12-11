@@ -5,7 +5,7 @@ import { useEffect, Suspense, useState, useRef } from "react";
 import { NextReactP5Wrapper } from "@p5-wrapper/next";
 import Timer from "@/components/Timer";
 import NewPostPopup from "./NewPostPopup";
-import { drawFunction, recordAction } from "@/lib/synth/visualHelper";
+import { drawFunctionSynth, recordAction } from "@/lib/synth/visualHelper";
 import { type P5CanvasInstance } from "@p5-wrapper/react";
 import { type MouseAction } from "@/types";
 
@@ -57,7 +57,14 @@ const Synth = ({ post }: { post: NewPost }) => {
         if (remainingTime > 0) {
           // drawing FUNCTIONALITY
           if (p5.mouseIsPressed === true) {
-            drawFunction(p5, p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY);
+            drawFunctionSynth(
+              p5,
+              p5.mouseX,
+              p5.mouseY,
+              p5.pmouseX,
+              p5.pmouseY,
+              1,
+            );
           }
 
           /// RECORDING STUFF ///
