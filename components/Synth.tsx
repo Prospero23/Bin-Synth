@@ -47,7 +47,6 @@ const Synth = ({ post }: { post: NewPost }) => {
       canvasMain = p5.createCanvas(p5.windowWidth, p5.windowHeight);
       canvasMain.position(0, offset);
       p5.background(0);
-      initAudio();
     };
     /// ////DRAW///////
     p5.draw = function () {
@@ -106,8 +105,9 @@ const Synth = ({ post }: { post: NewPost }) => {
       }
 
       // when mouse is pressed
-      p5.mousePressed = function () {
+      p5.mousePressed = async function () {
         isClick = true;
+        await initAudio();
       };
 
       // when mouse is released
@@ -160,7 +160,7 @@ const Synth = ({ post }: { post: NewPost }) => {
         <Timer initialTime={10} isStarted={isStarted} />
         <NextReactP5Wrapper sketch={sketch} />
       </Suspense>
-      <StartSynthPopup setIsStarted={setIsStarted} />
+      <StartSynthPopup setIsStarted={setIsStarted} initAudio={initAudio} />
       {/* @ts-expect-error this will be fixed with refactor */}
       <NewPostPopup isModalOpen={isModalOpen} post={updatedPost} />
     </>

@@ -3,8 +3,10 @@ import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 
 export default function StartSynthPopup({
   setIsStarted,
+  initAudio,
 }: {
   setIsStarted: Dispatch<SetStateAction<boolean>>;
+  initAudio: () => Promise<any>;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
@@ -18,6 +20,8 @@ export default function StartSynthPopup({
     setIsStarted(true); // start synth
     setIsOpen(false); // close modal
   };
+
+  const handleClick = async () => {};
 
   return (
     <dialog id="deletePost" className="modal" autoFocus open={isOpen}>
@@ -33,7 +37,9 @@ export default function StartSynthPopup({
           :)
         </p>
         <div className=" justify-evenly flex my-2">
-          <button className="hover:text-green-500">START</button>
+          <button className="hover:text-green-500" onClick={handleClick}>
+            START
+          </button>
         </div>
       </form>
     </dialog>

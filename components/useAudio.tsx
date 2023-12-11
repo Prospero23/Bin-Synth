@@ -12,16 +12,16 @@ import { useRef } from "react";
 
 export default function useAudio() {
   // Declare synth variables without initializing them immediately
-  let fmSynth: any,
-    randomPulseSynth: any,
-    granularSynth: any,
-    sineSynth: any,
-    bitCrusher,
-    reverb,
-    limiter,
-    compressor,
-    reverb1,
-    distortion1;
+  const fmSynth = useRef<Tone.FMSynth | null>(null);
+  const randomPulseSynth = useRef<Tone.Synth | null>(null);
+  const granularSynth = useRef<Tone.GrainPlayer | null>(null);
+  const sineSynth = useRef<Tone.Synth | null>(null);
+  const bitCrusher = useRef<Tone.BitCrusher | null>(null);
+  const reverb = useRef<Tone.Reverb | null>(null);
+  const limiter = useRef<Tone.Limiter | null>(null);
+  const compressor = useRef<Tone.Compressor | null>(null);
+  const reverb1 = useRef<Tone.Reverb | null>(null);
+  const distortion1 = useRef<Tone.Distortion | null>(null);
 
   const isAudioInitialized = useRef(false);
 
@@ -39,68 +39,97 @@ export default function useAudio() {
 
   function setupSynths() {
     // SOUND///
-    fmSynth = new Tone.FMSynth();
-    fmSynth.oscillator.type = "sawtooth";
+    fmSynth.current = new Tone.FMSynth();
+    fmSynth.current.oscillator.type = "sawtooth";
 
-    randomPulseSynth = new Tone.Synth();
-    randomPulseSynth.oscillator.type = "sine";
+    randomPulseSynth.current = new Tone.Synth();
+    randomPulseSynth.current.oscillator.type = "sine";
 
-    granularSynth = new Tone.GrainPlayer(granularOptions);
-    sineSynth = new Tone.Synth();
+    granularSynth.current = new Tone.GrainPlayer(granularOptions);
+    sineSynth.current = new Tone.Synth();
 
-    bitCrusher = new Tone.BitCrusher({
+    bitCrusher.current = new Tone.BitCrusher({
       bits: 8,
     });
-    reverb = new Tone.Reverb({
+    reverb.current = new Tone.Reverb({
       decay: 5,
     });
-    limiter = new Tone.Limiter();
-    limiter.threshold.value = -50; // Adjust the threshold level as needed
-    compressor = new Tone.Compressor(-20, 3);
+    limiter.current = new Tone.Limiter();
+    limiter.current.threshold.value = -50; // Adjust the threshold level as needed
+    compressor.current = new Tone.Compressor(-20, 3);
 
-    reverb1 = new Tone.Reverb({
+    reverb1.current = new Tone.Reverb({
       decay: 0.5,
     });
 
-    distortion1 = new Tone.Distortion(0.3);
+    distortion1.current = new Tone.Distortion(0.3);
 
-    fmSynth.chain(reverb1, distortion1, Tone.Destination);
-    randomPulseSynth.chain(
-      reverb,
-      bitCrusher,
-      compressor,
-      limiter,
+    fmSynth.current.chain(
+      reverb1.current,
+      distortion1.current,
       Tone.Destination,
     );
-    granularSynth.chain(Tone.Destination);
-    sineSynth.chain(Tone.Destination);
+    randomPulseSynth.current.chain(
+      reverb.current,
+      bitCrusher.current,
+      compressor.current,
+      limiter.current,
+      Tone.Destination,
+    );
+    granularSynth.current.chain(Tone.Destination);
+    sineSynth.current.chain(Tone.Destination);
   }
 
   function startSynth(p5: P5CanvasInstance, x: number, y: number) {
-    if (fmSynth === undefined) {
+    if (fmSynth.current === null) {
       // make sure synths defined first
       return;
     }
-    synthStart(p5, fmSynth, randomPulseSynth, granularSynth, sineSynth, x, y);
+    synthStart(
+      p5,
+      fmSynth.current,
+      randomPulseSynth.current,
+      granularSynth.current,
+      sineSynth.current,
+      x,
+      y,
+    );
   }
   function moveSynth(p5: P5CanvasInstance, x: number, y: number) {
-    if (fmSynth === undefined) {
+    if (fmSynth.current === null) {
       return;
     }
-    synthMove(p5, fmSynth, randomPulseSynth, granularSynth, sineSynth, x, y);
+
+    synthMove(
+      p5,
+      fmSynth.current,
+      randomPulseSynth.current,
+      granularSynth.current,
+      sineSynth.current,
+      x,
+      y,
+    );
   }
   function endSynth(p5: P5CanvasInstance) {
-    if (fmSynth === undefined) {
+    if (fmSynth.current === null) {
       return;
     }
-    synthEnd(p5, fmSynth, randomPulseSynth, granularSynth, sineSynth);
+    synthEnd(
+      p5,
+      fmSynth.current,
+      randomPulseSynth.current,
+      granularSynth.current,
+      sineSynth.current,
+    );
   }
 
   function stopAudio() {
-    if (fmSynth !== undefined) fmSynth.volume.value = -100;
-    if (randomPulseSynth !== undefined) randomPulseSynth.volume.value = -100;
-    if (granularSynth !== undefined) granularSynth.volume.value = -100;
-    if (sineSynth !== undefined) sineSynth.volume.value = -100;
+    if (fmSynth.current !== null) fmSynth.current.volume.value = -100;
+    if (randomPulseSynth.current !== null)
+      randomPulseSynth.current.volume.value = -100;
+    if (granularSynth.current !== null)
+      granularSynth.current.volume.value = -100;
+    if (sineSynth.current !== null) sineSynth.current.volume.value = -100;
     Tone.Transport.stop();
   }
 
