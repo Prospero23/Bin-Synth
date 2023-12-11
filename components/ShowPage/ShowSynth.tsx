@@ -39,7 +39,6 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
       buffer = p5.createGraphics(side * res_scale, side * res_scale);
       bufferInstance.current = buffer;
       buffer.background(0);
-      initAudio();
     };
 
     p5.draw = function () {
@@ -142,7 +141,8 @@ const ShowSynth = ({ actionsArray }: { actionsArray: MouseAction[] }) => {
     }
   };
 
-  const startPlayback = () => {
+  const startPlayback = async () => {
+    await initAudio();
     recordingStartTime.current = p5Instance.current.millis();
     isPlaying.current = true;
     bufferInstance.current.clear(); // Clear the buffer

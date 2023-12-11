@@ -41,7 +41,6 @@ const ProfileSynth = ({ user }: { user: UserResult }) => {
       p5.createCanvas(side, side);
 
       p5.background(0);
-      initAudio();
     };
 
     p5.draw = function () {
@@ -121,7 +120,10 @@ const ProfileSynth = ({ user }: { user: UserResult }) => {
     };
   };
 
-  const startPlayback = () => {
+  const startPlayback = async () => {
+    // Wait for the audio context to start or resume
+    await initAudio();
+
     if (p5Instance.current != null) {
       recordingStartTime.current = p5Instance.current.millis();
       isPlaying.current = true;
