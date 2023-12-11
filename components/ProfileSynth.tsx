@@ -4,7 +4,7 @@ import { NextReactP5Wrapper } from "@p5-wrapper/next";
 import { Suspense, useRef } from "react";
 import useAudio from "./useAudio";
 
-import { drawFunction } from "@/lib/synth/visualHelper";
+import { drawFunctionSynth } from "@/lib/synth/visualHelper";
 import { type P5CanvasInstance } from "@p5-wrapper/react";
 import { type UserResult } from "@/types";
 
@@ -61,34 +61,37 @@ const ProfileSynth = ({ user }: { user: UserResult }) => {
           const action = actionsArray[playbackIndex.current];
           if (action.time <= elapsedTime) {
             if (action.event === "dragged") {
-              drawFunction(
+              drawFunctionSynth(
                 p5,
                 action.x * scaleX,
                 action.y * scaleY,
                 action.prevX * scaleX,
                 action.prevY * scaleY,
+                1,
               );
               moveSynth(p5, action.x * scaleX, action.y * scaleY);
             }
 
             if (action.event === "click") {
-              drawFunction(
+              drawFunctionSynth(
                 p5,
                 action.x * scaleX,
                 action.y * scaleY,
                 action.prevX * scaleX,
                 action.prevY * scaleY,
+                1,
               );
               startSynth(p5, action.x * scaleX, action.y * scaleY);
             }
 
             if (action.event === "release") {
-              drawFunction(
+              drawFunctionSynth(
                 p5,
                 action.x * scaleX,
                 action.y * scaleY,
                 action.prevX * scaleX,
                 action.prevY * scaleY,
+                1,
               );
               endSynth(p5);
             }
